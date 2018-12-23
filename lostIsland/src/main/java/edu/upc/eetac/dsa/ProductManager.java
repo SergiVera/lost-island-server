@@ -1,6 +1,7 @@
 package edu.upc.eetac.dsa;
 
 import edu.upc.eetac.dsa.model.Player;
+import edu.upc.eetac.dsa.model.User;
 
 public interface ProductManager {
     /**Methods
@@ -61,7 +62,12 @@ public interface ProductManager {
      *@throws ?? 400 bad request
      *
      */
-    void modifyCredentials(String username, String password) throws UserNotFoundException;
+    void modifyCredentials(String username, String oldpassword, String newpassword) throws UserNotFoundException;
+    /**
+     * @param idUser id of the user (integer)
+     * @return User user class
+     */
+    User getUser(int idUser) throws UserNotFoundException;
     /**Add new weapon to my Inventory
      *
      *@param username name of the user
@@ -88,10 +94,10 @@ public interface ProductManager {
      *@param username name of the user
      *@throws UserNotFoundException if the User doesn't exist
      *
-     *//*
-    void deleteAccount(String username) throws UserNotFoundException;
+     */
+    void deleteAccount(String username, String password) throws UserNotFoundException;
 
-    *//**3. Objects
+    //**3. Objects
 
      /**Show list of all objects
      *
@@ -155,7 +161,6 @@ public interface ProductManager {
 
     *//**
      * clear all the data structures
-     *//*
+     */
     void clear();
-*/
 }

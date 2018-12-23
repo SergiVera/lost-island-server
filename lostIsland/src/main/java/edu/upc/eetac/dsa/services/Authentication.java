@@ -28,7 +28,7 @@ public class Authentication {
     }
 
     @POST
-    @ApiOperation(value = "load the Profile", notes = "x")
+    @ApiOperation(value = "load the Profile", notes = "enter a username and password to login")
     @ApiResponses(value = {
             @ApiResponse(code = 201, message = "Successful", response = Player.class, responseContainer = "Player"),
             @ApiResponse(code = 404, message = "User doesn't exist")
@@ -48,7 +48,7 @@ public class Authentication {
     }
 
     @POST
-    @ApiOperation(value = "create new Profile", notes = "x")
+    @ApiOperation(value = "create new Profile", notes = "enter a username and password to create a new account")
     @ApiResponses(value = {
             @ApiResponse(code = 201, message = "Successful"),
             @ApiResponse(code = 400, message = "Username already exists")
