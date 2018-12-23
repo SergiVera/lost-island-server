@@ -9,8 +9,8 @@ public class BoostDamage extends GameObject {
         this.damagePoints = damagePoints;
     }
 
-    @Override
+    /*@Override
     public void modifyAttributes() {
         this.damage += this.damagePoints;
-    }
+    }*/
 }

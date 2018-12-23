@@ -14,11 +14,11 @@ public class Food extends GameObject {
         this.foodpoints = foodpoints;
     }
 
-    @Override
+    /*@Override
     public void modifyAttributes() {
         if (this.currentHealth < this.maxHealth)
             this.health += this.foodpoints;
 
         if(this.health > this.maxHealth) this.health = this.maxHealth;
-    }
+    }*/
 }

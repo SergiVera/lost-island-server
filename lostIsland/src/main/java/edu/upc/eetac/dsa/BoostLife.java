@@ -9,8 +9,8 @@ public class BoostLife extends GameObject{
         this.boostPoints = boostPoints;
     }
 
-    @Override
+    /*@Override
     public void modifyAttributes() {
         this.maxHealth += this.boostPoints;
-    }
+    }*/
 }
