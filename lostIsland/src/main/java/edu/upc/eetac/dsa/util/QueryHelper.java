@@ -1,5 +1,9 @@
 package edu.upc.eetac.dsa.util;
 
+import edu.upc.eetac.dsa.mysql.Condition;
+
+import java.util.HashMap;
+
 public class QueryHelper {
 
     public static String createQueryINSERT(Object entity) {
@@ -74,6 +78,16 @@ public class QueryHelper {
     public static String findAllQuery(Class theClass) {
         StringBuffer sb = new StringBuffer();
         sb.append("SELECT * FROM ").append(theClass.getSimpleName());
+
+        return sb.toString();
+    }
+
+    public static String findAllQuery(HashMap params) {
+        Condition condition = (Condition) params.get("condition");
+
+        StringBuffer sb = new StringBuffer();
+        sb.append("SELECT * FROM ").append(params.get("table")).append(" ");
+        sb.append("WHERE ").append(params.get("column")).append(condition.getS()).append("'").append(condition.getName()).append("'");
 
         return sb.toString();
     }
