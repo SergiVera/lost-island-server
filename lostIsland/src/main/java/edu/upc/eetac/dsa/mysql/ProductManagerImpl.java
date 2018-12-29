@@ -3,6 +3,7 @@ package edu.upc.eetac.dsa.mysql;
 import edu.upc.eetac.dsa.exception.UserAlreadyExistsException;
 import edu.upc.eetac.dsa.exception.UserNotFoundException;
 import edu.upc.eetac.dsa.model.*;
+import org.apache.commons.collections.map.MultiValueMap;
 import org.apache.log4j.Logger;
 
 import java.util.ArrayList;
@@ -78,23 +79,49 @@ public class ProductManagerImpl implements ProductManager {
     }
 
 
-    /*@Override
+    @Override
     public List<GameObject> getAllObjectsOfAPlayer(int idUser) throws UserNotFoundException {
         Session session = null;
-        List<GameObject> gameObjectsList = null;
-        try{
-            session = FactorySession.openSession();
-            gameObjectsList = session.findAll(GameObject.class);
+        List<GameObject> foodObjectsList = null;
+        List<GameObject> boostDamageObjectsList = null;
+        List<GameObject> boostLifeObjectsList = null;
+        List<GameObject> gameObjectsList = new ArrayList<>();
+
+        User user = getUser(idUser);
+
+        if(user.getUsername() != null) {
+            String query = "SELECT GameObject.* FROM Player, GameObject, Players_Gameobjects ";
+            MultiValueMap params = new MultiValueMap();
+            params.put("Player.ID", new Condition("=", String.valueOf(idUser)));
+            params.put("Player.ID", new Condition("=", "Players_Gameobjects.player_id"));
+            params.put("Players_Gameobjects.gameObject_idGameObject", new Condition("=", "GameObject.ID"));
+            params.put("GameObject.type", new Condition("=", "'Food'"));
+
+            try {
+                session = FactorySession.openSession();
+                foodObjectsList = session.query(query, Food.class, params);
+                params.remove("GameObject.type");
+                params.put("GameObject.type", new Condition("=", "'BoostDamage'"));
+                boostDamageObjectsList = session.query(query, BoostDamage.class, params);
+                params.remove("GameObject.type");
+                params.put("GameObject.type", new Condition("=", "'BoostLife'"));
+                boostLifeObjectsList = session.query(query, BoostLife.class, params);
+            } catch (Exception e) {
+                log.error("Error trying to open the session: " + e.getMessage());
+            } finally {
+                session.close();
+            }
+
+            gameObjectsList.addAll(foodObjectsList);
+            gameObjectsList.addAll(boostDamageObjectsList);
+            gameObjectsList.addAll(boostLifeObjectsList);
         }
-        catch(Exception e){
-            log.error("Error trying to open the session: " +e.getMessage());
-        }
-        finally {
-            session.close();
+        else{
+            throw new UserNotFoundException();
         }
 
         return gameObjectsList;
-    }*/
+    }
 
     @Override
     public Stats getStatsOfAPlayer(int idUser) throws UserNotFoundException {
@@ -184,19 +211,18 @@ public class ProductManagerImpl implements ProductManager {
         int idUser = getIdUser(username, password);
 
         User user = new User();
-        GameObject gameObject = new GameObject() {
-            @Override
-            public void modifyAttributes() {
-
-            }
-        };
         Session session = null;
         Player player;
+        Players_Gameobjects players_gameobjects = new Players_Gameobjects();
+
+        HashMap params = new HashMap();
+
+        params.put("player_id", new Condition("=", String.valueOf(idUser)));
 
         try{
             session = FactorySession.openSession();
             player = (Player)session.get(Player.class, idUser);
-            session.delete(gameObject, idUser);
+            session.delete(players_gameobjects, params);
             session.delete(player, idUser);
             session.delete(user, idUser);
         }
@@ -216,20 +242,20 @@ public class ProductManagerImpl implements ProductManager {
        List<GameObject> boostLifeObjectsList = null;
        List<GameObject> gameObjectsList = new ArrayList<>();
 
-       HashMap params = new HashMap();
-       params.put("column", "type");
-       params.put("table", "GameObject");
-       params.put("condition", new Condition("=", "Food"));
+       String query = "SELECT * FROM GameObject ";
+
+       MultiValueMap params = new MultiValueMap();
+       params.put("type", new Condition("=", "'Food'"));
 
        try{
            session = FactorySession.openSession();
-           foodObjectsList = session.findAll(Food.class, params);
-           params.remove("condition");
-           params.put("condition", new Condition("=", "BoostDamage"));
-           boostDamageObjectsList = session.findAll(BoostDamage.class, params);
-           params.remove("condition");
-           params.put("condition", new Condition("=", "BoostLife"));
-           boostLifeObjectsList = session.findAll(BoostLife.class, params);
+           foodObjectsList = session.query(query, Food.class, params);
+           params.remove("type");
+           params.put("type", new Condition("=", "'BoostDamage'"));
+           boostDamageObjectsList = session.query(query, BoostDamage.class, params);
+           params.remove("type");
+           params.put("type", new Condition("=", "'BoostLife'"));
+           boostLifeObjectsList = session.query(query, BoostLife.class, params);
        }
        catch(Exception e){
            log.error("Error trying to open the session: " +e.getMessage());

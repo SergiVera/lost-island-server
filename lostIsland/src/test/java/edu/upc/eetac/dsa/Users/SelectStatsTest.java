@@ -1,4 +1,4 @@
-package edu.upc.eetac.dsa;
+package edu.upc.eetac.dsa.Users;
 
 import edu.upc.eetac.dsa.exception.UserNotFoundException;
 import edu.upc.eetac.dsa.mysql.ProductManager;

@@ -44,7 +44,7 @@ public interface ProductManager {
      *@return linkedlist of objects
      *
      */
-    /*List<GameObject> getAllObjectsOfAPlayer(int idUser) throws UserNotFoundException;
+    List<GameObject> getAllObjectsOfAPlayer(int idUser) throws UserNotFoundException;
     /**Show the stats of a given player
      *
      *@param idUser id of the user

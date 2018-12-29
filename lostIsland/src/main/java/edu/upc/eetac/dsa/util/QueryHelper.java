@@ -1,11 +1,13 @@
 package edu.upc.eetac.dsa.util;
 
 import edu.upc.eetac.dsa.mysql.Condition;
+import org.apache.commons.collections.map.MultiValueMap;
 
-import java.util.HashMap;
+import java.util.*;
 
 public class QueryHelper {
 
+    //INSERT query
     public static String createQueryINSERT(Object entity) {
 
         StringBuffer sb = new StringBuffer("INSERT INTO ");
@@ -30,6 +32,7 @@ public class QueryHelper {
         return sb.toString();
     }
 
+    //SELECT ID USER
     public static String createQuerySELECTIDUSER(Class theClass){
         StringBuffer sb = new StringBuffer();
         sb.append("SELECT ID FROM ").append(theClass.getSimpleName()).append(" ");
@@ -38,10 +41,12 @@ public class QueryHelper {
         return sb.toString();
     }
 
+    //SELECT query passing an Object
     public static String createQuerySELECT(Object entity) {
         return createQuerySELECT2(entity.getClass());
     }
 
+    //SELECT query passing a Class
     public static String createQuerySELECT2(Class theClass) {
         StringBuffer sb = new StringBuffer();
         sb.append("SELECT * FROM ").append(theClass.getSimpleName());
@@ -50,6 +55,7 @@ public class QueryHelper {
         return sb.toString();
     }
 
+    //DELETE query
     public static String createQueryDELETE(Object entity){
         StringBuffer sb = new StringBuffer();
         sb.append("DELETE FROM ").append(entity.getClass().getSimpleName()).append(" ");
@@ -58,6 +64,31 @@ public class QueryHelper {
         return sb.toString();
     }
 
+    //DELETE query with specified parameters
+    public static String createQueryDELETE(Object object, HashMap params) {
+        StringBuffer sb = new StringBuffer();
+        String[] keys = new String[params.size()];
+        int i = 0;
+
+        sb.append("DELETE FROM ").append(object.getClass().getSimpleName()).append(" ");
+        sb.append("WHERE ");
+
+        for(Object key : params.keySet()){
+            keys[i] = String.valueOf(key);
+            i++;
+        }
+
+        for(int j = 0; j<keys.length; j++){
+            Condition condition = (Condition) params.get(keys[j]);
+            sb.append(keys[j]).append(condition.getS()).append(condition.getName()).append(" AND ");
+        }
+
+        sb.delete(sb.length() - 5,sb.length());
+
+        return sb.toString();
+    }
+
+    //UPDATE query
     public static String createQueryUPDATE(Object entity){
         StringBuffer sb = new StringBuffer();
         sb.append("UPDATE ").append(entity.getClass().getSimpleName()).append(" ").append("SET");
@@ -75,6 +106,7 @@ public class QueryHelper {
         return sb.toString();
     }
 
+    //Find all query
     public static String findAllQuery(Class theClass) {
         StringBuffer sb = new StringBuffer();
         sb.append("SELECT * FROM ").append(theClass.getSimpleName());
@@ -82,12 +114,40 @@ public class QueryHelper {
         return sb.toString();
     }
 
-    public static String findAllQuery(HashMap params) {
+    //Query with conditions
+    public static String findAllQuery(Class theClass, HashMap params) {
         Condition condition = (Condition) params.get("condition");
 
         StringBuffer sb = new StringBuffer();
         sb.append("SELECT * FROM ").append(params.get("table")).append(" ");
-        sb.append("WHERE ").append(params.get("column")).append(condition.getS()).append("'").append(condition.getName()).append("'");
+        sb.append("WHERE ").append(params.get("column"));
+        sb.append(condition.getS()).append("'").append(condition.getName()).append("'");
+
+        return sb.toString();
+    }
+
+    //Query for 1:N relationship
+    public static String findAllQuery(String query, MultiValueMap params) {
+        StringBuffer sb = new StringBuffer();
+        List<String> keys = new LinkedList<>();
+
+        sb.append(query).append("WHERE ");
+
+        Set entrySet = params.entrySet();
+        Iterator it = entrySet.iterator();
+        while (it.hasNext()) {
+            Map.Entry mapEntry = (Map.Entry) it.next();
+            keys.add(String.valueOf(mapEntry.getKey()));
+        }
+
+        for(Object key : keys){
+            List<Condition> list = (List<Condition>) params.get(key);
+            for(int i = 0; i<list.size(); i++) {
+                sb.append(key).append(list.get(i).getS()).append(list.get(i).getName()).append(" AND ");
+            }
+        }
+
+        sb.delete(sb.length() - 5,sb.length());
 
         return sb.toString();
     }

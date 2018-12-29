@@ -1,4 +1,4 @@
-package edu.upc.eetac.dsa;
+package edu.upc.eetac.dsa.GameObjects;
 
 import edu.upc.eetac.dsa.exception.UserNotFoundException;
 import edu.upc.eetac.dsa.model.GameObject;

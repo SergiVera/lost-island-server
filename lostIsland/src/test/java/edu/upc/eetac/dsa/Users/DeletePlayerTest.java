@@ -1,19 +1,17 @@
-package edu.upc.eetac.dsa;
+package edu.upc.eetac.dsa.Users;
 
 import edu.upc.eetac.dsa.exception.UserNotFoundException;
 import edu.upc.eetac.dsa.mysql.ProductManager;
 import edu.upc.eetac.dsa.mysql.ProductManagerImpl;
-import org.junit.Assert;
 import org.junit.Test;
 
-public class UpdatePlayerTest {
+public class DeletePlayerTest {
     private ProductManager productManager;
 
     @Test
-    public void updatePlayerDB() throws UserNotFoundException {
+    public void deletePlayerDB() throws UserNotFoundException {
         this.productManager = ProductManagerImpl.getInstance();
-        this.productManager.modifyCredentials("Sergi", "Martinez", "Vera");
-        Assert.assertEquals("50", this.productManager.logIn("Sergi", "Vera").getCurrentHealth());
+        this.productManager.deleteAccount("Carlos", "Carlos");
         this.productManager.clear();
     }
 }

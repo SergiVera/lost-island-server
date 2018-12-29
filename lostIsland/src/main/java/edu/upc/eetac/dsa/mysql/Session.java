@@ -1,6 +1,7 @@
 package edu.upc.eetac.dsa.mysql;
 
 import edu.upc.eetac.dsa.exception.UserNotFoundException;
+import org.apache.commons.collections.map.MultiValueMap;
 
 import java.util.HashMap;
 import java.util.List;
@@ -13,7 +14,8 @@ public interface Session<E> {
     boolean checkIfUserIsRegistered(Class theClass, String username, String password);
     void update(Object object, int ID);
     void delete(Object object, int ID);
+    void delete(Object object, HashMap params);
     List<Object> findAll(Class theClass);
     List<Object> findAll(Class theClass, HashMap params);
-    List<Object> query(String query, Class theClass, HashMap params);
+    List<Object> query(String query, Class theClass, MultiValueMap params);
 }

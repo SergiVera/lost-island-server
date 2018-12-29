@@ -3,6 +3,7 @@ package edu.upc.eetac.dsa.mysql;
 import edu.upc.eetac.dsa.exception.UserNotFoundException;
 import edu.upc.eetac.dsa.util.ObjectHelper;
 import edu.upc.eetac.dsa.util.QueryHelper;
+import org.apache.commons.collections.map.MultiValueMap;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -25,7 +26,7 @@ public class SessionImpl implements Session {
 
         String insertQuery = QueryHelper.createQueryINSERT(entity);
 
-        PreparedStatement pstm = null;
+        PreparedStatement pstm;
 
 
         try {
@@ -78,8 +79,8 @@ public class SessionImpl implements Session {
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         }
-        ResultSet rs = null;
-        PreparedStatement pstm = null;
+        ResultSet rs;
+        PreparedStatement pstm;
 
         try {
             pstm = conn.prepareStatement(selectQuery);
@@ -88,7 +89,7 @@ public class SessionImpl implements Session {
 
 
             while(rs.next()){
-                Field[] fields = theClass.getSuperclass().getDeclaredFields();
+                Field[] fields = theClass.getDeclaredFields();
                 rs.getString(1);
                 for (int i = 0; i<fields.length; i++){
 
@@ -115,8 +116,8 @@ public class SessionImpl implements Session {
     public int getID(Class theClass, String username, String password) throws UserNotFoundException {
         String selectQuery = QueryHelper.createQuerySELECTIDUSER(theClass);
 
-        ResultSet rs = null;
-        PreparedStatement pstm = null;
+        ResultSet rs;
+        PreparedStatement pstm;
 
         int id;
 
@@ -141,8 +142,8 @@ public class SessionImpl implements Session {
     public boolean checkIfUserIsRegistered(Class theClass, String username, String password){
         String selectQuery = QueryHelper.createQuerySELECTIDUSER(theClass);
 
-        ResultSet rs = null;
-        PreparedStatement pstm = null;
+        ResultSet rs;
+        PreparedStatement pstm;
 
         boolean empty = true;
 
@@ -169,7 +170,7 @@ public class SessionImpl implements Session {
     public void update(Object object, int ID) {
         String updateQuery = QueryHelper.createQueryUPDATE(object);
 
-        PreparedStatement pstm = null;
+        PreparedStatement pstm;
 
         try {
             pstm = conn.prepareStatement(updateQuery);
@@ -202,6 +203,22 @@ public class SessionImpl implements Session {
         try {
             pstm = conn.prepareStatement(deleteQuery);
             pstm.setObject(1, ID);
+
+            pstm.executeUpdate();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public void delete(Object object, HashMap params) {
+        String deleteQuery = QueryHelper.createQueryDELETE(object, params);
+
+        PreparedStatement pstm;
+
+        try {
+            pstm = conn.prepareStatement(deleteQuery);
 
             pstm.executeUpdate();
 
@@ -256,18 +273,9 @@ public class SessionImpl implements Session {
         return listOfObjects;
     }
 
-
-    /*
-     *          HashMap params = new HashMap();
-     *          params.put("edat", new Condition("=", 15);
-     *          params.put("salary", new Condition(100000, ">=");
-     *          session.findAll(Employee.class, params);
-     *
-     *          SELECT * FROM Employee WHERE ( edat = 15 AND salary>=10000)
-     */
     public List<Object> findAll(Class theClass, HashMap params) {
 
-        String findAllQuery = QueryHelper.findAllQuery(params);
+        String findAllQuery = QueryHelper.findAllQuery(theClass, params);
 
         Object entity = null;
         List<Object> listOfObjects = new ArrayList<>();
@@ -311,10 +319,48 @@ public class SessionImpl implements Session {
         return listOfObjects;
     }
 
-     /*
-             *          SELECT * FROM Employee, Deparment  WHERE ( edat = 15 AND salary>=10000)
-    */
-    public List<Object> query(String query, Class theClass, HashMap params) {
-        return null;
+    public List<Object> query(String query, Class theClass, MultiValueMap params) {
+        String findAllQuery = QueryHelper.findAllQuery(query, params);
+
+        Object entity = null;
+        List<Object> listOfObjects = new ArrayList<>();
+
+        try {
+            entity = theClass.newInstance();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        ResultSet rs;
+        PreparedStatement pstm;
+
+        try {
+            pstm = conn.prepareStatement(findAllQuery);
+            rs = pstm.executeQuery();
+
+            while(rs.next()){
+                Field[] fields = theClass.getSuperclass().getDeclaredFields();
+                rs.getString(1);
+                for (int i = 0; i<fields.length; i++){
+                    ObjectHelper.setter(entity, fields[i].getName(), rs.getObject(i + 2));
+                }
+
+                listOfObjects.add(entity);
+
+                entity = theClass.newInstance();
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        }
+
+        return listOfObjects;
     }
 }

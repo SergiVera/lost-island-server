@@ -1,4 +1,4 @@
-package edu.upc.eetac.dsa;
+package edu.upc.eetac.dsa.Authentication;
 
 import edu.upc.eetac.dsa.exception.UserAlreadyExistsException;
 import edu.upc.eetac.dsa.exception.UserNotFoundException;

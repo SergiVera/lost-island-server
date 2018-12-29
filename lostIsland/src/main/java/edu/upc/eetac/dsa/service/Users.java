@@ -1,5 +1,6 @@
 package edu.upc.eetac.dsa.service;
 
+import edu.upc.eetac.dsa.model.GameObject;
 import edu.upc.eetac.dsa.mysql.ProductManager;
 import edu.upc.eetac.dsa.mysql.ProductManagerImpl;
 import edu.upc.eetac.dsa.exception.UserNotFoundException;
@@ -12,8 +13,10 @@ import io.swagger.annotations.ApiResponses;
 import org.apache.log4j.Logger;
 
 import javax.ws.rs.*;
+import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.util.List;
 
 @Api(value="/users", description = "Service of Autentication")
 @Path("/users")
@@ -88,7 +91,7 @@ public class Users {
         }
     }
 
-   /* @GET
+    @GET
     @ApiOperation(value = "get all objects of a player", notes = "get all objects of a player given its id")
     @ApiResponses(value = {
             @ApiResponse(code = 201, message = "Successful", response = GameObject.class, responseContainer = "GameObject class"),
@@ -105,5 +108,5 @@ public class Users {
             e.printStackTrace();
             return Response.status(404).build();
         }
-    }*/
+    }
 }
