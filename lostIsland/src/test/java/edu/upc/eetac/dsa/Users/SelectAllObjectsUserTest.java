@@ -13,7 +13,7 @@ public class SelectAllObjectsUserTest {
     private ProductManager productManager;
 
     @Test
-    public void selectPlayerDB() throws UserNotFoundException {
+    public void selectObjectsUserDB() throws UserNotFoundException {
         this.productManager = ProductManagerImpl.getInstance();
         List<GameObject> objectList = this.productManager.getAllObjectsOfAPlayer(1);
         Assert.assertEquals("20", objectList.get(0).getObjectPoints());

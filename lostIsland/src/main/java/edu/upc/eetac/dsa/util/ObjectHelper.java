@@ -59,7 +59,7 @@ public class ObjectHelper {
 
         for(Method method : methods){
             if(isGetter(method)){
-                if(method.getName().regionMatches(true, 3, property, 0, property.length()))
+                if((method.getName().regionMatches(true, 3, property, 0, property.length())) || (method.getName().regionMatches(true, 2, property, 0, property.length())))
                     result =method.invoke(entity);
             }
         }

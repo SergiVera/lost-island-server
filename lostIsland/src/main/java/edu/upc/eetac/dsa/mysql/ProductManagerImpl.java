@@ -1,5 +1,6 @@
 package edu.upc.eetac.dsa.mysql;
 
+import edu.upc.eetac.dsa.exception.UserAlreadyConectedException;
 import edu.upc.eetac.dsa.exception.UserAlreadyExistsException;
 import edu.upc.eetac.dsa.exception.UserNotFoundException;
 import edu.upc.eetac.dsa.model.*;
@@ -8,6 +9,7 @@ import org.apache.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 
 public class ProductManagerImpl implements ProductManager {
@@ -31,21 +33,42 @@ public class ProductManagerImpl implements ProductManager {
     }
 
     @Override
-    public Player logIn(String username, String password) throws UserNotFoundException {
+    public Player logIn(String username, String password) throws UserNotFoundException, UserAlreadyConectedException {
         int idUser = getIdUser(username, password);
 
         Session session = null;
-        Player player = null;
+        Player player;
+        User user = null;
 
         try{
             session = FactorySession.openSession();
-            player = (Player)session.get(Player.class, idUser);
+            user = (User)session.get(User.class, idUser);
         }
         catch(Exception e){
             log.error("Error trying to open the session: " +e.getMessage());
         }
         finally {
             session.close();
+        }
+
+        if(user.getConected() == false){
+            user.setConected(true);
+
+            try {
+                session = FactorySession.openSession();
+                session.update(user, idUser);
+                player = (Player)session.get(Player.class, idUser);
+            }
+            catch (Exception e) {
+                log.error("Error trying to open the session: " +e.getMessage());
+                throw new UserNotFoundException();
+            }
+            finally {
+                session.close();
+            }
+        }
+        else{
+            throw new UserAlreadyConectedException();
         }
 
         return player;
@@ -57,12 +80,12 @@ public class ProductManagerImpl implements ProductManager {
 
         try{
             session = FactorySession.openSession();
-            User user = new User(username, password);
+            User user = new User(username, password, false);
             boolean exists = session.checkIfUserIsRegistered(User.class, username, password);
             if(exists == false) {
                 session.save(user);
                 int idUser = getIdUser(username, password);
-                Player player = new Player(100, 100, 20, 1, 0, 0, 0, idUser);
+                Player player = new Player(100, 100, 20, 0, 0, 0, idUser);
                 session.save(player);
             }
             else{
@@ -74,6 +97,91 @@ public class ProductManagerImpl implements ProductManager {
             throw new UserAlreadyExistsException();
         }
         finally{
+            session.close();
+        }
+    }
+
+    @Override
+    public void modifyCredentials(String username, String oldpassword, String newpassword) throws UserNotFoundException {
+        int idUser = getIdUser(username, oldpassword);
+
+        Session session = null;
+        User user;
+        Credentials credentials = new Credentials();
+        credentials.setUsername(username);
+        credentials.setOldpassword(oldpassword);
+        credentials.setNewpassword(newpassword);
+
+        try{
+            session = FactorySession.openSession();
+            user = (User)session.get(User.class, idUser);
+            user.setPassword(newpassword);
+            session.update(user, idUser);
+        }
+        catch (Exception e){
+            log.error("Error trying to open the session: " +e.getMessage());
+        }
+        finally {
+            session.close();
+        }
+    }
+
+    @Override
+    public void logOut(int idUser) throws UserNotFoundException{
+        Session session = null;
+        User user;
+
+        try {
+            session = FactorySession.openSession();
+            user = (User)session.get(User.class, idUser);
+        }
+        catch(Exception e){
+            log.error("Error trying to open the session: " +e.getMessage());
+            throw new UserNotFoundException();
+        }
+        finally {
+            session.close();
+        }
+
+        user.setConected(false);
+
+        try {
+            session = FactorySession.openSession();
+            session.update(user, idUser);
+        }
+        catch (Exception e) {
+            log.error("Error trying to open the session: " +e.getMessage());
+            throw new UserNotFoundException();
+        }
+        finally {
+            session.close();
+        }
+    }
+
+    @Override
+    public void deleteAccount(String username, String password) throws UserNotFoundException {
+        int idUser = getIdUser(username, password);
+
+        User user = new User();
+        Session session = null;
+        Player player;
+        Players_Gameobjects players_gameobjects = new Players_Gameobjects();
+
+        HashMap params = new HashMap();
+
+        params.put("player_id", new Condition("=", String.valueOf(idUser)));
+
+        try{
+            session = FactorySession.openSession();
+            player = (Player)session.get(Player.class, idUser);
+            session.delete(players_gameobjects, params);
+            session.delete(player, idUser);
+            session.delete(user, idUser);
+        }
+        catch(Exception e){
+            log.error("Error trying to open the session: " +e.getMessage());
+        }
+        finally {
             session.close();
         }
     }
@@ -127,11 +235,13 @@ public class ProductManagerImpl implements ProductManager {
     public Stats getStatsOfAPlayer(int idUser) throws UserNotFoundException {
         Session session = null;
         Player player;
+        User user;
         Stats stats = new Stats();
 
         try{
             session = FactorySession.openSession();
             player = (Player)session.get(Player.class, idUser);
+            user = (User)session.get(User.class, idUser);
         }
         catch(Exception e){
             log.error("Error trying to open the session: " +e.getMessage());
@@ -141,6 +251,7 @@ public class ProductManagerImpl implements ProductManager {
             session.close();
         }
 
+        stats.setUsername(user.getUsername());
         stats.setPoints(player.getPoints());
         stats.setEnemiesKilled(player.getEnemiesKilled());
 
@@ -154,27 +265,6 @@ public class ProductManagerImpl implements ProductManager {
     public void changeObjectInUse(String username, int gameObjectId) throws UserNotFoundException {
 
     }*/
-
-    @Override
-    public void modifyCredentials(String username, String oldpassword, String newpassword) throws UserNotFoundException {
-        int idUser = getIdUser(username, oldpassword);
-
-        Session session = null;
-        User user;
-
-        try{
-            session = FactorySession.openSession();
-            user = (User)session.get(User.class, idUser);
-            user.setPassword(newpassword);
-            session.update(user, idUser);
-        }
-        catch (Exception e){
-            log.error("Error trying to open the session: " +e.getMessage());
-        }
-        finally {
-            session.close();
-        }
-    }
 
     @Override
     public User getUser(int idUser) throws UserNotFoundException{
@@ -196,35 +286,112 @@ public class ProductManagerImpl implements ProductManager {
         return user;
     }
 
+    @Override
+    public int getIdUser(String username, String password) throws UserNotFoundException{
+        Session session = null;
+
+        int idUser;
+
+        try {
+            session = FactorySession.openSession();
+            idUser = session.getID(User.class, username, password);
+        }
+        catch(Exception e){
+            log.error("The user doesn't exist: " +e.getMessage());
+            throw new UserNotFoundException();
+        }
+        finally {
+            session.close();
+        }
+
+        return idUser;
+    }
+
     /*@Override
     public void addWeapon(String username, Weapon myWeapon) throws UserNotFoundException {
 
+    }*/
+
+    @Override
+    public void updateUserPoints(int idUser, int points) throws UserNotFoundException{
+        Session session = null;
+        Player player;
+
+        try {
+            session = FactorySession.openSession();
+            player = (Player)session.get(Player.class, idUser);
+        }
+        catch(Exception e){
+            log.error("Error trying to open the session: " +e.getMessage());
+            throw new UserNotFoundException();
+        }
+        finally {
+            session.close();
+        }
+
+        player.setPoints(points);
+
+        try {
+            session = FactorySession.openSession();
+            session.update(player, idUser);
+        }
+        catch (Exception e) {
+            log.error("Error trying to open the session: " +e.getMessage());
+            throw new UserNotFoundException();
+        }
+        finally {
+            session.close();
+        }
     }
 
     @Override
+    public void updateUserEnemiesKilled(int idUser, int enemieskilled) throws UserNotFoundException{
+        Session session = null;
+        Player player;
+
+        try {
+            session = FactorySession.openSession();
+            player = (Player)session.get(Player.class, idUser);
+        }
+        catch(Exception e){
+            log.error("Error trying to open the session: " +e.getMessage());
+            throw new UserNotFoundException();
+        }
+        finally {
+            session.close();
+        }
+
+        player.setEnemiesKilled(enemieskilled);
+
+        try {
+            session = FactorySession.openSession();
+            session.update(player, idUser);
+        }
+        catch (Exception e) {
+            log.error("Error trying to open the session: " +e.getMessage());
+            throw new UserNotFoundException();
+        }
+        finally {
+            session.close();
+        }
+    }
+
+    /*@Override
     public void deleteWeapon(String username, int gameObjectId) throws UserNotFoundException {
 
     }*/
 
     @Override
-    public void deleteAccount(String username, String password) throws UserNotFoundException {
-        int idUser = getIdUser(username, password);
-
-        User user = new User();
+    public List<Stats> getStats(){
         Session session = null;
+        List<Player> playerList = null;
+        List<Stats> statsList = new LinkedList<>();
         Player player;
-        Players_Gameobjects players_gameobjects = new Players_Gameobjects();
-
-        HashMap params = new HashMap();
-
-        params.put("player_id", new Condition("=", String.valueOf(idUser)));
+        User user = null;
 
         try{
             session = FactorySession.openSession();
-            player = (Player)session.get(Player.class, idUser);
-            session.delete(players_gameobjects, params);
-            session.delete(player, idUser);
-            session.delete(user, idUser);
+            playerList = session.findAll(Player.class);
         }
         catch(Exception e){
             log.error("Error trying to open the session: " +e.getMessage());
@@ -232,9 +399,30 @@ public class ProductManagerImpl implements ProductManager {
         finally {
             session.close();
         }
+
+        for(int i = 0; i<playerList.size(); i++){
+            try {
+                session = FactorySession.openSession();
+                int idUser = playerList.get(i).getUser_id();
+                user = (User) session.get(User.class, idUser);
+            }
+            catch(Exception e){
+                log.error("Error trying to open the session: " +e.getMessage());
+            }
+            finally {
+                session.close();
+            }
+            Stats stats = new Stats();
+            stats.setUsername(user.getUsername());
+            stats.setEnemiesKilled(playerList.get(i).getEnemiesKilled());
+            stats.setPoints(playerList.get(i).getPoints());
+            statsList.add(stats);
+        }
+
+        return statsList;
     }
 
-   @Override
+    @Override
     public List<GameObject> getAllObjects() {
        Session session = null;
        List<GameObject> foodObjectsList = null;
@@ -284,45 +472,42 @@ public class ProductManagerImpl implements ProductManager {
     @Override
     public void deleteGameObject(int gameObjectId) throws GameObjectNotFoundException {
 
-    }
+    }*/
 
     @Override
-    public LinkedList<GameMap> getAllGameMaps() {
-        return null;
-    }
-
-    @Override
-    public String getAimOfAGameMap(int gameMapId) throws GameMapNotFoundException {
-        return null;
-    }
-
-    @Override
-    public int getStatus(String username) {
+    public int getStatus(int idUser) {
         return 0;
     }
 
     @Override
-    public void saveStatus(int gameMapId, String username) {
-
-    }*/
-
-    private int getIdUser(String username, String password) throws UserNotFoundException{
+    public void saveStatus(int gameMapId, int idUser) throws UserNotFoundException {
         Session session = null;
-
-        int idUser;
+        Player player;
 
         try {
             session = FactorySession.openSession();
-            idUser = session.getID(User.class, username, password);
+            player = (Player)session.get(Player.class, idUser);
         }
         catch(Exception e){
-            log.error("The user doesn't exist: " +e.getMessage());
+            log.error("Error trying to open the session: " +e.getMessage());
             throw new UserNotFoundException();
         }
         finally {
             session.close();
         }
 
-        return idUser;
+        player.setCheckPoint(gameMapId);
+
+        try {
+            session = FactorySession.openSession();
+            session.update(player, idUser);
+        }
+        catch (Exception e) {
+            log.error("Error trying to open the session: " +e.getMessage());
+            throw new UserNotFoundException();
+        }
+        finally {
+            session.close();
+        }
     }
 }

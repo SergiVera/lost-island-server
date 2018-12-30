@@ -6,6 +6,7 @@ CREATE TABLE User (
 ID INTEGER NOT NULL AUTO_INCREMENT,
 username VARCHAR(20),
 password VARCHAR(20),
+conected TINYINT(1),
 PRIMARY KEY (ID)
 );
 
@@ -15,7 +16,6 @@ currentHealth INTEGER,
 maxHealth INTEGER,
 attack INTEGER,
 checkPoint INTEGER,
-currentObject INTEGER,
 points INTEGER,
 enemiesKilled INTEGER,
 PRIMARY KEY (ID),
@@ -50,10 +50,10 @@ player_id INTEGER NOT NULL, foreign key(player_id) references Player(ID),
 enemy_idEnemy INTEGER NOT NULL, foreign key(enemy_idEnemy) references Enemy(ID)
 );
 
-INSERT INTO User (username, password) VALUES ('Sergi', 'Sergi');
-INSERT INTO User (username, password) VALUES ('Carlos', 'Carlos');
-INSERT INTO Player (currentHealth, maxHealth, attack, checkPoint, currentObject, points, enemiesKilled, user_id) VALUES (50, 100, 20, 1, 0, 25, 4, 1);
-INSERT INTO Player (currentHealth, maxHealth, attack, checkPoint, currentObject, points, enemiesKilled, user_id) VALUES (100, 100, 20, 1, 0, 25, 4, 2);
+INSERT INTO User (username, password, conected) VALUES ('Sergi', 'Sergi', false);
+INSERT INTO User (username, password, conected) VALUES ('Carlos', 'Carlos', false);
+INSERT INTO Player (currentHealth, maxHealth, attack, checkPoint, points, enemiesKilled, user_id) VALUES (50, 100, 20, 0, 25, 4, 1);
+INSERT INTO Player (currentHealth, maxHealth, attack, checkPoint, points, enemiesKilled, user_id) VALUES (100, 100, 20, 0, 25, 4, 2);
 INSERT INTO GameObject(type, name, objectPoints) VALUES ('BoostDamage','espada',20);
 INSERT INTO GameObject(type, name, objectPoints) VALUES ('BoostDamage','martillo',30);
 INSERT INTO GameObject(type, name, objectPoints) VALUES ('BoostLife','poison',10);

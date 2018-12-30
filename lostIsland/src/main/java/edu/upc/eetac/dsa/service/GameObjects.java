@@ -33,9 +33,9 @@ public class GameObjects {
     @ApiResponses(value = {
             @ApiResponse(code = 201, message = "Successful", response = GameObject.class, responseContainer = "GameObject class")
     })
-    @Path("/")
+    @Path("/allobjects")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response objectsPlayer() {
+    public Response allObjects() {
             List<GameObject> gameObjects = this.productManager.getAllObjects();
             GenericEntity<List<GameObject>> entity = new GenericEntity<List<GameObject>>(gameObjects) {};
             return Response.status(201).entity(entity).build();

@@ -1,11 +1,10 @@
 package edu.upc.eetac.dsa.service;
 
+import edu.upc.eetac.dsa.exception.UserNotFoundException;
 import edu.upc.eetac.dsa.model.GameObject;
+import edu.upc.eetac.dsa.model.Stats;
 import edu.upc.eetac.dsa.mysql.ProductManager;
 import edu.upc.eetac.dsa.mysql.ProductManagerImpl;
-import edu.upc.eetac.dsa.exception.UserNotFoundException;
-import edu.upc.eetac.dsa.model.Stats;
-import edu.upc.eetac.dsa.model.User;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -29,57 +28,15 @@ public class Users {
         this.productManager = ProductManagerImpl.getInstance();
     }
 
-    @PUT
-    @ApiOperation(value = "update credentials", notes = "you can only modify your password introducing a new one")
-    @ApiResponses(value = {
-            @ApiResponse(code = 201, message = "Successful"),
-            @ApiResponse(code = 404, message = "User doesn't exist")
-    })
-    @Path("/{idUser}/newcredentials")
-    @Consumes(MediaType.APPLICATION_JSON)
-    public Response updateCredentials(@PathParam("idUser") int idUser, String newpassword) {
-        try {
-            User user = this.productManager.getUser(idUser);
-            String username = user.getUsername();
-            String oldpassword = user.getPassword();
-            this.productManager.modifyCredentials(username, oldpassword, newpassword);
-            return Response.status(201).build();
-        } catch (UserNotFoundException e) {
-            e.printStackTrace();
-            return Response.status(404).build();
-        }
-    }
-
-    @DELETE
-    @ApiOperation(value = "delete account", notes = "delete an account given its credentials: username and password")
-    @ApiResponses(value = {
-            @ApiResponse(code = 201, message = "Successful"),
-            @ApiResponse(code = 404, message = "User doesn't exist")
-    })
-    @Path("/{idUser}/deleteaccount")
-    @Consumes(MediaType.APPLICATION_JSON)
-    public Response deleteAccount(@PathParam("idUser") int idUser) {
-        try {
-            User user = this.productManager.getUser(idUser);
-            String username = user.getUsername();
-            String password = user.getPassword();
-            this.productManager.deleteAccount(username, password);
-            return Response.status(201).build();
-        } catch (UserNotFoundException e) {
-            e.printStackTrace();
-            return Response.status(404).build();
-        }
-    }
-
     @GET
-    @ApiOperation(value = "get the stats of a player", notes = "get the points and the number of enemies killed of a player given its id")
+    @ApiOperation(value = "get the stats of a user", notes = "get the points and the number of enemies killed of a user given its id")
     @ApiResponses(value = {
             @ApiResponse(code = 201, message = "Successful", response = Stats.class, responseContainer = "Stats class"),
             @ApiResponse(code = 404, message = "User doesn't exist")
     })
     @Path("/{idUser}/stats")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response statsPlayer(@PathParam("idUser") int idUser) {
+    public Response statsUser(@PathParam("idUser") int idUser) {
         try {
             Stats stats = this.productManager.getStatsOfAPlayer(idUser);
             log.info("Points: " +stats.getPoints());
@@ -92,18 +49,67 @@ public class Users {
     }
 
     @GET
-    @ApiOperation(value = "get all objects of a player", notes = "get all objects of a player given its id")
+    @ApiOperation(value = "get all objects of a user", notes = "get all objects of a user given its id")
     @ApiResponses(value = {
             @ApiResponse(code = 201, message = "Successful", response = GameObject.class, responseContainer = "GameObject class"),
             @ApiResponse(code = 404, message = "User doesn't exist")
     })
     @Path("/{idUser}/objects")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response objectsPlayer(@PathParam("idUser") int idUser) {
+    public Response objectsUser(@PathParam("idUser") int idUser) {
         try {
             List<GameObject> gameObjects = this.productManager.getAllObjectsOfAPlayer(idUser);
             GenericEntity<List<GameObject>> entity = new GenericEntity<List<GameObject>>(gameObjects) {};
             return Response.status(201).entity(entity).build();
+        } catch (UserNotFoundException e) {
+            e.printStackTrace();
+            return Response.status(404).build();
+        }
+    }
+
+    @GET
+    @ApiOperation(value = "get all the stats", notes = "get the points and the number of enemies killed of every player")
+    @ApiResponses(value = {
+            @ApiResponse(code = 201, message = "Successful", response = Stats.class, responseContainer = "Stats class")
+    })
+    @Path("/stats")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response allStats(){
+        List<Stats> statsList = this.productManager.getStats();
+        GenericEntity<List<Stats>> entity = new GenericEntity<List<Stats>>(statsList) {};
+        return Response.status(201).entity(entity).build();
+    }
+
+    @PUT
+    @ApiOperation(value = "update user points", notes = "modify the points of the user")
+    @ApiResponses(value = {
+            @ApiResponse(code = 201, message = "Successful"),
+            @ApiResponse(code = 404, message = "User doesn't exist")
+    })
+    @Path("/{idUser}/updatepoints/{points}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response updateUserStatus(@PathParam("idUser") int idUser,@PathParam("points") int points){
+        try {
+            this.productManager.updateUserPoints(idUser, points);
+            return Response.status(201).build();
+        } catch (UserNotFoundException e) {
+            e.printStackTrace();
+            return Response.status(404).build();
+        }
+    }
+
+    @PUT
+    @ApiOperation(value = "update user enemieskilled", notes = "modify the number of killed enemies of the user")
+    @ApiResponses(value = {
+            @ApiResponse(code = 201, message = "Successful"),
+            @ApiResponse(code = 404, message = "User doesn't exist")
+    })
+    @Path("/{idUser}/updatekilledenemies/{enemieskilled}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response updateUserEnemiesKilled(@PathParam("idUser") int idUser,@PathParam("enemieskilled") int enemieskilled){
+        try {
+            this.productManager.updateUserEnemiesKilled(idUser, enemieskilled);
+            return Response.status(201).build();
         } catch (UserNotFoundException e) {
             e.printStackTrace();
             return Response.status(404).build();

@@ -1,9 +1,6 @@
 package edu.upc.eetac.dsa.mysql;
 
-import edu.upc.eetac.dsa.exception.GameMapNotFoundException;
-import edu.upc.eetac.dsa.exception.GameObjectNotFoundException;
-import edu.upc.eetac.dsa.exception.UserAlreadyExistsException;
-import edu.upc.eetac.dsa.exception.UserNotFoundException;
+import edu.upc.eetac.dsa.exception.*;
 import edu.upc.eetac.dsa.model.GameObject;
 import edu.upc.eetac.dsa.model.Player;
 import edu.upc.eetac.dsa.model.Stats;
@@ -26,7 +23,7 @@ public interface ProductManager {
      *@throws UserNotFoundException if the User doesn't exist
      *@return Player class
      */
-     Player logIn(String username, String password) throws UserNotFoundException;
+     Player logIn(String username, String password) throws UserNotFoundException, UserAlreadyConectedException;
     /**Creates a new user
      *
      *@param username name of the user
@@ -34,10 +31,31 @@ public interface ProductManager {
      *@throws UserAlreadyExistsException if the user exists
      */
      void signUp(String username, String password) throws UserAlreadyExistsException;
+    /**Cancel my account
+     *
+     *@param username name of the user
+     *@throws UserNotFoundException if the User doesn't exist
+     *
+     */
+    void deleteAccount(String username, String password) throws UserNotFoundException;
+    /**Change the username and the password of a given user
+     *
+     *@param username name of the user
+     *@param password password of the user
+     *@throws UserNotFoundException if the User doesn't exist
+     *@throws ?? 400 bad request
+     *
+     */
+    void modifyCredentials(String username, String oldpassword, String newpassword) throws UserNotFoundException;
+    /**
+     * @param idUser id of the user
+     * @throws UserNotFoundException if the User doesn't exist
+     */
+    void logOut(int idUser) throws UserNotFoundException;
 
     //**2. Users
 
-    /**Show list of all GameObjects of a given player
+    /**Show list of all GameObjects of a given user
      *
      *@param username name of the user
      *@throws UserNotFoundException if the User doesn't exist
@@ -45,7 +63,7 @@ public interface ProductManager {
      *
      */
     List<GameObject> getAllObjectsOfAPlayer(int idUser) throws UserNotFoundException;
-    /**Show the stats of a given player
+    /**Show the stats of a given user
      *
      *@param idUser id of the user
      *@throws UserNotFoundException if the User doesn't exist
@@ -62,20 +80,18 @@ public interface ProductManager {
      *
      *//*
     void changeObjectInUse(String username, int gameObjectId) throws UserNotFoundException;
-    *//**Change the username and the password of a given user
-     *
-     *@param username name of the user
-     *@param password password of the user
-     *@throws UserNotFoundException if the User doesn't exist
-     *@throws ?? 400 bad request
-     *
-     */
-    void modifyCredentials(String username, String oldpassword, String newpassword) throws UserNotFoundException;
-    /**
+    */
+    /**Get User passing its ID
      * @param idUser id of the user (integer)
      * @return User user class
      */
     User getUser(int idUser) throws UserNotFoundException;
+    /**Get ID of the user passing its username and password
+     * @param username username of the user
+     * @param password password of the user
+     * @return integer id of the user
+     */
+    int getIdUser(String username, String password) throws UserNotFoundException;
     /**Add new weapon to my Inventory
      *
      *@param username name of the user
@@ -86,30 +102,42 @@ public interface ProductManager {
     void addWeapon(String username, Weapon myWeapon) throws UserNotFoundException;
 
     *//**We can add more GameObjects to my Inventory??
-     /**In the POSTS & PUTS we have to return the modified | created fields??
+     /* *In the POSTS & PUTS we have to return the modified | created fields??
 
-     /**Remove weapon of my Inventory
-     *
-     *@param username name of the user
-     *@param gameObjectId id of the GameObject that we want to delete
-     *@throws UserNotFoundException if the User doesn't exist
-     *@throws ?? 400 bad request
-     *
-     *//*
-    void deleteWeapon(String username, int gameObjectId) throws UserNotFoundException;
-    *//**Cancel my account
-     *
-     *@param username name of the user
-     *@throws UserNotFoundException if the User doesn't exist
-     *
+     /**
+     * @param points points of the user
+     * @param idUser id of the user
+     * @throws UserNotFoundException
      */
-    void deleteAccount(String username, String password) throws UserNotFoundException;
+    void updateUserPoints(int idUser, int points) throws UserNotFoundException;
+
+    /**
+     * @param enemieskilled enemieskilled of the user
+     * @param idUser id of the user
+     * @throws UserNotFoundException
+     */
+    void updateUserEnemiesKilled(int idUser, int enemieskilled) throws UserNotFoundException;
+
+    /**Remove weapon of my Inventory
+    *
+    *@param username name of the user
+    *@param gameObjectId id of the GameObject that we want to delete
+    *@throws UserNotFoundException if the User doesn't exist
+    *@throws ?? 400 bad request
+    *
+    *//*
+    void deleteWeapon(String username, int gameObjectId) throws UserNotFoundException;
+    */
+    /**
+     * @return List of stats
+     */
+    List<Stats> getStats();
 
     //**3. Objects
 
      /**Show list of all objects
      *
-     *@return linkedlist of objects
+     *@return List of objects
      *
      */
     List<GameObject> getAllObjects();/*
@@ -136,38 +164,24 @@ public interface ProductManager {
      *//*
     void deleteGameObject(int gameObjectId) throws GameObjectNotFoundException;
 
-    *//**4. GameMaps
+    //4. GameMaps
 
-     /**Show list of all GameMaps in the game
+    *//**Get the gameMapId where the user ended its last game
      *
-     *@return linkedlist of GameMaps
-     *
-     *//*
-    LinkedList<GameMap> getAllGameMaps();
-    *//**Show the aim of each GameMap given its GameMapId
-     *
-     *@param gameMapId id of the GameMap
-     *@throws GameMapNotFoundException if the GameMap doesn't exist
-     *@return aim String of the aim of the map
-     *
-     *//*
-    String getAimOfAGameMap(int gameMapId) throws GameMapNotFoundException;
-    *//**Get the gameMapId where the player ended its last game
-     *
-     *@param username username of the player
+     *@param idUser id of the user
      *@return integer gameMapId
      *
-     *//*
-    int getStatus(String username);
-    *//**Save the position of the player in the map
+     */
+    int getStatus(int idUser);
+    /**Save the position of the user in the map
      *
      *@param gameMapId id of the GameMap
-     *@param username  username of the player in the current game
+     *@param idUser  id of the user in the current game
      *
-     *//*
-    void saveStatus(int gameMapId, String username);
+     */
+    void saveStatus(int gameMapId, int idUser) throws UserNotFoundException;
 
-    *//**
+    /**
      * clear all the data structures
      */
     void clear();

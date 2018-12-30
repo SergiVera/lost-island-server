@@ -2,12 +2,15 @@ package edu.upc.eetac.dsa.model;
 
 public class Stats {
     //Attributes
+
+    private String username;
     private int points;
     private int enemiesKilled;
 
     //Constructor
 
-    public Stats(int points, int enemiesKilled) {
+    public Stats(String username, int points, int enemiesKilled) {
+        this.username = username;
         this.points = points;
         this.enemiesKilled = enemiesKilled;
     }
@@ -35,5 +38,13 @@ public class Stats {
 
     public void setEnemiesKilled(int enemiesKilled) {
         this.enemiesKilled = enemiesKilled;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 }

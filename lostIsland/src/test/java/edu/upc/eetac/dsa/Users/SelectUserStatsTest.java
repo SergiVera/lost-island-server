@@ -6,11 +6,11 @@ import edu.upc.eetac.dsa.mysql.ProductManagerImpl;
 import org.junit.Assert;
 import org.junit.Test;
 
-public class SelectStatsTest {
+public class SelectUserStatsTest {
     private ProductManager dao;
 
     @Test
-    public void selectPlayerDB() throws UserNotFoundException {
+    public void selectStatsUserDB() throws UserNotFoundException {
         this.dao = ProductManagerImpl.getInstance();
         Assert.assertEquals("25",this.dao.getStatsOfAPlayer(1).getPoints());
     }
