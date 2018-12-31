@@ -1,6 +1,8 @@
 package edu.upc.eetac.dsa.service;
 
+import edu.upc.eetac.dsa.exception.GameObjectNotFoundException;
 import edu.upc.eetac.dsa.exception.UserNotFoundException;
+import edu.upc.eetac.dsa.model.Enemy;
 import edu.upc.eetac.dsa.model.GameObject;
 import edu.upc.eetac.dsa.model.Stats;
 import edu.upc.eetac.dsa.mysql.ProductManager;
@@ -68,6 +70,25 @@ public class Users {
     }
 
     @GET
+    @ApiOperation(value = "get all remaining enemies of a user", notes = "get all remaining enemies of a user given its id")
+    @ApiResponses(value = {
+            @ApiResponse(code = 201, message = "Successful", response = Enemy.class, responseContainer = "Enemy class"),
+            @ApiResponse(code = 404, message = "User doesn't exist")
+    })
+    @Path("/{idUser}/enemies")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response enemiesUser(@PathParam("idUser") int idUser) {
+        try {
+            List<Enemy> enemies = this.productManager.getAllEnemiesOfAPlayer(idUser);
+            GenericEntity<List<Enemy>> entity = new GenericEntity<List<Enemy>>(enemies) {};
+            return Response.status(201).entity(entity).build();
+        } catch (UserNotFoundException e) {
+            e.printStackTrace();
+            return Response.status(404).build();
+        }
+    }
+
+    @GET
     @ApiOperation(value = "get all the stats", notes = "get the points and the number of enemies killed of every player")
     @ApiResponses(value = {
             @ApiResponse(code = 201, message = "Successful", response = Stats.class, responseContainer = "Stats class")
@@ -113,6 +134,28 @@ public class Users {
         } catch (UserNotFoundException e) {
             e.printStackTrace();
             return Response.status(404).build();
+        }
+    }
+
+    @PUT
+    @ApiOperation(value = "update attributes of the user", notes = "modify the maxHealth, the currentHealth or the life, depends on the object the user has grabbed")
+    @ApiResponses(value = {
+            @ApiResponse(code = 201, message = "Successful"),
+            @ApiResponse(code = 404, message = "User doesn't exist"),
+            @ApiResponse(code = 402, message = "GameObject doesn't exist"),
+    })
+    @Path("/{idUser}/modifyattributes/{idGameObject}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response updateUserAttributes(@PathParam("idUser") int idUser,@PathParam("idGameObject") int idGameObject){
+        try {
+            this.productManager.modifyAttributes(idGameObject, idUser);
+            return Response.status(201).build();
+        } catch (UserNotFoundException e) {
+            e.printStackTrace();
+            return Response.status(404).build();
+        } catch (GameObjectNotFoundException e) {
+            e.printStackTrace();
+            return Response.status(402).build();
         }
     }
 }

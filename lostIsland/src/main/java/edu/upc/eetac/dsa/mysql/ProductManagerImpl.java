@@ -1,8 +1,6 @@
 package edu.upc.eetac.dsa.mysql;
 
-import edu.upc.eetac.dsa.exception.UserAlreadyConectedException;
-import edu.upc.eetac.dsa.exception.UserAlreadyExistsException;
-import edu.upc.eetac.dsa.exception.UserNotFoundException;
+import edu.upc.eetac.dsa.exception.*;
 import edu.upc.eetac.dsa.model.*;
 import org.apache.commons.collections.map.MultiValueMap;
 import org.apache.log4j.Logger;
@@ -232,6 +230,45 @@ public class ProductManagerImpl implements ProductManager {
     }
 
     @Override
+    public List<Enemy> getAllEnemiesOfAPlayer(int idUser) throws UserNotFoundException{
+        Session session = null;
+        List<Enemy> monkeyEnemyList = null;
+        List<Enemy> bossEnemyList = null;
+        List<Enemy> enemiesList = new ArrayList<>();
+
+        User user = getUser(idUser);
+
+        if(user.getUsername() != null){
+            String query = "SELECT Enemy.* FROM Player, Enemy, Players_Enemies ";
+            MultiValueMap params = new MultiValueMap();
+            params.put("Player.ID", new Condition("=", String.valueOf(idUser)));
+            params.put("Player.ID", new Condition("=", "Players_Enemies.player_id"));
+            params.put("Players_Enemies.enemy_idEnemy", new Condition("=", "Enemy.ID"));
+            params.put("Enemy.type", new Condition("=", "'Monkey'"));
+
+            try {
+                session = FactorySession.openSession();
+                monkeyEnemyList = session.query(query, Monkey.class, params);
+                params.remove("Enemy.type");
+                params.put("Enemy.type", new Condition("=", "'Boss'"));
+                bossEnemyList = session.query(query, Boss.class, params);
+            } catch (Exception e) {
+                log.error("Error trying to open the session: " + e.getMessage());
+            } finally {
+                session.close();
+            }
+
+            enemiesList.addAll(monkeyEnemyList);
+            enemiesList.addAll(bossEnemyList);
+        }
+        else{
+            throw new UserNotFoundException();
+        }
+
+        return enemiesList;
+    }
+
+    @Override
     public Stats getStatsOfAPlayer(int idUser) throws UserNotFoundException {
         Session session = null;
         Player player;
@@ -286,7 +323,7 @@ public class ProductManagerImpl implements ProductManager {
         return user;
     }
 
-    @Override
+   @Override
     public int getIdUser(String username, String password) throws UserNotFoundException{
         Session session = null;
 
@@ -307,10 +344,75 @@ public class ProductManagerImpl implements ProductManager {
         return idUser;
     }
 
-    /*@Override
-    public void addWeapon(String username, Weapon myWeapon) throws UserNotFoundException {
+    //This method is called when a player buys an object at the shop
+    @Override
+    public void addObject(int idUser, int idGameObject, int points, int costObject) throws UserNotFoundException, GameObjectNotFoundException, UserNoMoneyException {
 
-    }*/
+        if(points >= costObject)
+            modifyAttributes(idGameObject, idUser);
+        else
+            throw new UserNoMoneyException();
+
+    }
+
+    //This method is called when a player grabs an object in the game
+    @Override
+    public void modifyAttributes(int idGameObject, int idUser) throws UserNotFoundException, GameObjectNotFoundException{
+        Session session = null;
+        List<GameObject> gameObjectList;
+        GameObject object = null;
+        Player player;
+
+        try {
+            session = FactorySession.openSession();
+            player = (Player) session.get(Player.class, idUser);
+        } catch (Exception e) {
+            log.error("The user doesn't exist: " + e.getMessage());
+            throw new UserNotFoundException();
+        } finally {
+            session.close();
+        }
+
+        gameObjectList = getAllObjects();
+
+        for (GameObject gameObject : gameObjectList) {
+            if (gameObject.getId() == idGameObject) {
+                object = gameObject;
+            }
+            else
+                throw new GameObjectNotFoundException();
+        }
+
+        player = object.modifyAttributes(player);
+
+        //Modify listobjects
+
+        try{
+            session = FactorySession.openSession();
+            Players_Gameobjects players_gameobjects = new Players_Gameobjects(idUser, idGameObject);
+            session.customSave(players_gameobjects);
+        }
+        catch (Exception e) {
+            log.error("The user doesn't exist: " + e.getMessage());
+            throw new UserNotFoundException();
+        } finally {
+            session.close();
+        }
+
+        //Update database
+
+        try {
+            session = FactorySession.openSession();
+            session.update(player, idUser);
+        }
+        catch (Exception e) {
+            log.error("Error trying to open the session: " +e.getMessage());
+            throw new UserNotFoundException();
+        }
+        finally {
+            session.close();
+        }
+    }
 
     @Override
     public void updateUserPoints(int idUser, int points) throws UserNotFoundException{
@@ -509,5 +611,50 @@ public class ProductManagerImpl implements ProductManager {
         finally {
             session.close();
         }
+    }
+
+    @Override
+    public List<Enemy> getAllEnemies(){
+        Session session = null;
+        List<Enemy> monkeyEnemyList = null;
+        List<Enemy> bossEnemyList = null;
+        List<Enemy> mapEnemiesList = new ArrayList<>();
+
+        String query = "SELECT * FROM Enemy ";
+
+        MultiValueMap params = new MultiValueMap();
+        params.put("type", new Condition("=", "'Monkey'"));
+
+        try{
+            session = FactorySession.openSession();
+            monkeyEnemyList = session.query(query, Monkey.class, params);
+            params.remove("type");
+            params.put("type", new Condition("=", "'Boss'"));
+            bossEnemyList = session.query(query, Boss.class, params);
+        }
+        catch(Exception e){
+            log.error("Error trying to open the session: " +e.getMessage());
+        }
+        finally {
+            session.close();
+        }
+
+        for(int i = 0; i<monkeyEnemyList.size(); i++){
+            Monkey monkey = new Monkey();
+            monkey.setType(monkeyEnemyList.get(i).getType());
+            monkey.setLife(monkeyEnemyList.get(i).getLife());
+            monkey.setMap(monkeyEnemyList.get(i).getMap());
+            mapEnemiesList.add(monkey);
+        }
+
+        for(int i = 0; i<bossEnemyList.size(); i++){
+            Boss boss = new Boss();
+            boss.setType(bossEnemyList.get(i).getType());
+            boss.setLife(bossEnemyList.get(i).getLife());
+            boss.setMap(monkeyEnemyList.get(i).getMap());
+            mapEnemiesList.add(boss);
+        }
+
+        return mapEnemiesList;
     }
 }

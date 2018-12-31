@@ -24,10 +24,11 @@ FOREIGN KEY (user_id) REFERENCES User(ID)
 );
 
 CREATE TABLE GameObject (
-ID INTEGER NOT NULL AUTO_INCREMENT,
+ID INTEGER AUTO_INCREMENT,
 type VARCHAR(20),
 name VARCHAR(20),
 objectPoints INTEGER,
+cost INTEGER,
 PRIMARY KEY (ID)
 );
 
@@ -35,6 +36,7 @@ CREATE TABLE Enemy (
 ID INTEGER NOT NULL AUTO_INCREMENT,
 type VARCHAR(20),
 life INT,
+map INT,
 positionX INT,
 positionY INT,
 PRIMARY KEY (ID)
@@ -54,13 +56,13 @@ INSERT INTO User (username, password, conected) VALUES ('Sergi', 'Sergi', false)
 INSERT INTO User (username, password, conected) VALUES ('Carlos', 'Carlos', false);
 INSERT INTO Player (currentHealth, maxHealth, attack, checkPoint, points, enemiesKilled, user_id) VALUES (50, 100, 20, 0, 25, 4, 1);
 INSERT INTO Player (currentHealth, maxHealth, attack, checkPoint, points, enemiesKilled, user_id) VALUES (100, 100, 20, 0, 25, 4, 2);
-INSERT INTO GameObject(type, name, objectPoints) VALUES ('BoostDamage','espada',20);
-INSERT INTO GameObject(type, name, objectPoints) VALUES ('BoostDamage','martillo',30);
-INSERT INTO GameObject(type, name, objectPoints) VALUES ('BoostLife','poison',10);
-INSERT INTO Enemy (type, life, positionX, positionY) VALUES ('monkey',20,3,9);
-INSERT INTO Enemy (type, life, positionX, positionY) VALUES ('monkey',50,2,8);
+INSERT INTO GameObject(type, name, objectPoints, cost) VALUES ('BoostDamage','espada',20, 50);
+INSERT INTO GameObject(type, name, objectPoints, cost) VALUES ('BoostDamage','martillo',30, 100);
+INSERT INTO GameObject(type, name, objectPoints, cost) VALUES ('BoostLife','poison',10, 200);
+INSERT INTO Enemy (type, life, map, positionX, positionY) VALUES ('Monkey',20,1,3,9);
+INSERT INTO Enemy (type, life, map, positionX, positionY) VALUES ('Boss',50,3,2,8);
 INSERT INTO players_gameobjects (player_id, gameObject_idGameObject) VALUES (1,1);
 INSERT INTO players_gameobjects (player_id, gameObject_idGameObject) VALUES (1,2);
 INSERT INTO players_gameobjects (player_id, gameObject_idGameObject) VALUES (2,2);
-/*INSERT INTO players_enemies (player_id, enemy_idEnemy) VALUES (1,1);
-INSERT INTO players_enemies (player_id, enemy_idEnemy) VALUES (1,2);
+INSERT INTO players_enemies (player_id, enemy_idEnemy) VALUES (1,1);
+INSERT INTO players_enemies (player_id, enemy_idEnemy) VALUES (2,2);

@@ -1,6 +1,7 @@
 package edu.upc.eetac.dsa.service;
 
 import edu.upc.eetac.dsa.exception.UserNotFoundException;
+import edu.upc.eetac.dsa.model.Enemy;
 import edu.upc.eetac.dsa.mysql.ProductManager;
 import edu.upc.eetac.dsa.mysql.ProductManagerImpl;
 import io.swagger.annotations.Api;
@@ -9,12 +10,11 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.apache.log4j.Logger;
 
-import javax.ws.rs.Consumes;
-import javax.ws.rs.PUT;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
+import javax.ws.rs.*;
+import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.util.List;
 
 @Api(value="/maps", description = "Service of Autentication")
 @Path("/maps")
@@ -44,5 +44,18 @@ public class GameMaps {
             e.printStackTrace();
             return Response.status(404).build();
         }
+    }
+
+    @GET
+    @ApiOperation(value = "get all enemies in the game", notes = "get all enemies in the game")
+    @ApiResponses(value = {
+            @ApiResponse(code = 201, message = "Successful", response = Enemy.class, responseContainer = "Enemy class")
+    })
+    @Path("/allenemies")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response allEnemies() {
+        List<Enemy> enemies = this.productManager.getAllEnemies();
+        GenericEntity<List<Enemy>> entity = new GenericEntity<List<Enemy>>(enemies) {};
+        return Response.status(201).entity(entity).build();
     }
 }

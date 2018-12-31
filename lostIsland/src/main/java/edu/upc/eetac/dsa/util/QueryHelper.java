@@ -32,6 +32,30 @@ public class QueryHelper {
         return sb.toString();
     }
 
+    //INSERT query with custom fields
+    public static String createQueryCUSTOMINSERT(Object entity){
+
+        StringBuffer sb = new StringBuffer("INSERT INTO ");
+        sb.append(entity.getClass().getSimpleName()).append(" ");
+        sb.append("(");
+
+        String [] fields = ObjectHelper.getFields(entity);
+
+        for (String field: fields) {
+            sb.append(", ").append(field);
+        }
+
+        sb.append(") VALUES (?");
+
+        for (String field: fields) {
+            sb.append(", ?");
+        }
+
+        sb.append(")");
+
+        return sb.toString();
+    }
+
     //SELECT ID USER
     public static String createQuerySELECTIDUSER(Class theClass){
         StringBuffer sb = new StringBuffer();

@@ -3,8 +3,8 @@ package edu.upc.eetac.dsa.model;
 public class BoostLife extends GameObject {
 
     //Constructor
-    public BoostLife(String type, String name, int objectPoints) {
-        super(type, name, objectPoints);
+    public BoostLife(int id, String type, String name, int objectPoints, int cost) {
+        super(id, type, name, objectPoints, cost);
     }
 
     //Zero-argument constructor
@@ -13,7 +13,10 @@ public class BoostLife extends GameObject {
     }
 
     @Override
-    public void modifyAttributes() {
-
+    public Player modifyAttributes(Player player) {
+        int maxHealth = player.getMaxHealth();
+        maxHealth += this.objectPoints;
+        player.setMaxHealth(maxHealth);
+        return player;
     }
 }

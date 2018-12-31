@@ -1,10 +1,7 @@
 package edu.upc.eetac.dsa.mysql;
 
 import edu.upc.eetac.dsa.exception.*;
-import edu.upc.eetac.dsa.model.GameObject;
-import edu.upc.eetac.dsa.model.Player;
-import edu.upc.eetac.dsa.model.Stats;
-import edu.upc.eetac.dsa.model.User;
+import edu.upc.eetac.dsa.model.*;
 
 import java.util.List;
 
@@ -63,6 +60,14 @@ public interface ProductManager {
      *
      */
     List<GameObject> getAllObjectsOfAPlayer(int idUser) throws UserNotFoundException;
+    /**Show list of remaining enemies of a given user
+     *
+     *@param idUser id of the user
+     *@throws UserNotFoundException if the User doesn't exist
+     *@return linkedlist of enemies
+     *
+     */
+    List<Enemy> getAllEnemiesOfAPlayer(int idUser) throws UserNotFoundException;
     /**Show the stats of a given user
      *
      *@param idUser id of the user
@@ -94,23 +99,26 @@ public interface ProductManager {
     int getIdUser(String username, String password) throws UserNotFoundException;
     /**Add new weapon to my Inventory
      *
-     *@param username name of the user
+     *@param idUser id of the user
+     *@param idGameObject id of the object
+     *@param points points of the user
+     *@param costObject cost of the object
      *@throws UserNotFoundException if the User doesn't exist
-     *@throws ?? 400 bad request
+     *@throws GameObjectNotFoundException if the Object doesn't exist
      *
-     *//*
-    void addWeapon(String username, Weapon myWeapon) throws UserNotFoundException;
-
-    *//**We can add more GameObjects to my Inventory??
-     /* *In the POSTS & PUTS we have to return the modified | created fields??
-
+     */
+    void addObject(int idUser, int idGameObject, int points, int costObject) throws UserNotFoundException, GameObjectNotFoundException, UserNoMoneyException;
      /**
      * @param points points of the user
      * @param idUser id of the user
      * @throws UserNotFoundException
      */
     void updateUserPoints(int idUser, int points) throws UserNotFoundException;
-
+    /**
+     * @param idGameObject id of the object
+     * @param idUser id of the user
+     */
+    void modifyAttributes(int idGameObject, int idUser) throws UserNotFoundException, GameObjectNotFoundException;
     /**
      * @param enemieskilled enemieskilled of the user
      * @param idUser id of the user
@@ -180,6 +188,10 @@ public interface ProductManager {
      *
      */
     void saveStatus(int gameMapId, int idUser) throws UserNotFoundException;
+    /**
+     * @return List of enemies
+     */
+    List<Enemy> getAllEnemies();
 
     /**
      * clear all the data structures

@@ -3,8 +3,8 @@ package edu.upc.eetac.dsa.model;
 public class BoostDamage extends GameObject {
 
     //Constructor
-    public BoostDamage(String type, String name, int objectPoints) {
-        super(type, name, objectPoints);
+    public BoostDamage(int id, String type, String name, int objectPoints, int cost) {
+        super(id, type, name, objectPoints, cost);
     }
 
     //Zero-argument constructor
@@ -13,7 +13,10 @@ public class BoostDamage extends GameObject {
     }
 
     @Override
-    public void modifyAttributes() {
-
+    public Player modifyAttributes(Player player) {
+        int attackPoints = player.getAttack();
+        attackPoints += this.objectPoints;
+        player.setAttack(attackPoints);
+        return player;
     }
 }

@@ -22,9 +22,37 @@ public class SessionImpl implements Session {
 
     public void save(Object entity) {
 
-        //String selectQuery = QueryHelper.createQuerySELECTIDUSER2(entity);
-
         String insertQuery = QueryHelper.createQueryINSERT(entity);
+
+        PreparedStatement pstm;
+
+
+        try {
+            pstm = conn.prepareStatement(insertQuery);
+            pstm.setObject(1,0);
+            int i = 2;
+
+            for (String field: ObjectHelper.getFields(entity)) {
+                pstm.setObject(i++, ObjectHelper.getter(entity, field));
+            }
+
+            pstm.executeUpdate();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public void customSave(Object entity) {
+
+        String insertQuery = QueryHelper.createQueryCUSTOMINSERT(entity);
 
         PreparedStatement pstm;
 
