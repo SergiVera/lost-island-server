@@ -16,7 +16,7 @@ public class UpdateUserEnemiesKilled {
         this.productManager = ProductManagerImpl.getInstance();
         this.productManager.updateUserEnemiesKilled(1, 9);
         Player player = this.productManager.logIn("Sergi", "Sergi");
-        Assert.assertEquals("9", player.getEnemiesKilled());
+        Assert.assertEquals(9, player.getEnemiesKilled());
         this.productManager.clear();
     }
 }

@@ -17,7 +17,7 @@ public class UpdateAttributesUserTest {
         this.productManager = ProductManagerImpl.getInstance();
         this.productManager.modifyAttributes(5,2);
         Player player = this.productManager.logIn("Carlos", "Carlos");
-        Assert.assertEquals("105", player.getCurrentHealth());
+        Assert.assertEquals(105, player.getCurrentHealth());
         this.productManager.clear();
     }
 }

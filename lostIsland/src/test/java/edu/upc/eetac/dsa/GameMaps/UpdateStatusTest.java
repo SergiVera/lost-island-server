@@ -16,7 +16,7 @@ public class UpdateStatusTest {
         this.productManager = ProductManagerImpl.getInstance();
         this.productManager.saveStatus(4, 1);
         Player player = this.productManager.logIn("Sergi", "Sergi");
-        Assert.assertEquals("4", player.getCheckPoint());
+        Assert.assertEquals(4, player.getCheckPoint());
         this.productManager.clear();
     }
 }

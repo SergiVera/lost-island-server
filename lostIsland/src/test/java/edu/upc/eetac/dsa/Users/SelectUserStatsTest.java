@@ -12,7 +12,7 @@ public class SelectUserStatsTest {
     @Test
     public void selectStatsUserDB() throws UserNotFoundException {
         this.productManager = ProductManagerImpl.getInstance();
-        Assert.assertEquals("25",this.productManager.getStatsOfAPlayer(1).getPoints());
+        Assert.assertEquals(25,this.productManager.getStatsOfAPlayer(1).getPoints());
         this.productManager.clear();
     }
 }

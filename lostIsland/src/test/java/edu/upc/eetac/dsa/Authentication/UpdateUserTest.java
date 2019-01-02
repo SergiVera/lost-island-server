@@ -14,7 +14,7 @@ public class UpdateUserTest {
     public void updateUserDB() throws UserNotFoundException, UserAlreadyConectedException {
         this.productManager = ProductManagerImpl.getInstance();
         this.productManager.modifyCredentials("Sergi", "Martinez", "Vera");
-        Assert.assertEquals("50", this.productManager.logIn("Sergi", "Vera").getCurrentHealth());
+        Assert.assertEquals(50, this.productManager.logIn("Sergi", "Vera").getCurrentHealth());
         this.productManager.clear();
     }
 }

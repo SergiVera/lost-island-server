@@ -83,7 +83,7 @@ public class ProductManagerImpl implements ProductManager {
             if(exists == false) {
                 session.save(user);
                 int idUser = getIdUser(username, password);
-                Player player = new Player(100, 100, 20, 0, 0, 0, idUser);
+                Player player = new Player(6, 6, 1, 1, 0, 0, idUser);
                 session.save(player);
             }
             else{
@@ -164,6 +164,7 @@ public class ProductManagerImpl implements ProductManager {
         Session session = null;
         Player player;
         Players_Gameobjects players_gameobjects = new Players_Gameobjects();
+        Monkey monkey = new Monkey();
 
         HashMap params = new HashMap();
 
@@ -172,6 +173,7 @@ public class ProductManagerImpl implements ProductManager {
         try{
             session = FactorySession.openSession();
             player = (Player)session.get(Player.class, idUser);
+            session.delete(monkey, params);
             session.delete(players_gameobjects, params);
             session.delete(player, idUser);
             session.delete(user, idUser);
@@ -239,17 +241,14 @@ public class ProductManagerImpl implements ProductManager {
         User user = getUser(idUser);
 
         if(user.getUsername() != null){
-            String query = "SELECT Enemy.* FROM Player, Enemy, Players_Enemies ";
+            String query = "SELECT * FROM Enemy ";
             MultiValueMap params = new MultiValueMap();
-            params.put("Player.ID", new Condition("=", String.valueOf(idUser)));
-            params.put("Player.ID", new Condition("=", "Players_Enemies.player_id"));
-            params.put("Players_Enemies.enemy_idEnemy", new Condition("=", "Enemy.ID"));
-            params.put("Enemy.type", new Condition("=", "'Monkey'"));
-
+            params.put("player_id", new Condition("=", String.valueOf(idUser)));
+            params.put("type", new Condition("=", "'Monkey'"));
             try {
                 session = FactorySession.openSession();
                 monkeyEnemyList = session.query(query, Monkey.class, params);
-                params.remove("Enemy.type");
+                params.remove("type");
                 params.put("Enemy.type", new Condition("=", "'Boss'"));
                 bossEnemyList = session.query(query, Boss.class, params);
             } catch (Exception e) {
@@ -266,6 +265,104 @@ public class ProductManagerImpl implements ProductManager {
         }
 
         return enemiesList;
+    }
+
+    @Override
+    public void removeEnemyOfAPlayer(int idUser, int idEnemy) throws UserNotFoundException, EnemyNotFoundException {
+        Enemy enemy = getSingleEnemy(idEnemy);
+
+        Session session = null;
+
+        HashMap params = new HashMap();
+
+        params.put("player_id", new Condition("=", String.valueOf(idUser)));
+        params.put("ID", new Condition("=", String.valueOf(idEnemy)));
+
+        try{
+            session = FactorySession.openSession();
+            session.delete(enemy, params);
+        }
+        catch(Exception e){
+            log.error("Error trying to open the session: " +e.getMessage());
+            throw new UserNotFoundException();
+        }
+        finally {
+            session.close();
+        }
+    }
+
+    @Override
+    public void updateEnemyOfAPlayer(int idUser, int idEnemy, int life, int PositionX, int PositionY) throws UserNotFoundException, EnemyNotFoundException {
+        Session session = null;
+        List<Enemy> enemyList;
+        Enemy object = null;
+
+        enemyList = getAllEnemiesOfAPlayer(idUser);
+
+        for (Enemy enemy : enemyList) {
+            if (enemy.getID() == idEnemy) {
+                object = enemy;
+            }
+        }
+
+        if(object != null) {
+            object.setLife(life);
+            object.setPositionX(PositionX);
+            object.setPositionY(PositionY);
+
+            //Update database
+            try {
+                session = FactorySession.openSession();
+                session.update(object, idEnemy);
+            } catch (Exception e) {
+                log.error("Error trying to open the session: " + e.getMessage());
+                throw new UserNotFoundException();
+            } finally {
+                session.close();
+            }
+        }
+        else{
+            throw new EnemyNotFoundException();
+        }
+    }
+
+    private Enemy getSingleEnemy(int idEnemy) throws EnemyNotFoundException {
+        Session session = null;
+        Enemy enemy = null;
+        Monkey monkey;
+        Boss boss;
+        String result;
+
+        String query1 =  "SELECT IF((SELECT Type FROM Enemy WHERE ID="+idEnemy+")='Monkey', 'YES', 'NO')";
+        String query2 =  "SELECT IF((SELECT Type FROM Enemy WHERE ID="+idEnemy+")='Boss', 'YES', 'NO')";
+
+        String query = "SELECT * FROM Enemy ";
+
+        MultiValueMap params = new MultiValueMap();
+        params.put("ID", new Condition("=", String.valueOf(idEnemy)));
+
+        try{
+            session = FactorySession.openSession();
+            result = session.customQuery(query1);
+            if(result.equals("YES")){
+                monkey = (Monkey) session.singleQuery(query, Monkey.class, params);
+                enemy = monkey;
+            }
+            result = session.customQuery(query2);
+            if(result.equals("YES")){
+                boss = (Boss) session.singleQuery(query, Boss.class, params);
+                enemy = boss;
+            }
+        }
+        catch(Exception e){
+            log.error("Error trying to open the session: " +e.getMessage());
+            throw new EnemyNotFoundException();
+        }
+        finally {
+            session.close();
+        }
+
+        return enemy;
     }
 
     @Override
@@ -735,50 +832,5 @@ public class ProductManagerImpl implements ProductManager {
         finally {
             session.close();
         }
-    }
-
-    @Override
-    public List<Enemy> getAllEnemies(){
-        Session session = null;
-        List<Enemy> monkeyEnemyList = null;
-        List<Enemy> bossEnemyList = null;
-        List<Enemy> mapEnemiesList = new ArrayList<>();
-
-        String query = "SELECT * FROM Enemy ";
-
-        MultiValueMap params = new MultiValueMap();
-        params.put("type", new Condition("=", "'Monkey'"));
-
-        try{
-            session = FactorySession.openSession();
-            monkeyEnemyList = session.query(query, Monkey.class, params);
-            params.remove("type");
-            params.put("type", new Condition("=", "'Boss'"));
-            bossEnemyList = session.query(query, Boss.class, params);
-        }
-        catch(Exception e){
-            log.error("Error trying to open the session: " +e.getMessage());
-        }
-        finally {
-            session.close();
-        }
-
-        for(int i = 0; i<monkeyEnemyList.size(); i++){
-            Monkey monkey = new Monkey();
-            monkey.setType(monkeyEnemyList.get(i).getType());
-            monkey.setLife(monkeyEnemyList.get(i).getLife());
-            monkey.setMap(monkeyEnemyList.get(i).getMap());
-            mapEnemiesList.add(monkey);
-        }
-
-        for(int i = 0; i<bossEnemyList.size(); i++){
-            Boss boss = new Boss();
-            boss.setType(bossEnemyList.get(i).getType());
-            boss.setLife(bossEnemyList.get(i).getLife());
-            boss.setMap(monkeyEnemyList.get(i).getMap());
-            mapEnemiesList.add(boss);
-        }
-
-        return mapEnemiesList;
     }
 }

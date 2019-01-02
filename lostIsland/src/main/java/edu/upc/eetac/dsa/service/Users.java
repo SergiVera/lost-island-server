@@ -1,9 +1,6 @@
 package edu.upc.eetac.dsa.service;
 
-import edu.upc.eetac.dsa.exception.GameObjectBoostDamageAlreadyInUseException;
-import edu.upc.eetac.dsa.exception.GameObjectNotFoundException;
-import edu.upc.eetac.dsa.exception.UserNoMoneyException;
-import edu.upc.eetac.dsa.exception.UserNotFoundException;
+import edu.upc.eetac.dsa.exception.*;
 import edu.upc.eetac.dsa.model.Enemy;
 import edu.upc.eetac.dsa.model.GameObject;
 import edu.upc.eetac.dsa.model.Player;
@@ -88,6 +85,50 @@ public class Users {
         } catch (UserNotFoundException e) {
             e.printStackTrace();
             return Response.status(404).build();
+        }
+    }
+
+    @DELETE
+    @ApiOperation(value = "delete an enemy of the user", notes = "delete an enemy from the enemiesList in case the user killed it")
+    @ApiResponses(value = {
+            @ApiResponse(code = 201, message = "Successful"),
+            @ApiResponse(code = 404, message = "User doesn't exist"),
+            @ApiResponse(code = 403, message = "Enemy doesn't exist")
+    })
+    @Path("/{idUser}/delete-enemy/{idEnemy}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response deleteEnemyUser(@PathParam("idUser") int idUser, @PathParam("idEnemy") int idEnemy) {
+        try {
+            this.productManager.removeEnemyOfAPlayer(idUser, idEnemy);
+            return Response.status(201).build();
+        } catch (UserNotFoundException e) {
+            e.printStackTrace();
+            return Response.status(404).build();
+        } catch (EnemyNotFoundException e) {
+            e.printStackTrace();
+            return Response.status(403).build();
+        }
+    }
+
+    @PUT
+    @ApiOperation(value = "update an enemy of the user", notes = "update an enemy from the enemiesList of the User")
+    @ApiResponses(value = {
+            @ApiResponse(code = 201, message = "Successful"),
+            @ApiResponse(code = 404, message = "User doesn't exist"),
+            @ApiResponse(code = 403, message = "Enemy doesn't exist")
+    })
+    @Path("/{idUser}/update-enemy/{idEnemy}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response updateEnemyUser(@PathParam("idUser") int idUser, @PathParam("idEnemy") int idEnemy) {
+        try {
+            this.productManager.updateEnemyOfAPlayer(idUser, idEnemy, 4, 10, 12);
+            return Response.status(201).build();
+        } catch (UserNotFoundException e) {
+            e.printStackTrace();
+            return Response.status(404).build();
+        } catch (EnemyNotFoundException e) {
+            e.printStackTrace();
+            return Response.status(403).build();
         }
     }
 

@@ -6,11 +6,13 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 public class ObjectHelper {
-    public static String[] getFields(Object entity) {
+    public static String[] getFields(Object entity, boolean abstract) {
 
         Class theClass = entity.getClass();
 
-        Field[] fields = theClass.getDeclaredFields();
+        if(abstract = false){
+            Field[] fields = theClass.getDeclaredFields();
+        }
 
         String[] sFields = new String[fields.length];
         int i=0;

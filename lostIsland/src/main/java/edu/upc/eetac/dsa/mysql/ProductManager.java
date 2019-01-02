@@ -38,7 +38,8 @@ public interface ProductManager {
     /**Change the username and the password of a given user
      *
      *@param username name of the user
-     *@param password password of the user
+     *@param oldpassword old password of the user
+     *@param newpassword new password of the user
      *@throws UserNotFoundException if the User doesn't exist
      *@throws ?? 400 bad request
      *
@@ -54,7 +55,7 @@ public interface ProductManager {
 
     /**Show list of all GameObjects of a given user
      *
-     *@param username name of the user
+     *@param idUser id of the user
      *@throws UserNotFoundException if the User doesn't exist
      *@return linkedlist of objects
      *
@@ -68,6 +69,24 @@ public interface ProductManager {
      *
      */
     List<Enemy> getAllEnemiesOfAPlayer(int idUser) throws UserNotFoundException;
+    /**Remove an enemy from the enemiesList of a User in case that this User kills an enemy
+     *
+     *@param idUser id of the user
+     *@param idEnemy id of the user
+     *@throws UserNotFoundException if the User doesn't exist
+     *@throws EnemyNotFoundException if the Enemy doesn't exist
+     *
+     */
+    void removeEnemyOfAPlayer(int idUser, int idEnemy) throws UserNotFoundException, EnemyNotFoundException;
+    /**Update an enemy from the enemiesList of a User
+     *
+     *@param idUser id of the user
+     *@param idEnemy id of the user
+     *@throws UserNotFoundException if the User doesn't exist
+     *@throws EnemyNotFoundException if the Enemy doesn't exist
+     *
+     */
+    void updateEnemyOfAPlayer(int idUser, int idEnemy, int life, int PositionX, int PositionY) throws UserNotFoundException, EnemyNotFoundException;
     /**Show the stats of a given user
      *
      *@param idUser id of the user
@@ -193,10 +212,6 @@ public interface ProductManager {
      *
      */
     void saveStatus(int gameMapId, int idUser) throws UserNotFoundException;
-    /**
-     * @return List of enemies
-     */
-    List<Enemy> getAllEnemies();
 
     /**
      * clear all the data structures

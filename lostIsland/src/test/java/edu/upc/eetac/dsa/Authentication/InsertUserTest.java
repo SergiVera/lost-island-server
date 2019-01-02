@@ -15,7 +15,7 @@ public class InsertUserTest {
     public void insertUserDB() throws UserNotFoundException, UserAlreadyExistsException, UserAlreadyConectedException {
         this.productManager = ProductManagerImpl.getInstance();
         this.productManager.signUp("Carlos", "Carlos");
-        Assert.assertEquals("100", this.productManager.logIn("Carlos", "Carlos").getCurrentHealth());
+        Assert.assertEquals(100, this.productManager.logIn("Carlos", "Carlos").getCurrentHealth());
         this.productManager.clear();
     }
 }

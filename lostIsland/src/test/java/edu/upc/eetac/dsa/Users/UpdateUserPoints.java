@@ -16,7 +16,7 @@ public class UpdateUserPoints {
         this.productManager = ProductManagerImpl.getInstance();
         this.productManager.updateUserPoints(1, 200);
         Player player = this.productManager.logIn("Sergi", "Sergi");
-        Assert.assertEquals("200", player.getPoints());
+        Assert.assertEquals(200, player.getPoints());
         this.productManager.clear();
     }
 }

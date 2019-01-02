@@ -98,7 +98,12 @@ public class QueryHelper {
         String[] keys = new String[params.size()];
         int i = 0;
 
-        sb.append("DELETE FROM ").append(object.getClass().getSimpleName()).append(" ");
+        if(object.getClass().getSuperclass().getSimpleName().equals("Object")) {
+            sb.append("DELETE FROM ").append(object.getClass().getSimpleName()).append(" ");
+        }
+        else{
+            sb.append("DELETE FROM ").append(object.getClass().getSuperclass().getSimpleName()).append(" ");
+        }
         sb.append("WHERE ");
 
         for(Object key : params.keySet()){
@@ -119,19 +124,36 @@ public class QueryHelper {
     //UPDATE query
     public static String createQueryUPDATE(Object entity){
         StringBuffer sb = new StringBuffer();
-        sb.append("UPDATE ").append(entity.getClass().getSimpleName()).append(" ").append("SET");
+        if(entity.getClass().getSuperclass().getSimpleName().equals("Object")) {
+            sb.append("UPDATE ").append(entity.getClass().getSimpleName()).append(" ").append("SET");
 
-        String [] fields = ObjectHelper.getFields(entity);
+            String [] fields = ObjectHelper.getFields(entity);
 
-        for(String field: fields){
-            sb.append(" ").append(field);
-            sb.append(" = ?,");
+            for(String field: fields){
+                sb.append(" ").append(field);
+                sb.append(" = ?,");
+            }
+            sb.delete(sb.length() -1, sb.length());
+
+            sb.append(" WHERE ID = ?");
+
+            return sb.toString();
         }
-        sb.delete(sb.length() -1, sb.length());
+        else{
+            sb.append("UPDATE ").append(entity.getClass().getSuperclass().getSimpleName()).append(" ").append("SET");
 
-        sb.append(" WHERE ID = ?");
+            String [] fields = ObjectHelper.getFields(entity);
 
-        return sb.toString();
+            for(String field: fields){
+                sb.append(" ").append(field);
+                sb.append(" = ?,");
+            }
+            sb.delete(sb.length() -1, sb.length());
+
+            sb.append(" WHERE ID = ?");
+
+            return sb.toString();
+        }
     }
 
     //Find all query

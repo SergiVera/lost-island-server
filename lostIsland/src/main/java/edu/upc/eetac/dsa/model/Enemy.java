@@ -4,7 +4,7 @@ public abstract class Enemy {
 
     //Attributes
 
-    int id;
+    int ID;
     String type;
     int life;
     int map;
@@ -13,8 +13,8 @@ public abstract class Enemy {
 
     //Constructor
 
-    public Enemy(int id, String type, int life, int map, int positionX, int positionY) {
-        this.id = id;
+    public Enemy(int ID, String type, int life, int map, int positionX, int positionY) {
+        this.ID = ID;
         this.type = type;
         this.life = life;
         this.map = map;
@@ -31,12 +31,12 @@ public abstract class Enemy {
     //Getters and setters
 
 
-    public int getId() {
-        return id;
+    public int getID() {
+        return ID;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setID(int ID) {
+        this.ID = ID;
     }
 
     public String getType() {
