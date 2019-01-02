@@ -13,9 +13,17 @@ public class BoostLife extends GameObject {
     }
 
     @Override
-    public Player modifyAttributes(Player player) {
+    public Player modifyAttributesBuy(Player player) {
         int maxHealth = player.getMaxHealth();
         maxHealth += this.objectPoints;
+        player.setMaxHealth(maxHealth);
+        return player;
+    }
+
+    @Override
+    public Player modifyAttributesSell(Player player) {
+        int maxHealth = player.getMaxHealth();
+        maxHealth -= this.objectPoints;
         player.setMaxHealth(maxHealth);
         return player;
     }

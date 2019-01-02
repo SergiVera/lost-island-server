@@ -33,13 +33,24 @@ public class QueryHelper {
     }
 
     //INSERT query with custom fields
-    public static String createQueryCUSTOMINSERT(Object entity){
+    public static String createQueryCUSTOMINSERT(Object entity, boolean noclass){
 
         StringBuffer sb = new StringBuffer("INSERT INTO ");
-        sb.append(entity.getClass().getSimpleName()).append(" ");
-        sb.append("(");
 
-        String [] fields = ObjectHelper.getFields(entity, false);
+        String[] fields;
+
+        if(noclass == false) {
+            sb.append(entity.getClass().getSimpleName()).append(" ");
+            sb.append("(");
+
+            fields = ObjectHelper.getFields(entity, false);
+        }
+        else{
+            sb.append(entity.getClass().getSuperclass().getSimpleName()).append(" ");
+            sb.append("(");
+
+            fields = ObjectHelper.getFields(entity, true);
+        }
 
         for (String field: fields) {
             sb.append(field).append(", ");

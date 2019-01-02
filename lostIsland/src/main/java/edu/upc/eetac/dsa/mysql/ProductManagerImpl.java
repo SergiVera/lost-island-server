@@ -85,6 +85,25 @@ public class ProductManagerImpl implements ProductManager {
                 int idUser = getIdUser(username, password);
                 Player player = new Player(6, 6, 1, 1, 0, 0, idUser);
                 session.save(player);
+                for(int i=1; i<4; i++) {
+                    Monkey monkey = new Monkey();
+                    monkey.setType("Monkey");
+                    monkey.setLife(2);
+                    monkey.setMap(i);
+                    monkey.setPositionX(3);
+                    monkey.setPositionY(9);
+                    monkey.setPlayer_id(idUser);
+                    session.customSave(monkey, true);
+                }
+                Boss boss = new Boss();
+                boss.setType("Boss");
+                boss.setLife(10);
+                boss.setMap(4);
+                boss.setPositionX(2);
+                boss.setPositionY(8);
+                boss.setPlayer_id(idUser);
+                session.customSave(boss, true);
+
             }
             else{
                 throw new UserAlreadyExistsException();
@@ -395,11 +414,6 @@ public class ProductManagerImpl implements ProductManager {
         return stats;
     }
 
-    /*@Override
-    public void changeObjectInUse(String username, int gameObjectId) throws UserNotFoundException {
-
-    }*/
-
     @Override
     public User getUser(int idUser) throws UserNotFoundException{
         Session session = null;
@@ -496,7 +510,7 @@ public class ProductManagerImpl implements ProductManager {
             if (points >= costObject) {
                 points -= costObject;
                 updateUserPoints(idUser, points);
-                modifyAttributes(idGameObject, idUser);
+                modifyAttributes(idGameObject, idUser, true);
             }
             else
                 throw new UserNoMoneyException();
@@ -577,7 +591,7 @@ public class ProductManagerImpl implements ProductManager {
 
     //This method is called when a player grabs an object in the game
     @Override
-    public void modifyAttributes(int idGameObject, int idUser) throws UserNotFoundException, GameObjectNotFoundException{
+    public void modifyAttributes(int idGameObject, int idUser, boolean buy) throws UserNotFoundException, GameObjectNotFoundException{
         Session session = null;
         List<GameObject> gameObjectList;
         GameObject object = null;
@@ -603,19 +617,41 @@ public class ProductManagerImpl implements ProductManager {
 
         if(object != null) {
 
-            player = object.modifyAttributes(player);
+            if(buy == true) {
+                player = object.modifyAttributesBuy(player);
 
-            //Modify listobjects
+                //Modify listobjects
 
-            try {
-                session = FactorySession.openSession();
-                Players_Gameobjects players_gameobjects = new Players_Gameobjects(idUser, idGameObject);
-                session.customSave(players_gameobjects);
-            } catch (Exception e) {
-                log.error("The user doesn't exist: " + e.getMessage());
-                throw new UserNotFoundException();
-            } finally {
-                session.close();
+                try {
+                    session = FactorySession.openSession();
+                    Players_Gameobjects players_gameobjects = new Players_Gameobjects(idUser, idGameObject);
+                    session.customSave(players_gameobjects, false);
+                } catch (Exception e) {
+                    log.error("The user doesn't exist: " + e.getMessage());
+                    throw new UserNotFoundException();
+                } finally {
+                    session.close();
+                }
+            }
+            else{
+                player = object.modifyAttributesSell(player);
+
+                HashMap params = new HashMap();
+
+                params.put("player_id", new Condition("=", String.valueOf(idUser)));
+                params.put("gameObject_idGameObject", new Condition("=", String.valueOf(idGameObject)));
+                //Modify listobjects
+
+                try {
+                    session = FactorySession.openSession();
+                    Players_Gameobjects players_gameobjects = new Players_Gameobjects(idUser, idGameObject);
+                    session.delete(players_gameobjects, params);
+                } catch (Exception e) {
+                    log.error("The user doesn't exist: " + e.getMessage());
+                    throw new UserNotFoundException();
+                } finally {
+                    session.close();
+                }
             }
 
             //Update database
@@ -699,10 +735,12 @@ public class ProductManagerImpl implements ProductManager {
         }
     }
 
-    /*@Override
-    public void deleteWeapon(String username, int gameObjectId) throws UserNotFoundException {
-
-    }*/
+    @Override
+    public void sellObject(int idUser, int idGameObject, int points, int costObject) throws UserNotFoundException, GameObjectNotFoundException {
+        points += costObject/2;
+        updateUserPoints(idUser, points);
+        modifyAttributes(idGameObject, idUser, false);
+    }
 
     @Override
     public List<Stats> getStats(){

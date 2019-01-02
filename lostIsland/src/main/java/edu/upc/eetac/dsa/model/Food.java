@@ -13,13 +13,27 @@ public class Food extends GameObject {
     }
 
     @Override
-    public Player modifyAttributes(Player player) {
+    public Player modifyAttributesBuy(Player player) {
         int maxHealth = player.getMaxHealth();
         int currentHealth = player.getCurrentHealth();
         if(currentHealth < maxHealth) {
             currentHealth += this.objectPoints;
             if(currentHealth >= maxHealth){
                 currentHealth = maxHealth;
+            }
+        }
+        player.setCurrentHealth(currentHealth);
+        return player;
+    }
+
+    @Override
+    public Player modifyAttributesSell(Player player) {
+        int maxHealth = player.getMaxHealth();
+        int currentHealth = player.getCurrentHealth();
+        if(currentHealth < maxHealth){
+            currentHealth -= this.objectPoints;
+            if(currentHealth < 1){
+                currentHealth = 1;
             }
         }
         player.setCurrentHealth(currentHealth);

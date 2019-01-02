@@ -15,7 +15,7 @@ public class UpdateAttributesUserTest {
     @Test
     public void updateAttributesUserDB() throws UserNotFoundException, UserAlreadyConectedException, GameObjectNotFoundException {
         this.productManager = ProductManagerImpl.getInstance();
-        this.productManager.modifyAttributes(5,2);
+        this.productManager.modifyAttributes(5,2, true);
         Player player = this.productManager.logIn("Carlos", "Carlos");
         Assert.assertEquals(105, player.getCurrentHealth());
         this.productManager.clear();

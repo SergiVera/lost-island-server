@@ -13,9 +13,17 @@ public class BoostDamage extends GameObject {
     }
 
     @Override
-    public Player modifyAttributes(Player player) {
+    public Player modifyAttributesBuy(Player player) {
         int attackPoints = player.getAttack();
         attackPoints += this.objectPoints;
+        player.setAttack(attackPoints);
+        return player;
+    }
+
+    @Override
+    public Player modifyAttributesSell(Player player) {
+        int attackPoints = player.getAttack();
+        attackPoints -= this.objectPoints;
         player.setAttack(attackPoints);
         return player;
     }

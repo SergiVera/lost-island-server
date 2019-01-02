@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface Session<E> {
     void save(Object entity);
-    void customSave(Object entity);
+    void customSave(Object entity, boolean noclass);
     void close();
     Object get(Class theClass, int ID);
     int getID(Class theClass, String username, String password) throws UserNotFoundException;

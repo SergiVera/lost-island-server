@@ -17,8 +17,9 @@ public interface ProductManager {
      *
      *@param username name of the user
      *@param password password of the user
-     *@throws UserNotFoundException if the User doesn't exist
      *@return Player class
+     *@throws UserNotFoundException if the User doesn't exist
+     *@throws UserAlreadyConectedException if the user is already conected
      */
      Player logIn(String username, String password) throws UserNotFoundException, UserAlreadyConectedException;
     /**Creates a new user
@@ -41,7 +42,6 @@ public interface ProductManager {
      *@param oldpassword old password of the user
      *@param newpassword new password of the user
      *@throws UserNotFoundException if the User doesn't exist
-     *@throws ?? 400 bad request
      *
      */
     void modifyCredentials(String username, String oldpassword, String newpassword) throws UserNotFoundException;
@@ -56,8 +56,8 @@ public interface ProductManager {
     /**Show list of all GameObjects of a given user
      *
      *@param idUser id of the user
-     *@throws UserNotFoundException if the User doesn't exist
      *@return linkedlist of objects
+     *@throws UserNotFoundException if the User doesn't exist
      *
      */
     List<GameObject> getAllObjectsOfAPlayer(int idUser) throws UserNotFoundException;
@@ -66,6 +66,7 @@ public interface ProductManager {
      *@param idUser id of the user
      *@throws UserNotFoundException if the User doesn't exist
      *@return linkedlist of enemies
+     *@throws UserNotFoundException if the User doesn't exist
      *
      */
     List<Enemy> getAllEnemiesOfAPlayer(int idUser) throws UserNotFoundException;
@@ -92,33 +93,27 @@ public interface ProductManager {
      *@param idUser id of the user
      *@throws UserNotFoundException if the User doesn't exist
      *@return Stats class
+     *@throws UserNotFoundException if the User doesn't exist
      *
      */
-    Stats getStatsOfAPlayer(int idUser) throws UserNotFoundException;/*
-    *//**Change the current object in use
-     *
-     *@param username name of the user
-     *@param gameObjectId id of the GameObject that we want to use
-     *@throws UserNotFoundException if the User doesn't exist
-     *@throws ?? 400 bad request
-     *
-     *//*
-    void changeObjectInUse(String username, int gameObjectId) throws UserNotFoundException;
-    */
+    Stats getStatsOfAPlayer(int idUser) throws UserNotFoundException;
     /**Get User passing its ID
      * @param idUser id of the user (integer)
      * @return User user class
+     * @throws UserNotFoundException if the User doesn't exist
      */
     User getUser(int idUser) throws UserNotFoundException;
     /**Get Player passing its ID
      * @param idUser id of the user (integer)
      * @return Player player class
+     * @throws UserNotFoundException if the User doesn't exist
      */
     Player getPlayer(int idUser) throws UserNotFoundException;
     /**Get ID of the user passing its username and password
      * @param username username of the user
      * @param password password of the user
      * @return integer id of the user
+     * @throws UserNotFoundException if the User doesn't exist
      */
     int getIdUser(String username, String password) throws UserNotFoundException;
     /**Buy new object and add it to my Inventory
@@ -129,6 +124,8 @@ public interface ProductManager {
      *@param costObject cost of the object
      *@throws UserNotFoundException if the User doesn't exist
      *@throws GameObjectNotFoundException if the Object doesn't exist
+     *@throws UserNoMoneyException if the user doesn't has enough money to buy the object
+     *@throws GameObjectBoostDamageAlreadyInUseException if the object that we want to buy exists in our Inventory
      *
      */
     void buyObject(int idUser, int idGameObject, int points, int costObject) throws UserNotFoundException, GameObjectNotFoundException, UserNoMoneyException, GameObjectBoostDamageAlreadyInUseException;
@@ -141,25 +138,28 @@ public interface ProductManager {
     /**
      * @param idGameObject id of the object
      * @param idUser id of the user
+     * @param buy if the user buys or sell an object
+     * @throws UserNotFoundException if the User doesn't exist
+     * @throws GameObjectNotFoundException if the Object doesn't exist
      */
-    void modifyAttributes(int idGameObject, int idUser) throws UserNotFoundException, GameObjectNotFoundException;
+    void modifyAttributes(int idGameObject, int idUser, boolean buy) throws UserNotFoundException, GameObjectNotFoundException;
     /**
      * @param enemieskilled enemieskilled of the user
      * @param idUser id of the user
      * @throws UserNotFoundException
      */
     void updateUserEnemiesKilled(int idUser, int enemieskilled) throws UserNotFoundException;
-
-    /**Remove weapon of my Inventory
-    *
-    *@param username name of the user
-    *@param gameObjectId id of the GameObject that we want to delete
-    *@throws UserNotFoundException if the User doesn't exist
-    *@throws ?? 400 bad request
-    *
-    *//*
-    void deleteWeapon(String username, int gameObjectId) throws UserNotFoundException;
-    */
+    /**Sell an object and remove it from my Inventory
+     *
+     *@param idUser id of the user
+     *@param idGameObject id of the object
+     *@param points points of the user
+     *@param costObject cost of the object
+     *@throws UserNotFoundException if the User doesn't exist
+     *@throws GameObjectNotFoundException if the Object doesn't exist
+     *
+     */
+    void sellObject(int idUser, int idGameObject, int points, int costObject) throws UserNotFoundException, GameObjectNotFoundException;
     /**
      * @return List of stats
      */

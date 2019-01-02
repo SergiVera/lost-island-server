@@ -210,7 +210,7 @@ public class Users {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response updateUserAttributes(@PathParam("idUser") int idUser,@PathParam("idGameObject") int idGameObject){
         try {
-            this.productManager.modifyAttributes(idGameObject, idUser);
+            this.productManager.modifyAttributes(idGameObject, idUser, true);
             return Response.status(201).build();
         } catch (UserNotFoundException e) {
             e.printStackTrace();
@@ -260,6 +260,40 @@ public class Users {
         } catch (GameObjectBoostDamageAlreadyInUseException e) {
             e.printStackTrace();
             return Response.status(405).build();
+        }
+    }
+
+    @DELETE
+    @ApiOperation(value = "sell an object from my Inventary", notes = "sel and object from my Inventary and upate the attributes of the user. When you sell an object, you only get the 50% of the points")
+    @ApiResponses(value = {
+            @ApiResponse(code = 201, message = "Successful"),
+            @ApiResponse(code = 404, message = "User doesn't exist"),
+            @ApiResponse(code = 403, message = "GameObject doesn't exist")
+    })
+    @Path("/{idUser}/sellobject/{idGameObject}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response sellGameObject(@PathParam("idUser") int idUser,@PathParam("idGameObject") int idGameObject){
+        Player player;
+        List<GameObject> gameObjectList;
+        GameObject object = null;
+
+        try {
+            player = this.productManager.getPlayer(idUser);
+            gameObjectList = this.productManager.getAllObjects();
+
+            for (GameObject gameObject : gameObjectList) {
+                if (gameObject.getID() == idGameObject) {
+                    object = gameObject;
+                }
+            }
+            this.productManager.sellObject(idUser, idGameObject, player.getPoints(), object.getCost());
+            return Response.status(201).build();
+        } catch (UserNotFoundException e) {
+            e.printStackTrace();
+            return Response.status(404).build();
+        } catch (GameObjectNotFoundException e) {
+            e.printStackTrace();
+            return Response.status(403).build();
         }
     }
 }

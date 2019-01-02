@@ -69,7 +69,11 @@ public abstract class GameObject{
         this.cost = cost;
     }
 
-    //Method that modifies the attributes of the player
+    //Method that modifies the attributes of the player when user buys an object
 
-    public abstract Player modifyAttributes(Player player);
+    public abstract Player modifyAttributesBuy(Player player);
+
+    //Method that modifies the attributes of the player when user sells an object
+
+    public abstract Player modifyAttributesSell(Player player);
 }
