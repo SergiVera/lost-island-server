@@ -20,4 +20,5 @@ public interface Session<E> {
     List<Object> findAll(Class theClass, HashMap params);
     List<Object> query(String query, Class theClass, MultiValueMap params);
     Object singleQuery(String query, Class theClass, MultiValueMap params);
+    String customQuery(String query);
 }

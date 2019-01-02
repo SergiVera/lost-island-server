@@ -434,8 +434,15 @@ public class ProductManagerImpl implements ProductManager {
 
     private GameObject getSingleObject(int idGameObject) throws GameObjectNotFoundException {
         Session session = null;
-        GameObject gameObject;
-        BoostDamage boostDamage = null;
+        GameObject gameObject = null;
+        BoostDamage boostDamage;
+        BoostLife boostLife;
+        Food food;
+        String result;
+
+        String query1 =  "SELECT IF((SELECT Type FROM GameObject WHERE ID="+idGameObject+")='BoostLife', 'YES', 'NO')";
+        String query2 =  "SELECT IF((SELECT Type FROM GameObject WHERE ID="+idGameObject+")='BoostDamage', 'YES', 'NO')";
+        String query3 =  "SELECT IF((SELECT Type FROM GameObject WHERE ID="+idGameObject+")='Food', 'YES', 'NO')";
 
         String query = "SELECT * FROM GameObject ";
 
@@ -444,7 +451,21 @@ public class ProductManagerImpl implements ProductManager {
 
         try{
             session = FactorySession.openSession();
-            boostDamage = (BoostDamage) session.singleQuery(query, BoostDamage.class, params);
+            result = session.customQuery(query1);
+            if(result.equals("YES")){
+                boostLife = (BoostLife) session.singleQuery(query, BoostLife.class, params);
+                gameObject = boostLife;
+            }
+            result = session.customQuery(query2);
+            if(result.equals("YES")){
+                boostDamage = (BoostDamage) session.singleQuery(query, BoostDamage.class, params);
+                gameObject = boostDamage;
+            }
+            result = session.customQuery(query3);
+            if(result.equals("YES")){
+                food = (Food) session.singleQuery(query, Food.class, params);
+                gameObject = food;
+            }
         }
         catch(Exception e){
             log.error("Error trying to open the session: " +e.getMessage());
@@ -453,8 +474,6 @@ public class ProductManagerImpl implements ProductManager {
         finally {
             session.close();
         }
-
-        gameObject = boostDamage;
 
         return gameObject;
     }

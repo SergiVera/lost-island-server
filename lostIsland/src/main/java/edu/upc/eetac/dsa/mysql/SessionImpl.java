@@ -433,4 +433,26 @@ public class SessionImpl implements Session {
 
         return entity;
     }
+
+    @Override
+    public String customQuery(String query) {
+        ResultSet rs;
+        PreparedStatement pstm;
+
+        String result = null;
+
+        try {
+            pstm = conn.prepareStatement(query);
+            rs = pstm.executeQuery();
+
+            rs.next();
+
+            result = rs.getString(1);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return result;
+    }
 }
