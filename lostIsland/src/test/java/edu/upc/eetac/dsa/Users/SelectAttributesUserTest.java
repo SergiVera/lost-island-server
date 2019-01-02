@@ -1,6 +1,5 @@
-package edu.upc.eetac.dsa.Authentication;
+package edu.upc.eetac.dsa.Users;
 
-import edu.upc.eetac.dsa.exception.UserAlreadyConectedException;
 import edu.upc.eetac.dsa.exception.UserNotFoundException;
 import edu.upc.eetac.dsa.model.Player;
 import edu.upc.eetac.dsa.mysql.ProductManager;
@@ -8,15 +7,15 @@ import edu.upc.eetac.dsa.mysql.ProductManagerImpl;
 import org.junit.Assert;
 import org.junit.Test;
 
-public class DeleteUserTest {
+public class SelectAttributesUserTest {
     private ProductManager productManager;
 
     @Test
-    public void deleteUserDB() throws UserNotFoundException, UserAlreadyConectedException {
+    public void selectAttributesUserDB() throws UserNotFoundException {
         this.productManager = ProductManagerImpl.getInstance();
-        this.productManager.deleteAccount("Carlos", "Carlos");
-        Player player = this.productManager.logIn("Carlos", "Carlos");
-        Assert.assertNull(player);
+        Player player = this.productManager.getPlayer(1);
+        Assert.assertEquals(6, player.getMaxHealth());
+        Assert.assertEquals(0, player.getPoints());
         this.productManager.clear();
     }
 }

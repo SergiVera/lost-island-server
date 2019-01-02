@@ -35,7 +35,7 @@ public class SessionImpl implements Session {
             pstm.setObject(1,0);
             int i = 2;
 
-            for (String field: ObjectHelper.getFields(entity)) {
+            for (String field: ObjectHelper.getFields(entity, false)) {
                 pstm.setObject(i++, ObjectHelper.getter(entity, field));
             }
 
@@ -64,7 +64,7 @@ public class SessionImpl implements Session {
             pstm = conn.prepareStatement(insertQuery);
             int i = 1;
 
-            for (String field: ObjectHelper.getFields(entity)) {
+            for (String field: ObjectHelper.getFields(entity, false)) {
                 pstm.setObject(i++, ObjectHelper.getter(entity, field));
             }
 
@@ -159,6 +159,7 @@ public class SessionImpl implements Session {
 
             rs.next();
 
+
             id = rs.getInt(1);
 
         } catch (SQLException e) {
@@ -197,7 +198,7 @@ public class SessionImpl implements Session {
             return true;
     }
 
-    public void update(Object object, int ID) {
+    public void update(Object object, int ID, boolean noclass) {
         String updateQuery = QueryHelper.createQueryUPDATE(object);
 
         PreparedStatement pstm;
@@ -206,8 +207,15 @@ public class SessionImpl implements Session {
             pstm = conn.prepareStatement(updateQuery);
             int i = 1;
 
-            for(String field: ObjectHelper.getFields(object)){
-                pstm.setObject(i++, ObjectHelper.getter(object, field));
+            if(noclass == false) {
+                for (String field : ObjectHelper.getFields(object, false)) {
+                    pstm.setObject(i++, ObjectHelper.getter(object, field));
+                }
+            }
+            else{
+                for (String field : ObjectHelper.getFields(object, true)) {
+                    pstm.setObject(i++, ObjectHelper.getter(object, field));
+                }
             }
 
             pstm.setObject(i,ID);

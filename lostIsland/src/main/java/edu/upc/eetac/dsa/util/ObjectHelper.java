@@ -6,20 +6,30 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 public class ObjectHelper {
-    public static String[] getFields(Object entity, boolean abstract) {
+    public static String[] getFields(Object entity, boolean noclass) {
 
         Class theClass = entity.getClass();
 
-        if(abstract = false){
+        if(noclass == false){
             Field[] fields = theClass.getDeclaredFields();
+
+            String[] sFields = new String[fields.length];
+            int i=0;
+
+            for (Field f: fields) sFields[i++]=f.getName();
+
+            return sFields;
         }
+        else{
+            Field[] fields = theClass.getSuperclass().getDeclaredFields();
 
-        String[] sFields = new String[fields.length];
-        int i=0;
+            String[] sFields = new String[fields.length];
+            int i=0;
 
-        for (Field f: fields) sFields[i++]=f.getName();
+            for (Field f: fields) sFields[i++]=f.getName();
 
-        return sFields;
+            return sFields;
+        }
 
     }
 

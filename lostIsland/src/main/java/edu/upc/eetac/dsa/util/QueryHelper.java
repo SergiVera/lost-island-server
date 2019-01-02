@@ -14,7 +14,7 @@ public class QueryHelper {
         sb.append(entity.getClass().getSimpleName()).append(" ");
         sb.append("(");
 
-        String [] fields = ObjectHelper.getFields(entity);
+        String [] fields = ObjectHelper.getFields(entity, false);
 
         sb.append("ID");
         for (String field: fields) {
@@ -39,7 +39,7 @@ public class QueryHelper {
         sb.append(entity.getClass().getSimpleName()).append(" ");
         sb.append("(");
 
-        String [] fields = ObjectHelper.getFields(entity);
+        String [] fields = ObjectHelper.getFields(entity, false);
 
         for (String field: fields) {
             sb.append(field).append(", ");
@@ -123,11 +123,12 @@ public class QueryHelper {
 
     //UPDATE query
     public static String createQueryUPDATE(Object entity){
+        boolean noclass = false;
         StringBuffer sb = new StringBuffer();
         if(entity.getClass().getSuperclass().getSimpleName().equals("Object")) {
             sb.append("UPDATE ").append(entity.getClass().getSimpleName()).append(" ").append("SET");
 
-            String [] fields = ObjectHelper.getFields(entity);
+            String [] fields = ObjectHelper.getFields(entity, noclass);
 
             for(String field: fields){
                 sb.append(" ").append(field);
@@ -140,9 +141,10 @@ public class QueryHelper {
             return sb.toString();
         }
         else{
+            noclass = true;
             sb.append("UPDATE ").append(entity.getClass().getSuperclass().getSimpleName()).append(" ").append("SET");
 
-            String [] fields = ObjectHelper.getFields(entity);
+            String [] fields = ObjectHelper.getFields(entity, noclass);
 
             for(String field: fields){
                 sb.append(" ").append(field);

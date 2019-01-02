@@ -1,6 +1,7 @@
 package edu.upc.eetac.dsa.Users;
 
 import edu.upc.eetac.dsa.exception.EnemyNotFoundException;
+import edu.upc.eetac.dsa.exception.UserAlreadyConectedException;
 import edu.upc.eetac.dsa.exception.UserNotFoundException;
 import edu.upc.eetac.dsa.model.Enemy;
 import edu.upc.eetac.dsa.mysql.ProductManager;
@@ -10,19 +11,15 @@ import org.junit.Test;
 
 import java.util.List;
 
-public class DeleEnemyUserTest {
+public class UpdateEnemyUserTest {
     private ProductManager productManager;
 
     @Test
-    public void deleteUserDB() throws UserNotFoundException, EnemyNotFoundException {
+    public void updateEnemyUserDB() throws UserNotFoundException, UserAlreadyConectedException, EnemyNotFoundException {
         this.productManager = ProductManagerImpl.getInstance();
-        this.productManager.removeEnemyOfAPlayer(1, 1);
+        this.productManager.updateEnemyOfAPlayer(1, 2, 4, 10, 12);
         List<Enemy> enemyList = this.productManager.getAllEnemiesOfAPlayer(1);
-        Assert.assertEquals("Monkey", enemyList.get(0).getType());
-        Assert.assertEquals(2, enemyList.get(0).getLife());
-        Assert.assertEquals(2, enemyList.get(0).getMap());
-        Assert.assertEquals(3, enemyList.get(0).getPositionX());
-        Assert.assertEquals(9, enemyList.get(0).getPositionY());
+        Assert.assertEquals(4, enemyList.get(1).getLife());
         this.productManager.clear();
     }
 }

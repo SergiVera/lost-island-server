@@ -54,7 +54,7 @@ public class ProductManagerImpl implements ProductManager {
 
             try {
                 session = FactorySession.openSession();
-                session.update(user, idUser);
+                session.update(user, idUser, false);
                 player = (Player)session.get(Player.class, idUser);
             }
             catch (Exception e) {
@@ -114,7 +114,7 @@ public class ProductManagerImpl implements ProductManager {
             session = FactorySession.openSession();
             user = (User)session.get(User.class, idUser);
             user.setPassword(newpassword);
-            session.update(user, idUser);
+            session.update(user, idUser, false);
         }
         catch (Exception e){
             log.error("Error trying to open the session: " +e.getMessage());
@@ -145,7 +145,7 @@ public class ProductManagerImpl implements ProductManager {
 
         try {
             session = FactorySession.openSession();
-            session.update(user, idUser);
+            session.update(user, idUser, false);
         }
         catch (Exception e) {
             log.error("Error trying to open the session: " +e.getMessage());
@@ -313,7 +313,7 @@ public class ProductManagerImpl implements ProductManager {
             //Update database
             try {
                 session = FactorySession.openSession();
-                session.update(object, idEnemy);
+                session.update(object, idEnemy, true);
             } catch (Exception e) {
                 log.error("Error trying to open the session: " + e.getMessage());
                 throw new UserNotFoundException();
@@ -622,7 +622,7 @@ public class ProductManagerImpl implements ProductManager {
 
             try {
                 session = FactorySession.openSession();
-                session.update(player, idUser);
+                session.update(player, idUser, false);
             } catch (Exception e) {
                 log.error("Error trying to open the session: " + e.getMessage());
                 throw new UserNotFoundException();
@@ -656,7 +656,7 @@ public class ProductManagerImpl implements ProductManager {
 
         try {
             session = FactorySession.openSession();
-            session.update(player, idUser);
+            session.update(player, idUser, false);
         }
         catch (Exception e) {
             log.error("Error trying to open the session: " +e.getMessage());
@@ -688,7 +688,7 @@ public class ProductManagerImpl implements ProductManager {
 
         try {
             session = FactorySession.openSession();
-            session.update(player, idUser);
+            session.update(player, idUser, false);
         }
         catch (Exception e) {
             log.error("Error trying to open the session: " +e.getMessage());
@@ -823,7 +823,7 @@ public class ProductManagerImpl implements ProductManager {
 
         try {
             session = FactorySession.openSession();
-            session.update(player, idUser);
+            session.update(player, idUser, false);
         }
         catch (Exception e) {
             log.error("Error trying to open the session: " +e.getMessage());

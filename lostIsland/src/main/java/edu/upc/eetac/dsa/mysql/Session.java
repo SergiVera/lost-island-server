@@ -13,7 +13,7 @@ public interface Session<E> {
     Object get(Class theClass, int ID);
     int getID(Class theClass, String username, String password) throws UserNotFoundException;
     boolean checkIfUserIsRegistered(Class theClass, String username, String password);
-    void update(Object object, int ID);
+    void update(Object object, int ID, boolean noclass);
     void delete(Object object, int ID);
     void delete(Object object, HashMap params);
     List<Object> findAll(Class theClass);

@@ -51,6 +51,24 @@ public class Users {
     }
 
     @GET
+    @ApiOperation(value = "get attributes of a user", notes = "get the attributes of a user given its id")
+    @ApiResponses(value = {
+            @ApiResponse(code = 201, message = "Successful", response = Player.class, responseContainer = "Player class"),
+            @ApiResponse(code = 404, message = "User doesn't exist")
+    })
+    @Path("/{idUser}/attributes")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response attributesUser(@PathParam("idUser") int idUser) {
+        try {
+            Player player = this.productManager.getPlayer(idUser);
+            return Response.status(201).entity(player).build();
+        } catch (UserNotFoundException e) {
+            e.printStackTrace();
+            return Response.status(404).build();
+        }
+    }
+
+    @GET
     @ApiOperation(value = "get all objects of a user", notes = "get all objects of a user given its id")
     @ApiResponses(value = {
             @ApiResponse(code = 201, message = "Successful", response = GameObject.class, responseContainer = "GameObject class"),
