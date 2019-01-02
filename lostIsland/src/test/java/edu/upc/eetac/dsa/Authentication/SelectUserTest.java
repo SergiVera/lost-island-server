@@ -14,5 +14,6 @@ public class SelectUserTest {
     public void selectUserDB() throws UserNotFoundException, UserAlreadyConectedException {
         this.productManager = ProductManagerImpl.getInstance();
         Assert.assertEquals("100",this.productManager.logIn("Sergi", "Sergi").getMaxHealth());
+        this.productManager.clear();
     }
 }

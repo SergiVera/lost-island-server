@@ -1,9 +1,12 @@
 package edu.upc.eetac.dsa.service;
 
+import edu.upc.eetac.dsa.exception.GameObjectBoostDamageAlreadyInUseException;
 import edu.upc.eetac.dsa.exception.GameObjectNotFoundException;
+import edu.upc.eetac.dsa.exception.UserNoMoneyException;
 import edu.upc.eetac.dsa.exception.UserNotFoundException;
 import edu.upc.eetac.dsa.model.Enemy;
 import edu.upc.eetac.dsa.model.GameObject;
+import edu.upc.eetac.dsa.model.Player;
 import edu.upc.eetac.dsa.model.Stats;
 import edu.upc.eetac.dsa.mysql.ProductManager;
 import edu.upc.eetac.dsa.mysql.ProductManagerImpl;
@@ -142,7 +145,7 @@ public class Users {
     @ApiResponses(value = {
             @ApiResponse(code = 201, message = "Successful"),
             @ApiResponse(code = 404, message = "User doesn't exist"),
-            @ApiResponse(code = 402, message = "GameObject doesn't exist"),
+            @ApiResponse(code = 403, message = "GameObject doesn't exist"),
     })
     @Path("/{idUser}/modifyattributes/{idGameObject}")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -155,7 +158,49 @@ public class Users {
             return Response.status(404).build();
         } catch (GameObjectNotFoundException e) {
             e.printStackTrace();
+            return Response.status(403).build();
+        }
+    }
+
+    @POST
+    @ApiOperation(value = "buy an object from the shop", notes = "buy and object from the shop and upate the attributes of the user. You can buy only one object of type BoostDamage with this name")
+    @ApiResponses(value = {
+            @ApiResponse(code = 201, message = "Successful"),
+            @ApiResponse(code = 404, message = "User doesn't exist"),
+            @ApiResponse(code = 402, message = "You don't have enough points to buy this object"),
+            @ApiResponse(code = 403, message = "GameObject doesn't exist"),
+            @ApiResponse(code = 405, message = "The object that you want to add is already in use")
+    })
+    @Path("/{idUser}/buyobject/{idGameObject}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response buyGameObject(@PathParam("idUser") int idUser,@PathParam("idGameObject") int idGameObject){
+        Player player;
+        List<GameObject> gameObjectList;
+        GameObject object = null;
+
+        try {
+            player = this.productManager.getPlayer(idUser);
+            gameObjectList = this.productManager.getAllObjects();
+
+            for (GameObject gameObject : gameObjectList) {
+                if (gameObject.getID() == idGameObject) {
+                    object = gameObject;
+                }
+            }
+            this.productManager.buyObject(idUser, idGameObject, player.getPoints(), object.getCost());
+            return Response.status(201).build();
+        } catch (UserNotFoundException e) {
+            e.printStackTrace();
+            return Response.status(404).build();
+        } catch (UserNoMoneyException e) {
+            e.printStackTrace();
             return Response.status(402).build();
+        } catch (GameObjectNotFoundException e) {
+            e.printStackTrace();
+            return Response.status(403).build();
+        } catch (GameObjectBoostDamageAlreadyInUseException e) {
+            e.printStackTrace();
+            return Response.status(405).build();
         }
     }
 }

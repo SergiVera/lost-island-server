@@ -4,7 +4,7 @@ public abstract class GameObject{
 
     //Attributes
 
-    int id;
+    int ID;
     String type;
     String name;
     int objectPoints;
@@ -12,8 +12,8 @@ public abstract class GameObject{
 
     //Constructor
 
-    public GameObject(int id, String type, String name, int objectPoints, int cost) {
-        this.id = id;
+    public GameObject(int ID, String type, String name, int objectPoints, int cost) {
+        this.ID = ID;
         this.type = type;
         this.name = name;
         this.objectPoints = objectPoints;
@@ -29,12 +29,12 @@ public abstract class GameObject{
     //Getters and setters
 
 
-    public int getId() {
-        return id;
+    public int getID() {
+        return ID;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setID(int ID) {
+        this.ID = ID;
     }
 
     public String getType() {

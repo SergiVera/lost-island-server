@@ -18,5 +18,6 @@ public class SelectAllObjectsUserTest {
         List<GameObject> objectList = this.productManager.getAllObjectsOfAPlayer(1);
         Assert.assertEquals("20", objectList.get(0).getObjectPoints());
         Assert.assertEquals("30", objectList.get(1).getObjectPoints());
+        this.productManager.clear();
     }
 }

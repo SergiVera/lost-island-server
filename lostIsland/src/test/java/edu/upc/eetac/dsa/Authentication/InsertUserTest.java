@@ -16,5 +16,6 @@ public class InsertUserTest {
         this.productManager = ProductManagerImpl.getInstance();
         this.productManager.signUp("Carlos", "Carlos");
         Assert.assertEquals("100", this.productManager.logIn("Carlos", "Carlos").getCurrentHealth());
+        this.productManager.clear();
     }
 }

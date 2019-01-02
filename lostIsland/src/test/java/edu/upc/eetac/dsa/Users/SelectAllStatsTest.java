@@ -17,5 +17,6 @@ public class SelectAllStatsTest {
         List<Stats> statsList = this.productManager.getStats();
         Assert.assertEquals("25", statsList.get(0).getPoints());
         Assert.assertEquals("Carlos", statsList.get(1).getUsername());
+        this.productManager.clear();
     }
 }

@@ -18,5 +18,6 @@ public class SelectEnemiesUserTest {
         List<Enemy> objectList = this.productManager.getAllEnemiesOfAPlayer(1);
         Assert.assertEquals("1", objectList.get(0).getMap());
         Assert.assertEquals("2", objectList.get(1).getMap());
+        this.productManager.clear();
     }
 }

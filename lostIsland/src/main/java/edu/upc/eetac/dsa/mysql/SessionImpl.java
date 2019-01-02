@@ -4,6 +4,7 @@ import edu.upc.eetac.dsa.exception.UserNotFoundException;
 import edu.upc.eetac.dsa.util.ObjectHelper;
 import edu.upc.eetac.dsa.util.QueryHelper;
 import org.apache.commons.collections.map.MultiValueMap;
+import org.apache.log4j.Logger;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -14,6 +15,8 @@ import java.util.List;
 
 
 public class SessionImpl implements Session {
+    final static Logger log = Logger.getLogger(ProductManagerImpl.class.getName());
+
     private final Connection conn;
 
     public SessionImpl(Connection conn) {
@@ -59,8 +62,7 @@ public class SessionImpl implements Session {
 
         try {
             pstm = conn.prepareStatement(insertQuery);
-            pstm.setObject(1,0);
-            int i = 2;
+            int i = 1;
 
             for (String field: ObjectHelper.getFields(entity)) {
                 pstm.setObject(i++, ObjectHelper.getter(entity, field));
@@ -371,7 +373,8 @@ public class SessionImpl implements Session {
                 Field[] fields = theClass.getSuperclass().getDeclaredFields();
                 rs.getString(1);
                 for (int i = 0; i<fields.length; i++){
-                    ObjectHelper.setter(entity, fields[i].getName(), rs.getObject(i + 2));
+                    log.info(" name "+fields[i].getName()+ " value " + rs.getObject(i + 1));
+                    ObjectHelper.setter(entity, fields[i].getName(), rs.getObject(i + 1));
                 }
 
                 listOfObjects.add(entity);
@@ -390,5 +393,44 @@ public class SessionImpl implements Session {
         }
 
         return listOfObjects;
+    }
+
+    public Object singleQuery(String query, Class theClass, MultiValueMap params) {
+        String findAllQuery = QueryHelper.findAllQuery(query, params);
+
+        Object entity = null;
+
+        try {
+            entity = theClass.newInstance();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        ResultSet rs;
+        PreparedStatement pstm;
+
+        try {
+            pstm = conn.prepareStatement(findAllQuery);
+            rs = pstm.executeQuery();
+
+            while(rs.next()){
+                Field[] fields = theClass.getSuperclass().getDeclaredFields();
+                rs.getString(1);
+                for (int i = 0; i<fields.length; i++){
+                    log.info(" name "+fields[i].getName()+ " value " + rs.getObject(i + 1));
+                    ObjectHelper.setter(entity, fields[i].getName(), rs.getObject(i + 1));
+                }
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        }
+
+        return entity;
     }
 }

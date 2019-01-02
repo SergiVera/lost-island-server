@@ -91,13 +91,18 @@ public interface ProductManager {
      * @return User user class
      */
     User getUser(int idUser) throws UserNotFoundException;
+    /**Get Player passing its ID
+     * @param idUser id of the user (integer)
+     * @return Player player class
+     */
+    Player getPlayer(int idUser) throws UserNotFoundException;
     /**Get ID of the user passing its username and password
      * @param username username of the user
      * @param password password of the user
      * @return integer id of the user
      */
     int getIdUser(String username, String password) throws UserNotFoundException;
-    /**Add new weapon to my Inventory
+    /**Buy new object and add it to my Inventory
      *
      *@param idUser id of the user
      *@param idGameObject id of the object
@@ -107,7 +112,7 @@ public interface ProductManager {
      *@throws GameObjectNotFoundException if the Object doesn't exist
      *
      */
-    void addObject(int idUser, int idGameObject, int points, int costObject) throws UserNotFoundException, GameObjectNotFoundException, UserNoMoneyException;
+    void buyObject(int idUser, int idGameObject, int points, int costObject) throws UserNotFoundException, GameObjectNotFoundException, UserNoMoneyException, GameObjectBoostDamageAlreadyInUseException;
      /**
      * @param points points of the user
      * @param idUser id of the user

@@ -323,6 +323,26 @@ public class ProductManagerImpl implements ProductManager {
         return user;
     }
 
+    @Override
+    public Player getPlayer (int idUser) throws UserNotFoundException{
+        Session session = null;
+        Player player;
+
+        try{
+            session = FactorySession.openSession();
+            player = (Player) session.get(Player.class, idUser);
+        }
+        catch(Exception e){
+            log.error("Error trying to open the session: " +e.getMessage());
+            throw new UserNotFoundException();
+        }
+        finally {
+            session.close();
+        }
+
+        return player;
+    }
+
    @Override
     public int getIdUser(String username, String password) throws UserNotFoundException{
         Session session = null;
@@ -346,13 +366,97 @@ public class ProductManagerImpl implements ProductManager {
 
     //This method is called when a player buys an object at the shop
     @Override
-    public void addObject(int idUser, int idGameObject, int points, int costObject) throws UserNotFoundException, GameObjectNotFoundException, UserNoMoneyException {
+    public void buyObject(int idUser, int idGameObject, int points, int costObject) throws UserNotFoundException, GameObjectNotFoundException, UserNoMoneyException, GameObjectBoostDamageAlreadyInUseException {
+        List<GameObject> gameObjectList;
+        List<GameObject> boostDamageObjectList;
+        boolean exists = false;
 
-        if(points >= costObject)
-            modifyAttributes(idGameObject, idUser);
+        //Get all objects of the user
+        gameObjectList = this.getAllObjectsOfAPlayer(idUser);
+
+        //Get single object we want to add
+        boostDamageObjectList = this.getAllBoostDamage();
+
+        //Get single object passing its id
+        GameObject singleObject = this.getSingleObject(idGameObject);
+
+        for(GameObject go : gameObjectList){
+            for(GameObject gameObject : boostDamageObjectList) {
+                log.info("gameObjectList: type " + go.getType() + " name " + go.getName());
+                log.info("boostDamageObjectList: type " + gameObject.getType() + " name " + gameObject.getName());
+                exists = (go.getType().equals(gameObject.getType())) && (go.getName().equals(gameObject.getName())) && (singleObject.getName().equals(go.getName()));
+                log.info("Exists: " +exists);
+                if(exists == true){
+                    break;
+                }
+            }
+            if(exists == true){
+                break;
+            }
+        }
+
+        if(exists == false) {
+            if (points >= costObject) {
+                points -= costObject;
+                updateUserPoints(idUser, points);
+                modifyAttributes(idGameObject, idUser);
+            }
+            else
+                throw new UserNoMoneyException();
+        }
         else
-            throw new UserNoMoneyException();
+            throw new GameObjectBoostDamageAlreadyInUseException();
+    }
 
+    private List<GameObject> getAllBoostDamage() {
+        Session session = null;
+
+        List<GameObject> boostDamageObjectsList = null;
+
+        String query = "SELECT * FROM GameObject ";
+
+        MultiValueMap params = new MultiValueMap();
+        params.put("type", new Condition("=", "'BoostDamage'"));
+
+        try{
+            session = FactorySession.openSession();
+            boostDamageObjectsList = session.query(query, BoostDamage.class, params);
+        }
+        catch(Exception e){
+            log.error("Error trying to open the session: " +e.getMessage());
+        }
+        finally {
+            session.close();
+        }
+
+        return boostDamageObjectsList;
+    }
+
+    private GameObject getSingleObject(int idGameObject) throws GameObjectNotFoundException {
+        Session session = null;
+        GameObject gameObject;
+        BoostDamage boostDamage = null;
+
+        String query = "SELECT * FROM GameObject ";
+
+        MultiValueMap params = new MultiValueMap();
+        params.put("ID", new Condition("=", String.valueOf(idGameObject)));
+
+        try{
+            session = FactorySession.openSession();
+            boostDamage = (BoostDamage) session.singleQuery(query, BoostDamage.class, params);
+        }
+        catch(Exception e){
+            log.error("Error trying to open the session: " +e.getMessage());
+            throw new GameObjectNotFoundException();
+        }
+        finally {
+            session.close();
+        }
+
+        gameObject = boostDamage;
+
+        return gameObject;
     }
 
     //This method is called when a player grabs an object in the game
@@ -376,41 +480,42 @@ public class ProductManagerImpl implements ProductManager {
         gameObjectList = getAllObjects();
 
         for (GameObject gameObject : gameObjectList) {
-            if (gameObject.getId() == idGameObject) {
+            if (gameObject.getID() == idGameObject) {
                 object = gameObject;
             }
-            else
-                throw new GameObjectNotFoundException();
         }
 
-        player = object.modifyAttributes(player);
+        if(object != null) {
 
-        //Modify listobjects
+            player = object.modifyAttributes(player);
 
-        try{
-            session = FactorySession.openSession();
-            Players_Gameobjects players_gameobjects = new Players_Gameobjects(idUser, idGameObject);
-            session.customSave(players_gameobjects);
-        }
-        catch (Exception e) {
-            log.error("The user doesn't exist: " + e.getMessage());
-            throw new UserNotFoundException();
-        } finally {
-            session.close();
-        }
+            //Modify listobjects
 
-        //Update database
+            try {
+                session = FactorySession.openSession();
+                Players_Gameobjects players_gameobjects = new Players_Gameobjects(idUser, idGameObject);
+                session.customSave(players_gameobjects);
+            } catch (Exception e) {
+                log.error("The user doesn't exist: " + e.getMessage());
+                throw new UserNotFoundException();
+            } finally {
+                session.close();
+            }
 
-        try {
-            session = FactorySession.openSession();
-            session.update(player, idUser);
+            //Update database
+
+            try {
+                session = FactorySession.openSession();
+                session.update(player, idUser);
+            } catch (Exception e) {
+                log.error("Error trying to open the session: " + e.getMessage());
+                throw new UserNotFoundException();
+            } finally {
+                session.close();
+            }
         }
-        catch (Exception e) {
-            log.error("Error trying to open the session: " +e.getMessage());
-            throw new UserNotFoundException();
-        }
-        finally {
-            session.close();
+        else{
+            throw new GameObjectNotFoundException();
         }
     }
 

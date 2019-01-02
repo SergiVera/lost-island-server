@@ -42,14 +42,18 @@ public class QueryHelper {
         String [] fields = ObjectHelper.getFields(entity);
 
         for (String field: fields) {
-            sb.append(", ").append(field);
+            sb.append(field).append(", ");
         }
 
-        sb.append(") VALUES (?");
+        sb.delete(sb.length() -2, sb.length());
+
+        sb.append(") VALUES (");
 
         for (String field: fields) {
-            sb.append(", ?");
+            sb.append("? , ");
         }
+
+        sb.delete(sb.length() -2, sb.length());
 
         sb.append(")");
 

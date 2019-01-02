@@ -17,5 +17,6 @@ public class SelectAllEnemiesTest {
         List<Enemy> objectList = this.productManager.getAllEnemies();
         Assert.assertEquals("20", objectList.get(0).getLife());
         Assert.assertEquals("50", objectList.get(1).getLife());
+        this.productManager.clear();
     }
 }
