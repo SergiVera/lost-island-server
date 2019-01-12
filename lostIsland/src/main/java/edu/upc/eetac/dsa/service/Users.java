@@ -128,6 +128,29 @@ public class Users {
         }
     }
 
+    @DELETE
+    @ApiOperation(value = "delete a part of the antenna of the user", notes = "delete a part of the antenna from the GameObjectList in case the user pick the part during the game")
+    @ApiResponses(value = {
+            @ApiResponse(code = 201, message = "Successful"),
+            @ApiResponse(code = 404, message = "User doesn't exist"),
+            @ApiResponse(code = 403, message = "GameObject doesn't exist")
+    })
+    @Path("/{idUser}/delete-antenna-part/{idGameObject}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response deleteAntennaPartUser(@PathParam("idUser") int idUser, @PathParam("idGameObject") int idGameObject) {
+        try {
+            this.productManager.removeAntennaPartOfAPlayer(idUser, idGameObject);
+            return Response.status(201).build();
+        } catch (UserNotFoundException e) {
+            e.printStackTrace();
+            return Response.status(404).build();
+        } catch (GameObjectNotFoundException e) {
+            e.printStackTrace();
+            return Response.status(403).build();
+        }
+
+    }
+
     @PUT
     @ApiOperation(value = "update an enemy of the user", notes = "update an enemy from the enemiesList of the User")
     @ApiResponses(value = {
@@ -294,6 +317,24 @@ public class Users {
         } catch (GameObjectNotFoundException e) {
             e.printStackTrace();
             return Response.status(403).build();
+        }
+    }
+
+    @PUT
+    @ApiOperation(value = "finish the game", notes = "finish the game of the user  and update the attributes of the enemies")
+    @ApiResponses(value = {
+            @ApiResponse(code = 201, message = "Successful"),
+            @ApiResponse(code = 404, message = "User doesn't exist")
+    })
+    @Path("/{idUser}/finishgame")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response finishGame(@PathParam("idUser") int idUser){
+        try {
+            this.productManager.finishPlayerGame(idUser);
+            return Response.status(201).build();
+        } catch (UserNotFoundException e) {
+            e.printStackTrace();
+            return Response.status(404).build();
         }
     }
 }

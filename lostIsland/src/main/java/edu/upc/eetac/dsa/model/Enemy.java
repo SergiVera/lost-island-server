@@ -89,4 +89,6 @@ public abstract class Enemy {
     public void setPlayer_id(int player_id) {
         this.player_id = player_id;
     }
+
+    public abstract Enemy modifyAttributes(Enemy enemy);
 }

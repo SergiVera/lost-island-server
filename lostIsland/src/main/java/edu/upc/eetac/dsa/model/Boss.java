@@ -13,4 +13,9 @@ public class Boss extends Enemy {
     public Boss() {
         super();
     }
+
+    @Override
+    public Enemy modifyAttributes(Enemy enemy) {
+        return null;
+    }
 }

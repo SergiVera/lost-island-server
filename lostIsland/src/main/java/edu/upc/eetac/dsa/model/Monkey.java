@@ -13,4 +13,12 @@ public class Monkey extends Enemy {
     public Monkey() {
         super();
     }
+
+    @Override
+    public Enemy modifyAttributes(Enemy enemy) {
+        int life = enemy.getLife();
+        life = life + life/2;
+        enemy.setLife(life);
+        return enemy;
+    }
 }

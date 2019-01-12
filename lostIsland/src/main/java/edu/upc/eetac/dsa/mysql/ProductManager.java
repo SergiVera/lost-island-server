@@ -53,6 +53,13 @@ public interface ProductManager {
 
     //**2. Users
 
+    /**Ends a game of a user and update the fields
+     *
+     *@param idUser id of the user
+     *@throws UserNotFoundException if the User doesn't exist
+     *
+     */
+    void finishPlayerGame(int idUser) throws UserNotFoundException;
     /**Show list of all GameObjects of a given user
      *
      *@param idUser id of the user
@@ -79,6 +86,15 @@ public interface ProductManager {
      *
      */
     void removeEnemyOfAPlayer(int idUser, int idEnemy) throws UserNotFoundException, EnemyNotFoundException;
+    /**Remove a part of antenna from the gameObjectList of a User in case that this User pick this part in the game
+     *
+     *@param idUser id of the user
+     *@param idGameObject id of the user
+     *@throws UserNotFoundException if the User doesn't exist
+     *@throws GameObjectNotFoundException if the GameObject doesn't exist
+     *
+     */
+    void removeAntennaPartOfAPlayer(int idUser, int idGameObject) throws UserNotFoundException, GameObjectNotFoundException;
     /**Update an enemy from the enemiesList of a User
      *
      *@param idUser id of the user

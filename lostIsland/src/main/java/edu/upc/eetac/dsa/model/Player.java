@@ -9,20 +9,21 @@ public class Player {
     private int checkPoint;
     private int points;
     private int enemiesKilled;
+    private int level;
     private int user_id;
 
     //Constructor
 
-    public Player(int currentHealth, int maxHealth, int attack, int checkPoint, int points, int enemiesKilled, int user_id) {
+    public Player(int currentHealth, int maxHealth, int attack, int checkPoint, int points, int enemiesKilled, int level, int user_id) {
         this.currentHealth = currentHealth;
         this.maxHealth = maxHealth;
         this.attack = attack;
         this.checkPoint = checkPoint;
         this.points = points;
         this.enemiesKilled = enemiesKilled;
+        this.level = level;
         this.user_id = user_id;
     }
-
 
     //Zero-argument constructor
 
@@ -79,6 +80,14 @@ public class Player {
 
     public void setEnemiesKilled(int enemiesKilled) {
         this.enemiesKilled = enemiesKilled;
+    }
+
+    public int getLevel() {
+        return level;
+    }
+
+    public void setLevel(int level) {
+        this.level = level;
     }
 
     public int getUser_id() {

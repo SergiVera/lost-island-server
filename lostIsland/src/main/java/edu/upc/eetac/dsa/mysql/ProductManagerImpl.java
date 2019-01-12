@@ -84,7 +84,7 @@ public class ProductManagerImpl implements ProductManager {
             if(exists == false) {
                 session.save(user);
                 int idUser = getIdUser(username, password);
-                Player player = new Player(6, 6, 1, 1, 0, 0, idUser);
+                Player player = new Player(6, 6, 1, 1, 0, 0, 1, idUser);
                 session.save(player);
                 for(int i=1; i<4; i++) {
                     Monkey monkey = new Monkey();
@@ -159,6 +159,8 @@ public class ProductManagerImpl implements ProductManager {
         try {
             session = FactorySession.openSession();
             user = (User)session.get(User.class, idUser);
+            user.setConected(false);
+            session.update(user, idUser, false);
         }
         catch(Exception e){
             log.error("Error trying to open the session: " +e.getMessage());
@@ -167,20 +169,77 @@ public class ProductManagerImpl implements ProductManager {
         finally {
             session.close();
         }
+    }
 
-        user.setConected(false);
+    @Override
+    public void finishPlayerGame(int idUser) throws UserNotFoundException {
+        Session session = null;
+        Monkey monkey = new Monkey();
+        Boss boss = new Boss();
+        List<Antenna> antennaList;
+        Player player;
 
-        try {
-            session = FactorySession.openSession();
-            session.update(user, idUser, false);
+        player = getPlayer(idUser);
+
+        if(player.getUser_id() != 0) {
+            player.setLevel(player.getLevel() + 1);
+
+            try {
+                session = FactorySession.openSession();
+                session.update(player, idUser, false);
+            } catch (Exception e) {
+                log.error("Error trying to open the session: " + e.getMessage());
+                throw new UserNotFoundException();
+            } finally {
+                session.close();
+            }
+
+            player = getPlayer(idUser);
+
+            HashMap params = new HashMap();
+
+            params.put("player_id", new Condition("=", String.valueOf(idUser)));
+
+            try {
+                session = FactorySession.openSession();
+                session.delete(monkey, params);
+                for (int i = 1; i < 4; i++) {
+                    monkey.setType("Monkey");
+                    monkey.setLife(2 * player.getLevel());
+                    monkey.setMap(i);
+                    monkey.setPositionX(3);
+                    monkey.setPositionY(9);
+                    monkey.setPlayer_id(idUser);
+                    session.customSave(monkey, true);
+                }
+                boss.setType("Boss");
+                boss.setLife(10 * player.getLevel());
+                boss.setMap(4);
+                boss.setPositionX(2);
+                boss.setPositionY(8);
+                boss.setPlayer_id(idUser);
+                session.customSave(boss, true);
+                MultiValueMap newparams = new MultiValueMap();
+                newparams.put("type", new Condition("=", "'Antenna'"));
+                newparams.put("player_id", new Condition("=", String.valueOf(idUser)));
+                String query = "SELECT * FROM GameObject ";
+                antennaList = session.query(query, Antenna.class, newparams);
+                for (GameObject gameObject : antennaList) {
+                    Players_Gameobjects players_gameobjects = new Players_Gameobjects(idUser, gameObject.getID());
+                    session.customSave(players_gameobjects, false);
+                }
+                updateUserPoints(idUser, player.getPoints() + 10);
+            } catch (Exception e) {
+                log.error("Error trying to open the session: " + e.getMessage());
+                throw new UserNotFoundException();
+            } finally {
+                session.close();
+            }
         }
-        catch (Exception e) {
-            log.error("Error trying to open the session: " +e.getMessage());
+        else{
             throw new UserNotFoundException();
         }
-        finally {
-            session.close();
-        }
+
     }
 
     @Override
@@ -324,6 +383,11 @@ public class ProductManagerImpl implements ProductManager {
     }
 
     @Override
+    public void removeAntennaPartOfAPlayer(int idUser, int idGameObject) throws UserNotFoundException, GameObjectNotFoundException {
+        modifyAttributes(idGameObject, idUser, false);
+    }
+
+    @Override
     public void updateEnemyOfAPlayer(int idUser, int idEnemy, int life, int PositionX, int PositionY) throws UserNotFoundException, EnemyNotFoundException {
         Session session = null;
         List<Enemy> enemyList;
@@ -420,6 +484,7 @@ public class ProductManagerImpl implements ProductManager {
         stats.setUsername(user.getUsername());
         stats.setPoints(player.getPoints());
         stats.setEnemiesKilled(player.getEnemiesKilled());
+        stats.setLevel(player.getLevel());
 
         log.info("Points: " +stats.getPoints());
         log.info("Enemies killed: " +stats.getEnemiesKilled());
@@ -613,7 +678,7 @@ public class ProductManagerImpl implements ProductManager {
     @Override
     public void modifyAttributes(int idGameObject, int idUser, boolean buy) throws UserNotFoundException, GameObjectNotFoundException{
         Session session = null;
-        GameObject object = null;
+        GameObject object;
         Player player;
 
         try {
@@ -692,22 +757,10 @@ public class ProductManagerImpl implements ProductManager {
         try {
             session = FactorySession.openSession();
             player = (Player)session.get(Player.class, idUser);
-        }
-        catch(Exception e){
-            log.error("Error trying to open the session: " +e.getMessage());
-            throw new UserNotFoundException();
-        }
-        finally {
-            session.close();
-        }
-
-        player.setPoints(points);
-
-        try {
-            session = FactorySession.openSession();
+            player.setPoints(points);
             session.update(player, idUser, false);
         }
-        catch (Exception e) {
+        catch(Exception e){
             log.error("Error trying to open the session: " +e.getMessage());
             throw new UserNotFoundException();
         }
@@ -724,22 +777,10 @@ public class ProductManagerImpl implements ProductManager {
         try {
             session = FactorySession.openSession();
             player = (Player)session.get(Player.class, idUser);
-        }
-        catch(Exception e){
-            log.error("Error trying to open the session: " +e.getMessage());
-            throw new UserNotFoundException();
-        }
-        finally {
-            session.close();
-        }
-
-        player.setEnemiesKilled(enemieskilled);
-
-        try {
-            session = FactorySession.openSession();
+            player.setEnemiesKilled(enemieskilled);
             session.update(player, idUser, false);
         }
-        catch (Exception e) {
+        catch(Exception e){
             log.error("Error trying to open the session: " +e.getMessage());
             throw new UserNotFoundException();
         }
@@ -760,7 +801,6 @@ public class ProductManagerImpl implements ProductManager {
         Session session = null;
         List<Player> playerList = null;
         List<Stats> statsList = new LinkedList<>();
-        Player player;
         User user = null;
 
         try{
@@ -790,6 +830,7 @@ public class ProductManagerImpl implements ProductManager {
             stats.setUsername(user.getUsername());
             stats.setEnemiesKilled(playerList.get(i).getEnemiesKilled());
             stats.setPoints(playerList.get(i).getPoints());
+            stats.setLevel(playerList.get(i).getLevel());
             statsList.add(stats);
         }
 
@@ -866,22 +907,10 @@ public class ProductManagerImpl implements ProductManager {
         try {
             session = FactorySession.openSession();
             player = (Player)session.get(Player.class, idUser);
-        }
-        catch(Exception e){
-            log.error("Error trying to open the session: " +e.getMessage());
-            throw new UserNotFoundException();
-        }
-        finally {
-            session.close();
-        }
-
-        player.setCheckPoint(gameMapId);
-
-        try {
-            session = FactorySession.openSession();
+            player.setCheckPoint(gameMapId);
             session.update(player, idUser, false);
         }
-        catch (Exception e) {
+        catch(Exception e){
             log.error("Error trying to open the session: " +e.getMessage());
             throw new UserNotFoundException();
         }

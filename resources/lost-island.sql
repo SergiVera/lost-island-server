@@ -18,6 +18,7 @@ attack INTEGER,
 checkPoint INTEGER,
 points INTEGER,
 enemiesKilled INTEGER,
+level INTEGER,
 PRIMARY KEY (ID),
 user_id INTEGER NOT NULL UNIQUE,
 FOREIGN KEY (user_id) REFERENCES User(ID)
@@ -53,8 +54,8 @@ gameObject_idGameObject INTEGER NOT NULL, foreign key(gameObject_idGameObject) r
 /*Some fake data to test the backend*/
 INSERT INTO User (username, password, conected) VALUES ('Sergi', 'Sergi', false);
 INSERT INTO User (username, password, conected) VALUES ('Carlos', 'Carlos', false);
-INSERT INTO Player (currentHealth, maxHealth, attack, checkPoint, points, enemiesKilled, user_id) VALUES (6, 6, 1, 1, 0, 0, 1);
-INSERT INTO Player (currentHealth, maxHealth, attack, checkPoint, points, enemiesKilled, user_id) VALUES (6, 6, 1, 1, 0, 0, 2);
+INSERT INTO Player (currentHealth, maxHealth, attack, checkPoint, points, enemiesKilled, level, user_id) VALUES (6, 6, 1, 1, 0, 0, 1, 1);
+INSERT INTO Player (currentHealth, maxHealth, attack, checkPoint, points, enemiesKilled, level, user_id) VALUES (6, 6, 1, 1, 0, 0, 1, 2);
 INSERT INTO GameObject(type, name, objectPoints, cost) VALUES ('BoostDamage','sword',1, 10);
 INSERT INTO GameObject(type, name, objectPoints, cost) VALUES ('BoostDamage','hammer',2, 20);
 INSERT INTO GameObject(type, name, objectPoints, cost) VALUES ('BoostDamage','bomb',3, 30);

@@ -127,18 +127,19 @@ public class SessionImpl implements Session {
             rs = pstm.executeQuery();
 
 
-            while(rs.next()){
+            while (rs.next()) {
                 Field[] fields = theClass.getDeclaredFields();
                 rs.getString(1);
-                for (int i = 0; i<fields.length; i++){
+                for (int i = 0; i < fields.length; i++) {
 
 
-                    String fieldName = this.getFieldName(i+2, rs);
+                    String fieldName = this.getFieldName(i + 2, rs);
 
                     ObjectHelper.setter(entity, fieldName, rs.getObject(i + 2));
                 }
 
             }
+
 
 
         } catch (SQLException e) {
