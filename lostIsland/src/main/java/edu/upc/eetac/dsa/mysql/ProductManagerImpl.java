@@ -178,6 +178,7 @@ public class ProductManagerImpl implements ProductManager {
         Boss boss = new Boss();
         List<Antenna> antennaList;
         Player player;
+        List<GameObject> antennaObjectsList;
 
         player = getPlayer(idUser);
 
@@ -219,11 +220,24 @@ public class ProductManagerImpl implements ProductManager {
                 boss.setPositionY(8);
                 boss.setPlayer_id(idUser);
                 session.customSave(boss, true);
-                MultiValueMap newparams = new MultiValueMap();
-                newparams.put("type", new Condition("=", "'Antenna'"));
-                newparams.put("player_id", new Condition("=", String.valueOf(idUser)));
-                String query = "SELECT * FROM GameObject ";
-                antennaList = session.query(query, Antenna.class, newparams);
+                String query = "SELECT GameObject.* FROM Player, GameObject, Players_Gameobjects ";
+                MultiValueMap params2 = new MultiValueMap();
+                params2.put("Player.ID", new Condition("=", String.valueOf(idUser)));
+                params2.put("Player.ID", new Condition("=", "Players_Gameobjects.player_id"));
+                params2.put("Players_Gameobjects.gameObject_idGameObject", new Condition("=", "GameObject.ID"));
+                params2.put("GameObject.type", new Condition("=", "'Antenna'"));
+                antennaObjectsList = session.query(query, Antenna.class, params2);
+                for(GameObject gameObject : antennaObjectsList){
+                    HashMap params3 = new HashMap();
+                    params3.put("player_id", new Condition("=", String.valueOf(idUser)));
+                    params3.put("gameObject_idGameObject", new Condition("=", String.valueOf(gameObject.getID())));
+                    Players_Gameobjects players_gameobjects = new Players_Gameobjects(idUser, gameObject.getID());
+                    session.delete(players_gameobjects, params3);
+                }
+                MultiValueMap params4 = new MultiValueMap();
+                params4.put("type", new Condition("=", "'Antenna'"));
+                String query2 = "SELECT * FROM GameObject ";
+                antennaList = session.query(query2, Antenna.class, params4);
                 for (GameObject gameObject : antennaList) {
                     Players_Gameobjects players_gameobjects = new Players_Gameobjects(idUser, gameObject.getID());
                     session.customSave(players_gameobjects, false);
