@@ -75,6 +75,7 @@ public class ProductManagerImpl implements ProductManager {
     @Override
     public void signUp(String username, String password) throws UserAlreadyExistsException {
         Session session = null;
+        List<GameObject> antenna;
 
         try{
             session = FactorySession.openSession();
@@ -103,7 +104,14 @@ public class ProductManagerImpl implements ProductManager {
                 boss.setPositionY(8);
                 boss.setPlayer_id(idUser);
                 session.customSave(boss, true);
-
+                MultiValueMap params = new MultiValueMap();
+                params.put("type",new Condition("=", "'Antenna'"));
+                String query = "SELECT * FROM GameObject ";
+                antenna = session.query(query, Antenna.class, params);
+                for (GameObject gameObject : antenna) {
+                    Players_Gameobjects players_gameobjects = new Players_Gameobjects(idUser, gameObject.getID());
+                    session.customSave(players_gameobjects, false);
+                }
             }
             else{
                 throw new UserAlreadyExistsException();
@@ -212,6 +220,7 @@ public class ProductManagerImpl implements ProductManager {
         List<GameObject> foodObjectsList = null;
         List<GameObject> boostDamageObjectsList = null;
         List<GameObject> boostLifeObjectsList = null;
+        List<GameObject> antennaObjectsList = null;
         List<GameObject> gameObjectsList = new ArrayList<>();
 
         User user = getUser(idUser);
@@ -233,6 +242,9 @@ public class ProductManagerImpl implements ProductManager {
                 params.remove("GameObject.type");
                 params.put("GameObject.type", new Condition("=", "'BoostLife'"));
                 boostLifeObjectsList = session.query(query, BoostLife.class, params);
+                params.remove("GameObject.type");
+                params.put("GameObject.type", new Condition("=", "'Antenna'"));
+                antennaObjectsList = session.query(query, Antenna.class, params);
             } catch (Exception e) {
                 log.error("Error trying to open the session: " + e.getMessage());
             } finally {
@@ -242,6 +254,7 @@ public class ProductManagerImpl implements ProductManager {
             gameObjectsList.addAll(foodObjectsList);
             gameObjectsList.addAll(boostDamageObjectsList);
             gameObjectsList.addAll(boostLifeObjectsList);
+            gameObjectsList.addAll(antennaObjectsList);
         }
         else{
             throw new UserNotFoundException();
@@ -549,11 +562,13 @@ public class ProductManagerImpl implements ProductManager {
         BoostDamage boostDamage;
         BoostLife boostLife;
         Food food;
+        Antenna antenna;
         String result;
 
         String query1 =  "SELECT IF((SELECT Type FROM GameObject WHERE ID="+idGameObject+")='BoostLife', 'YES', 'NO')";
         String query2 =  "SELECT IF((SELECT Type FROM GameObject WHERE ID="+idGameObject+")='BoostDamage', 'YES', 'NO')";
         String query3 =  "SELECT IF((SELECT Type FROM GameObject WHERE ID="+idGameObject+")='Food', 'YES', 'NO')";
+        String query4 =  "SELECT IF((SELECT Type FROM GameObject WHERE ID="+idGameObject+")='Antenna', 'YES', 'NO')";
 
         String query = "SELECT * FROM GameObject ";
 
@@ -577,6 +592,11 @@ public class ProductManagerImpl implements ProductManager {
                 food = (Food) session.singleQuery(query, Food.class, params);
                 gameObject = food;
             }
+            result = session.customQuery(query4);
+            if(result.equals("YES")){
+                antenna = (Antenna) session.singleQuery(query, Antenna.class, params);
+                gameObject = antenna;
+            }
         }
         catch(Exception e){
             log.error("Error trying to open the session: " +e.getMessage());
@@ -593,7 +613,6 @@ public class ProductManagerImpl implements ProductManager {
     @Override
     public void modifyAttributes(int idGameObject, int idUser, boolean buy) throws UserNotFoundException, GameObjectNotFoundException{
         Session session = null;
-        List<GameObject> gameObjectList;
         GameObject object = null;
         Player player;
 
@@ -607,13 +626,7 @@ public class ProductManagerImpl implements ProductManager {
             session.close();
         }
 
-        gameObjectList = getAllObjects();
-
-        for (GameObject gameObject : gameObjectList) {
-            if (gameObject.getID() == idGameObject) {
-                object = gameObject;
-            }
-        }
+       object = getSingleObject(idGameObject);
 
         if(object != null) {
 
@@ -789,6 +802,7 @@ public class ProductManagerImpl implements ProductManager {
        List<GameObject> foodObjectsList = null;
        List<GameObject> boostDamageObjectsList = null;
        List<GameObject> boostLifeObjectsList = null;
+       List<GameObject> antennaObjectsList = null;
        List<GameObject> gameObjectsList = new ArrayList<>();
 
        String query = "SELECT * FROM GameObject ";
@@ -805,6 +819,9 @@ public class ProductManagerImpl implements ProductManager {
            params.remove("type");
            params.put("type", new Condition("=", "'BoostLife'"));
            boostLifeObjectsList = session.query(query, BoostLife.class, params);
+           params.remove("type");
+           params.put("type", new Condition("=", "'Antenna'"));
+           antennaObjectsList = session.query(query, Antenna.class, params);
        }
        catch(Exception e){
            log.error("Error trying to open the session: " +e.getMessage());
@@ -816,6 +833,7 @@ public class ProductManagerImpl implements ProductManager {
        gameObjectsList.addAll(foodObjectsList);
        gameObjectsList.addAll(boostDamageObjectsList);
        gameObjectsList.addAll(boostLifeObjectsList);
+       gameObjectsList.addAll(antennaObjectsList);
 
        return gameObjectsList;
     }
