@@ -180,7 +180,7 @@ public class SessionImpl implements Session {
     }
 
     public boolean checkIfUserIsRegistered(Class theClass, String username, String password){
-        String selectQuery = QueryHelper.createQuerySELECTIDUSER(theClass);
+        String selectQuery = QueryHelper.createQueryCHECKUSER(theClass);
 
         ResultSet rs;
         PreparedStatement pstm;
