@@ -857,7 +857,6 @@ public class ProductManagerImpl implements ProductManager {
        List<GameObject> foodObjectsList = null;
        List<GameObject> boostDamageObjectsList = null;
        List<GameObject> boostLifeObjectsList = null;
-       List<GameObject> antennaObjectsList = null;
        List<GameObject> gameObjectsList = new ArrayList<>();
 
        String query = "SELECT * FROM GameObject ";
@@ -874,9 +873,6 @@ public class ProductManagerImpl implements ProductManager {
            params.remove("type");
            params.put("type", new Condition("=", "'BoostLife'"));
            boostLifeObjectsList = session.query(query, BoostLife.class, params);
-           params.remove("type");
-           params.put("type", new Condition("=", "'Antenna'"));
-           antennaObjectsList = session.query(query, Antenna.class, params);
        }
        catch(Exception e){
            log.error("Error trying to open the session: " +e.getMessage());
@@ -888,7 +884,6 @@ public class ProductManagerImpl implements ProductManager {
        gameObjectsList.addAll(foodObjectsList);
        gameObjectsList.addAll(boostDamageObjectsList);
        gameObjectsList.addAll(boostLifeObjectsList);
-       gameObjectsList.addAll(antennaObjectsList);
 
        return gameObjectsList;
     }

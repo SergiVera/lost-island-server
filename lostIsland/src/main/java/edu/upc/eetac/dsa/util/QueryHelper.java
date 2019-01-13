@@ -75,7 +75,7 @@ public class QueryHelper {
     public static String createQuerySELECTIDUSER(Class theClass){
         StringBuffer sb = new StringBuffer();
         sb.append("SELECT ID FROM ").append(theClass.getSimpleName()).append(" ");
-        sb.append("WHERE username = ?").append(" ").append("AND password = ?");
+        sb.append("WHERE username = ?").append(" ");
 
         return sb.toString();
     }

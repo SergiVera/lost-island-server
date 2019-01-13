@@ -190,7 +190,6 @@ public class SessionImpl implements Session {
         try {
             pstm = conn.prepareStatement(selectQuery);
             pstm.setObject(1, username);
-            pstm.setObject(2, password);
             rs = pstm.executeQuery();
 
             while(rs.next()) {
