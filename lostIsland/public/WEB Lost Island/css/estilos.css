@@ -1,0 +1,204 @@
+/*Estilo general*/
+* {
+  margin: 0;
+  padding: 0; }
+
+body {
+  font-family: "Roboto Mono", monospace;
+  font-size: 16px; }
+/*Estilos cabecera*/
+header {
+  background: url("../img/fondo-2.jpg"), #19FFFFFF;
+  background-size: cover;
+  background-position: center 0;
+  background-repeat: no-repeat; }
+  header .contenedor_logo_menu {
+    padding: 25px 0;
+    border-bottom: 1px solid rgba(53, 53, 53, 0.4); }
+    header .contenedor_logo_menu .logo a {
+      display: block; }
+      header .contenedor_logo_menu .logo a img {
+        vertical-align: top; }
+    header .contenedor_logo_menu .menu {
+      text-align: right;
+      line-height: 50px; }
+      header .contenedor_logo_menu .menu a {
+        color: #000;
+        margin-left: 60px;
+        font-size: 18px; }
+  header .texto {
+    color: #fff;
+    text-align: center;
+    margin: 100px; }
+    header .texto .primera-linea,
+    header .texto .segunda-linea {
+      font-family: "Roboto Mono", monospace;
+      font-weight: 300; }
+    header .texto .primera_linea {
+      font-size: 70px;
+      list-style: 35px;
+      margin-bottom: 30px; }
+    header .texto .segunda_linea {
+      font-size: 30px;
+      list-style: 25px;
+      margin-bottom: 60px; }
+    header .texto .contendeor-btns a {
+      border-radius: 4px;
+      border: 2px solid #fff;
+      color: #fff;
+      padding: 12px 0;
+      font-weight: 600;
+      width: 235px;
+      display: inline-block;
+      text-align: center;
+      margin: 0 10px; }
+      header .texto .contendeor-btns a:hover {
+        text-decoration: none;
+        background: #fff;
+        color: #087408FF; }
+/*Estilos main*/
+.main .info {
+  padding: 70px 0; }
+  .main .info .titulo {
+    text-align: center;
+    font-family: "Roboto Mono", monospace;
+    font-weight: 300;
+    font-size: 32px;
+    margin-bottom: 70px; }
+  .main .info .caracteristica {
+    text-align: center; }
+    .main .info .caracteristica .foto img {
+      border-radius: 3px;
+      width: 100%;
+      margin-bottom: 30px; }
+    .main .info .caracteristica .primera-linea {
+      font-weight: 700;
+      margin-bottom: 30px;
+      font-size: 20px; }
+    .main .info .caracteristica .parrafo {
+      margin-bottom: 30px;
+      line-height: 28px; }
+.main .mapas {
+  margin-bottom: 70px; }
+  .main .mapas .foto {
+    margin-bottom: 20px; }
+    .main .mapas .foto .mapa img {
+      border-radius: 3px;
+      width: 100%;
+      vertical-align: top; }
+    .main .mapas .foto .titulo {
+      margin-top: 70px;
+      margin-bottom: 20px;
+      font-size: 32px;
+      line-height: 32px;
+      font-weight: 300; }
+      .main .mapas .foto .titulo.verde {
+        color: #00AD27FF; }
+      .main .mapas .foto .titulo.azul {
+        color: #00DBFFFF; }
+    .main .mapas .foto .parrafo {
+      line-height: 28px; }
+    .main .mapas .foto .derecha {
+      text-align: right; }
+.main .tabla {
+  padding: 70px 0;
+}
+/*Estilo footer*/
+footer .direccion {
+  background: #3c4045;
+  padding: 30px 0;
+  color: #fff; }
+  footer .direccion .titulo {
+    font-size: 32px;
+    line-height: 32px;
+    font-weight: 300;
+    margin-bottom: 30px; }
+  footer .direccion .correo,
+  footer .direccion .git {
+    margin-bottom: 10px; }
+  footer .direccion .logo img {
+    margin-top: 70px; }
+footer .social {
+  text-align: center;
+  padding: 20px 0; }
+  footer .social a {
+    padding: 10px;
+    display: inline-block;
+    margin: 0 20px;
+    width: 50px;
+    font-size: 22px;
+    color: #fff;
+    background: #000;
+    border-radius: 100px; }
+    footer .social a.hover {
+      text-decoration: none; }
+    footer .social a.youtube {
+      background: #cd201f; }
+    footer .social a.github {
+      background: #000; }
+/*Estilos para adaptar a pantañas pequeñas*/
+@media screen and (max-width: 992px) {
+  header .contenedor_logo_menu .logo {
+    margin-bottom: 20px;
+    text-align: center; }
+  header .contenedor_logo_menu .menu {
+    text-align: center; }
+    header .contenedor_logo_menu .menu a {
+      margin: 0 20px; }
+  header .texto {
+    margin: 50px 0;
+    font-size: 16px; }
+    header .texto .primera-linea {
+      font-size: 1.5em; }
+    header .texto .segunda-linea {
+      font-size: 1.3em; }
+    header .texto .contendeor-btns a {
+      margin-bottom: 10px; }
+
+  .main .info .caracteristicas {
+    margin-top: 0; }
+  .main .mapas .foto .titulo {
+    margin-top: 0; } }
+@media screen and (max-width: 768px) {
+  .main .info .caracteristicas {
+    margin-bottom: 40px; }
+  .main .mapas .foto {
+    text-align: center; }
+    .main .mapas .foto .texto * {
+      text-align: left; }
+    .main .mapas .foto .texto p {
+      margin-bottom: 10px; }
+
+  footer .direccion {
+    text-align: center; }
+    footer .direccion .logo img {
+      margin-top: 20px; } }
+/*ESTILOS TABLA*/
+table, td, th {
+  border: 1px solid rgba(0,0,0, .2);
+}
+
+table {
+  margin: auto;
+  border-collapse: collapse;
+  width: 700px;
+  text-align: center;
+}
+
+th, td {
+  padding: 10px 20px;
+}
+
+th{
+  background: #009F06FF;
+  color: #fff;  
+}
+
+tr:hover{
+   background: #B2B2B2;
+}
+
+
+
+
+/*# sourceMappingURL=estilos.css.map */
