@@ -51,8 +51,17 @@
             <artifactId>swagger-jersey2-jaxrs</artifactId>
             <version>${swagger-jersey2-jaxrs.version}</version>
         </dependency>
-
-
+        <dependency>
+            <groupId>commons-collections</groupId>
+            <artifactId>commons-collections</artifactId>
+            <version>3.2.1</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/mysql/mysql-connector-java -->
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>8.0.13</version>
+        </dependency>
     </dependencies>
 
     <build>

@@ -20,7 +20,7 @@ public class Main {
     public static HttpServer startServer() {
         // create a resource config that scans for JAX-RS resources and providers
         // in edu.upc.dsa package
-        final ResourceConfig rc = new ResourceConfig().packages("edu.upc.eetac.dsa.services");
+        final ResourceConfig rc = new ResourceConfig().packages("edu.upc.eetac.dsa.service");
 
         rc.register(io.swagger.jaxrs.listing.ApiListingResource.class);
         rc.register(io.swagger.jaxrs.listing.SwaggerSerializers.class);
@@ -32,7 +32,7 @@ public class Main {
         beanConfig.setContact("support@example.com");
         beanConfig.setDescription("REST API for Lost Islans");
         beanConfig.setLicenseUrl("http://www.apache.org/licenses/LICENSE-2.0.html");
-        beanConfig.setResourcePackage("edu.upc.eetac.dsa.services");
+        beanConfig.setResourcePackage("edu.upc.eetac.dsa.service");
         beanConfig.setTermsOfServiceUrl("http://www.example.com/resources/eula");
         beanConfig.setTitle("REST API");
         beanConfig.setVersion("1.0.0");

@@ -6,18 +6,30 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 public class ObjectHelper {
-    public static String[] getFields(Object entity) {
+    public static String[] getFields(Object entity, boolean noclass) {
 
         Class theClass = entity.getClass();
 
-        Field[] fields = theClass.getDeclaredFields();
+        if(noclass == false){
+            Field[] fields = theClass.getDeclaredFields();
 
-        String[] sFields = new String[fields.length];
-        int i=0;
+            String[] sFields = new String[fields.length];
+            int i=0;
 
-        for (Field f: fields) sFields[i++]=f.getName();
+            for (Field f: fields) sFields[i++]=f.getName();
 
-        return sFields;
+            return sFields;
+        }
+        else{
+            Field[] fields = theClass.getSuperclass().getDeclaredFields();
+
+            String[] sFields = new String[fields.length];
+            int i=0;
+
+            for (Field f: fields) sFields[i++]=f.getName();
+
+            return sFields;
+        }
 
     }
 
@@ -59,7 +71,7 @@ public class ObjectHelper {
 
         for(Method method : methods){
             if(isGetter(method)){
-                if(method.getName().regionMatches(true, 3, property, 0, property.length()))
+                if((method.getName().regionMatches(true, 3, property, 0, property.length())) || (method.getName().regionMatches(true, 2, property, 0, property.length())))
                     result =method.invoke(entity);
             }
         }
