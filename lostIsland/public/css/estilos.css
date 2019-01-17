@@ -14,11 +14,14 @@ header {
   background-repeat: no-repeat; }
   header .contenedor_logo_menu {
     padding: 25px 0;
-    border-bottom: 1px solid rgba(53, 53, 53, 0.4); }
+    border-bottom: 1px solid rgba(53, 53, 53, 0.4); 
+    cursor: pointer;}
     header .contenedor_logo_menu .logo a {
-      display: block; }
+      display: block;
+      cursor: pointer; }
       header .contenedor_logo_menu .logo a img {
-        vertical-align: top; }
+        vertical-align: top; 
+        cursor: pointer;}
     header .contenedor_logo_menu .menu {
       text-align: right;
       line-height: 50px; }

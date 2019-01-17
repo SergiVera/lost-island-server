@@ -8,6 +8,8 @@
 	<link rel="stylesheet" href="../css/font-awesome.min.css">
 	<link href="https://fonts.googleapis.com/css?family=Roboto+Mono:300,400,500i,700" rel="stylesheet">
 	<link rel="stylesheet" href="../css/estilos.css">
+	<script src="../js/jquery.js"></script>
+	<script src="../js/bootstrap.min.js"></script>
 
 </head>
 <body>
@@ -16,11 +18,30 @@
 		<div class="container">
 			<div class="row contenedor_logo_menu">
 				<div class="logo col-xs-12 col-md-6">
-					<a href="inicio2.html"><img src="../resources/logo.png" alt=""></a>					
+					<a id = "path"><script type ="text/javascript">
+						$("#path").click(function(){
+								var loc = window.location;
+								console.log(loc.href);
+								window.open(loc.href,"_self");
+						});
+						</script>
+						<img src="../resources/logo.png" alt="">
+					</a>					
 				</div>
 				<div class="menu col-xs-12 col-md-6">					
 					<a href="scoreboard2.html">ScoreBoard</a>
-					<a href="#">USER_NAME</a>
+					<a href="#" id = "name">
+							<script type ="text/javascript">
+								function getRelativePath(){
+									var loc = window.location;
+									console.log(loc);
+									var pathName = loc.href.substring(loc.href.lastIndexOf('=') + 1,loc.href.length);
+									console.log(pathName);
+									return pathName;
+								}
+								document.getElementById("name").innerHTML = getRelativePath();
+						</script>
+					</a>
 					<a href="shop.html">Shop</a>
 				</div>
 			</div>
@@ -115,9 +136,5 @@
 			</div>
 		</div>	
 	</footer>
-
-	<script src="js/jquery.js"></script>
-	<script src="js/popper.min.js"></script>
-	<script src="js/bootstrap.min.js"></script>
 </body>
 </html>
