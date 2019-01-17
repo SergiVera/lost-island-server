@@ -95,6 +95,18 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    public void myStatsClick(View v){
+        objectsBtn.setVisibility(View.INVISIBLE);
+        unityButton.setVisibility(View.INVISIBLE);
+        scoreboardBtn.setVisibility(View.INVISIBLE);
+        mystatsBtn.setVisibility(View.INVISIBLE);
+
+        listObjects.setVisibility(View.VISIBLE);
+        returnObjectsBtn.setVisibility(View.VISIBLE );
+        gameApi.mystats(1).enqueue(myStatsCallBack);
+
+    }
+
     Callback<List<GameObject>> objectsCallBack = new Callback<List<GameObject>>(){
 
         @Override
@@ -130,6 +142,25 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public void onFailure(Call<List<Stats>> call, Throwable t) {
+
+        }
+    };
+
+    Callback<UserStats> myStatsCallBack = new Callback<UserStats>(){
+
+        @Override
+        public void onResponse(Call<UserStats> call, Response<UserStats> response) {
+            if (response.isSuccessful()) {
+                List<UserStats> data = new ArrayList<>();
+                data.add(response.body());
+                listObjects.setAdapter(new AdapterRecyclerUserStats(data));
+            } else {
+                Log.d("QuestionsCallback", "Code: " + response.code() + " Message: " + response.message());
+            }
+        }
+
+        @Override
+        public void onFailure(Call<UserStats> call, Throwable t) {
 
         }
     };

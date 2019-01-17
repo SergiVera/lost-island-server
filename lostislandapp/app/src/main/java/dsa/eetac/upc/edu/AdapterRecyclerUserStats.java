@@ -8,8 +8,8 @@ import android.widget.TextView;
 
 import java.util.List;
 
-public class AdapterRecyclerStats extends RecyclerView.Adapter<AdapterRecyclerStats.ViewHolder> {
-    private List<Stats> data;
+public class AdapterRecyclerUserStats extends RecyclerView.Adapter<AdapterRecyclerUserStats.ViewHolder> {
+    private List<UserStats> data;
 
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -23,22 +23,22 @@ public class AdapterRecyclerStats extends RecyclerView.Adapter<AdapterRecyclerSt
         }
     }
 
-    public AdapterRecyclerStats(List<Stats> data) {
+    public AdapterRecyclerUserStats(List<UserStats> data) {
         this.data = data;
     }
 
     @Override
-    public AdapterRecyclerStats.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public AdapterRecyclerUserStats.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v;
         v = LayoutInflater.from(parent.getContext()).inflate(android.R.layout.simple_selectable_list_item, parent, false);
         return new ViewHolder(v);
     }
 
     @Override
-    public void onBindViewHolder(AdapterRecyclerStats.ViewHolder holder, int position) {
-        Stats obj = data.get(position);
-        holder.text.setText("Pos: "+position+" "+ obj.getUsername()+" Points: "+ obj.getPoints());
-        holder.itemView.setTag(obj.getPoints());//por ver
+    public void onBindViewHolder(AdapterRecyclerUserStats.ViewHolder holder, int position) {
+        UserStats obj = data.get(position);
+        holder.text.setText("enemies killed :"+obj.getEnemiesKilled());
+        holder.itemView.setTag(obj.getAttack());//por ver
         // holder.btn.setText("edit");
     }
 

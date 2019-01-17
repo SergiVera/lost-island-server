@@ -38,7 +38,7 @@ public class AdapterRecycler extends RecyclerView.Adapter<AdapterRecycler.ViewHo
     @Override
     public void onBindViewHolder(AdapterRecycler.ViewHolder holder, int position) {
         GameObject obj = data.get(position);
-        holder.text.setText("Item Name "+obj.getName()+" Cost: "+obj.getCost()+" eurillos xD");// it should be in two texts. Later I will do it
+        holder.text.setText("Name:"+obj.getName()+" Cost: "+obj.getCost()+" eurillos xD");// it should be in two texts. Later I will do it
         holder.itemView.setTag(obj.getCost());
         // holder.btn.setText("edit");
     }

@@ -14,4 +14,7 @@ public interface GameApi {
 
     @GET("users/stats")
     Call<List<Stats>> allstats();
+
+    @GET("users/{idUser}/attributes")
+    Call<UserStats> mystats(@Path("idUser") int id_user);
 }

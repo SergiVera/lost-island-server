@@ -69,6 +69,7 @@
         android:layout_marginStart="78dp"
         android:layout_marginEnd="78dp"
         android:layout_marginBottom="15dp"
+        android:onClick="myStatsClick"
         android:text="My Stats"
         app:layout_constraintBottom_toTopOf="@+id/scoreboardBtn"
         app:layout_constraintEnd_toEndOf="parent"
