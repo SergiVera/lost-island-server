@@ -1,7 +1,5 @@
 package dsa.eetac.upc.edu;
 
-import android.graphics.Color;
-import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,8 +7,9 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import java.util.List;
-public class AdapterRecycler extends RecyclerView.Adapter<AdapterRecycler.ViewHolder> {
-    private List<GameObject> data;
+
+public class AdapterRecyclerStats extends RecyclerView.Adapter<AdapterRecyclerStats.ViewHolder> {
+    private List<Stats> data;
 
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -24,22 +23,22 @@ public class AdapterRecycler extends RecyclerView.Adapter<AdapterRecycler.ViewHo
         }
     }
 
-    public AdapterRecycler(List<GameObject> data) {
+    public AdapterRecyclerStats(List<Stats> data) {
         this.data = data;
     }
 
     @Override
-    public AdapterRecycler.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public AdapterRecyclerStats.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v;
         v = LayoutInflater.from(parent.getContext()).inflate(android.R.layout.simple_selectable_list_item, parent, false);
         return new ViewHolder(v);
     }
 
     @Override
-    public void onBindViewHolder(AdapterRecycler.ViewHolder holder, int position) {
-        GameObject obj = data.get(position);
-        holder.text.setText("Name:"+obj.getName()+" Cost: "+obj.getCost()+" eurillos xD");// it should be in two texts. Later I will do it
-        holder.itemView.setTag(obj.getCost());
+    public void onBindViewHolder(AdapterRecyclerStats.ViewHolder holder, int position) {
+        Stats obj = data.get(position);
+        holder.text.setText("Pos: "+position+" "+ obj.getUsername()+" Points: "+ obj.getPoints());
+        holder.itemView.setTag(obj.getPoints());//por ver
         // holder.btn.setText("edit");
     }
 
