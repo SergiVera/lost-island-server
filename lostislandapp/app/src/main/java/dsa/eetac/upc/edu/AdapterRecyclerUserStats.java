@@ -11,7 +11,6 @@ import java.util.List;
 public class AdapterRecyclerUserStats extends RecyclerView.Adapter<AdapterRecyclerUserStats.ViewHolder> {
     private List<UserStats> data;
 
-
     public class ViewHolder extends RecyclerView.ViewHolder {
         public TextView text;
         // public Button btn;
@@ -37,7 +36,7 @@ public class AdapterRecyclerUserStats extends RecyclerView.Adapter<AdapterRecycl
     @Override
     public void onBindViewHolder(AdapterRecyclerUserStats.ViewHolder holder, int position) {
         UserStats obj = data.get(position);
-        holder.text.setText("enemies killed :"+obj.getEnemiesKilled());
+        holder.text.setText(obj.toString());
         holder.itemView.setTag(obj.getAttack());//por ver
         // holder.btn.setText("edit");
     }
