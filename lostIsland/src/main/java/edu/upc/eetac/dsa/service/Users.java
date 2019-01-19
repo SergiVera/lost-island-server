@@ -229,7 +229,7 @@ public class Users {
             @ApiResponse(code = 404, message = "User doesn't exist"),
             @ApiResponse(code = 403, message = "GameObject doesn't exist"),
     })
-    @Path("/{idUser}/modifyattributes/{idGameObject}")
+    @Path("/{idUser}/modifyattributes/{idGameObject}}")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response updateUserAttributes(@PathParam("idUser") int idUser,@PathParam("idGameObject") int idGameObject){
         try {
