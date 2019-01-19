@@ -16,7 +16,7 @@
 
 	<header>
 		<div class="container">
-			<div class="row contenedor_logo_menu">
+			<div class="row contenedor_logo_menu ">
 				<div class="logo col-xs-12 col-md-6">
 					<a id = "path"><script type ="text/javascript">
 						$("#path").click(function(){
@@ -28,10 +28,13 @@
 						<img src="../resources/logo.png" alt="">
 					</a>					
 				</div>
-				<div class="menu col-xs-12 col-md-6">					
+				
+				<div class="menu col-xs-12 col-md-6">
 					<a href="scoreboard2.html">ScoreBoard</a>
-					<a href="#" id = "name">
-							<script type ="text/javascript">
+					<div class="dropdown">
+						<a href="#">
+				            USER_NAME 
+				            <!--<script type ="text/javascript">
 								function getRelativePath(){
 									var loc = window.location;
 									console.log(loc);
@@ -40,9 +43,26 @@
 									return pathName;
 								}
 								document.getElementById("name").innerHTML = getRelativePath();
-						</script>
-					</a>
-					<a href="shop.html">Shop</a>
+							</script> -->
+							<span class="caret"></span>					
+				        </a>
+						<div class="dropdown-menu">
+							<div class="row">
+								<a href="#">Profile</a>
+							</div>
+							<div class="row">
+								<a href="#">Change Password</a>
+							</div>
+							<div class="row">
+								<a href="../index.html">Log Out</a>
+							</div>
+							<div class="row">
+								<a href="../index.html">Delet</a>
+							</div>					            	
+		        		</div>
+					</div>
+			        					        
+				    <a href="shop.html">Shop</a>									
 				</div>
 			</div>
 
@@ -117,7 +137,7 @@
 				<div class="row">
 					<div class="col-md-8">
 						<h4 class="titulo">Contacto</h4>
-						<p class="correo">lostiland@gmail.com</p>
+						<p class="correo">lostisland@gmail.com</p>
 						<p class="git">LINK github</p>
 					</div>
 					<div class="col-md-4 logo" >
@@ -130,11 +150,13 @@
 		<div class="social">
 			<div class="container">
 				<div class="col-md-12">
-					<a href="#" class="youtube"><i class="fa fa-youtube"></i></a>
-					<a href="#" class="github"><i class="fa fa-github"></i></a>
+					<a href="https://github.com/SergiVera/lost-island-server" class="github1"><i class="fa fa-github"></i></a>
+					<a href="https://www.youtube.com/" class="youtube"><i class="fa fa-youtube"></i></a>
+					<a href="https://github.com/SergiVera/lost-island-client" class="github"><i class="fa fa-github"></i></a>
 				</div>				
 			</div>
-		</div>	
+		</div>
 	</footer>
+
 </body>
 </html>
