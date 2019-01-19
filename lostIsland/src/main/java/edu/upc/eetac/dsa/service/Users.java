@@ -223,13 +223,31 @@ public class Users {
     }
 
     @PUT
+    @ApiOperation(value = "update user currentHealth", notes = "modify the currentHealth of the user")
+    @ApiResponses(value = {
+            @ApiResponse(code = 201, message = "Successful"),
+            @ApiResponse(code = 404, message = "User doesn't exist")
+    })
+    @Path("/{idUser}/updatekilledenemies/{currentHealth}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response updateUserCurrentHealth(@PathParam("idUser") int idUser,@PathParam("currentHealth") int currentHealth){
+        try {
+            this.productManager.updateUserCurrentHealth(idUser, currentHealth);
+            return Response.status(201).build();
+        } catch (UserNotFoundException e) {
+            e.printStackTrace();
+            return Response.status(404).build();
+        }
+    }
+
+    @PUT
     @ApiOperation(value = "update attributes of the user", notes = "modify the maxHealth, the currentHealth or the life, depends on the object the user has grabbed")
     @ApiResponses(value = {
             @ApiResponse(code = 201, message = "Successful"),
             @ApiResponse(code = 404, message = "User doesn't exist"),
             @ApiResponse(code = 403, message = "GameObject doesn't exist"),
     })
-    @Path("/{idUser}/modifyattributes/{idGameObject}}")
+    @Path("/{idUser}/modifyattributes/{idGameObject}")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response updateUserAttributes(@PathParam("idUser") int idUser,@PathParam("idGameObject") int idGameObject){
         try {

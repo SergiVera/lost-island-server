@@ -804,6 +804,26 @@ public class ProductManagerImpl implements ProductManager {
     }
 
     @Override
+    public void updateUserCurrentHealth(int idUser, int currentHealth) throws UserNotFoundException{
+        Session session = null;
+        Player player;
+
+        try {
+            session = FactorySession.openSession();
+            player = (Player)session.get(Player.class, idUser);
+            player.setCurrentHealth(currentHealth);
+            session.update(player, idUser, false);
+        }
+        catch(Exception e){
+            log.error("Error trying to open the session: " +e.getMessage());
+            throw new UserNotFoundException();
+        }
+        finally {
+            session.close();
+        }
+    }
+
+    @Override
     public void sellObject(int idUser, int idGameObject, int points, int costObject) throws UserNotFoundException, GameObjectNotFoundException {
         points += costObject/2;
         updateUserPoints(idUser, points);

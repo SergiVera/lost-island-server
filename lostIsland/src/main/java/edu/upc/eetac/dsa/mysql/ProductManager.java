@@ -165,6 +165,12 @@ public interface ProductManager {
      * @throws UserNotFoundException
      */
     void updateUserEnemiesKilled(int idUser, int enemieskilled) throws UserNotFoundException;
+    /**
+     * @param currentHealth currentHealth of the user
+     * @param idUser id of the user
+     * @throws UserNotFoundException
+     */
+    void updateUserCurrentHealth(int idUser, int currentHealth) throws UserNotFoundException;
     /**Sell an object and remove it from my Inventory
      *
      *@param idUser id of the user

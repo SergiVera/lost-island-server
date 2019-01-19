@@ -54,13 +54,14 @@ gameObject_idGameObject INTEGER NOT NULL, foreign key(gameObject_idGameObject) r
 /*Some fake data to test the backend*/
 INSERT INTO User (username, password, conected) VALUES ('Sergi', 'Sergi', false);
 INSERT INTO User (username, password, conected) VALUES ('Carlos', 'Carlos', false);
-INSERT INTO Player (currentHealth, maxHealth, attack, checkPoint, points, enemiesKilled, level, user_id) VALUES (6, 6, 1, 1, 0, 0, 1, 1);
-INSERT INTO Player (currentHealth, maxHealth, attack, checkPoint, points, enemiesKilled, level, user_id) VALUES (6, 6, 1, 1, 0, 0, 1, 2);
-INSERT INTO GameObject(type, name, objectPoints, cost) VALUES ('BoostDamage','sword',1, 10);
-INSERT INTO GameObject(type, name, objectPoints, cost) VALUES ('BoostDamage','hammer',2, 20);
-INSERT INTO GameObject(type, name, objectPoints, cost) VALUES ('BoostDamage','bomb',3, 30);
-INSERT INTO GameObject(type, name, objectPoints, cost) VALUES ('BoostLife','poison',1, 20);
-INSERT INTO GameObject(type, name, objectPoints, cost) VALUES ('Food','banana',1, 5);
+INSERT INTO Player (currentHealth, maxHealth, attack, checkPoint, points, enemiesKilled, level, user_id) VALUES (6, 6, 1, 1, 100, 0, 1, 1);
+INSERT INTO Player (currentHealth, maxHealth, attack, checkPoint, points, enemiesKilled, level, user_id) VALUES (6, 6, 1, 1, 100, 0, 1, 2);
+INSERT INTO GameObject(type, name, objectPoints, cost) VALUES ('BoostDamage','sword',1, 20);
+INSERT INTO GameObject(type, name, objectPoints, cost) VALUES ('BoostDamage','hammer',2, 50);
+INSERT INTO GameObject(type, name, objectPoints, cost) VALUES ('BoostDamage','bomb',3, 100);
+INSERT INTO GameObject(type, name, objectPoints, cost) VALUES ('BoostLife','poison',1, 40);
+INSERT INTO GameObject(type, name, objectPoints, cost) VALUES ('BoostLife','coco',2, 200);
+INSERT INTO GameObject(type, name, objectPoints, cost) VALUES ('Food','banana',1, 10);
 INSERT INTO GameObject(type, name, objectPoints, cost) VALUES ('Antenna','Reflector',0, 0);
 INSERT INTO GameObject(type, name, objectPoints, cost) VALUES ('Antenna','Dipole',0, 0);
 INSERT INTO GameObject(type, name, objectPoints, cost) VALUES ('Antenna','Directors',0, 0);
