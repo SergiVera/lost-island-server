@@ -158,11 +158,11 @@ public class Users {
             @ApiResponse(code = 404, message = "User doesn't exist"),
             @ApiResponse(code = 403, message = "Enemy doesn't exist")
     })
-    @Path("/{idUser}/update-enemy/{idEnemy}")
+    @Path("/{idUser}/update-enemy/{idEnemy}/{enemyLife}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response updateEnemyUser(@PathParam("idUser") int idUser, @PathParam("idEnemy") int idEnemy) {
+    public Response updateEnemyUser(@PathParam("idUser") int idUser, @PathParam("idEnemy") int idEnemy, @PathParam("enemyLife") int enemyLife) {
         try {
-            this.productManager.updateEnemyOfAPlayer(idUser, idEnemy, 4, 10, 12);
+            this.productManager.updateEnemyOfAPlayer(idUser, idEnemy, enemyLife, 10, 12);
             return Response.status(201).build();
         } catch (UserNotFoundException e) {
             e.printStackTrace();

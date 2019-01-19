@@ -57,7 +57,7 @@ public class Authentication {
     @POST
     @ApiOperation(value = "create new Profile", notes = "enter a username and password to create a new account")
     @ApiResponses(value = {
-            @ApiResponse(code = 201, message = "Successful", response = User.class, responseContainer = "User class"),
+            @ApiResponse(code = 201, message = "Successful", response = void.class, responseContainer = "Void class"),
             @ApiResponse(code = 402, message = "Username already exists")
     })
     @Path("/sign-up")
@@ -67,7 +67,7 @@ public class Authentication {
         String password = user.getPassword();
         try {
             this.productManager.signUp(username, password);
-            return Response.status(201).entity(user).build();
+            return Response.status(201).build();
         } catch (UserAlreadyExistsException e) {
             e.printStackTrace();
             return Response.status(402).build();
