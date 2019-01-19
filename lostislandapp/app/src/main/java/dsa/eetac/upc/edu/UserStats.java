@@ -67,4 +67,18 @@ public class UserStats {
     public void setUser_id(int user_id) {
         this.user_id = user_id;
     }
+
+    @Override
+    public String toString() {
+        return "UserStats{" +
+                "currentHealth=" + currentHealth +
+                ", maxHealth=" + maxHealth +
+                ", attack=" + attack +
+                ", checkPoint=" + checkPoint +
+                ", points=" + points +
+                ", enemiesKilled=" + enemiesKilled +
+                ", level=" + level +
+                ", user_id=" + user_id +
+                '}';
+    }
 }

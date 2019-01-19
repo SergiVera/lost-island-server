@@ -1,5 +1,7 @@
 package dsa.eetac.upc.edu;
 
+import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -31,6 +33,8 @@ public class MainActivity extends AppCompatActivity {
     private Button mystatsBtn;
     private Button scoreboardBtn;
     private Button unityButton;
+    ProgressDialog progressDialog;
+    AdapterRecycler adapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,7 +43,6 @@ public class MainActivity extends AppCompatActivity {
         returnObjectsBtn = findViewById(R.id.returnObjects_Btn);
         scoreboardBtn = findViewById(R.id.scoreboardBtn);
         mystatsBtn = findViewById(R.id.myStatsBtn);
-
         unityButton = findViewById(R.id.launchgamebtn);
         unityButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -47,10 +50,19 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(new Intent(MainActivity.this,ConfigurationActivity.class));
             }
         });
+        adapter = new AdapterRecycler(this);
         listObjects = (RecyclerView) findViewById(R.id.recyclerView);
         listObjects.setHasFixedSize(true);
         listObjects.setLayoutManager(new LinearLayoutManager(MainActivity.this));
         createGameApi();
+        //Progress loading
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setTitle("Loading...");
+        progressDialog.setMessage("Waiting for the server");
+        progressDialog.setCancelable(false);
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+        progressDialog.show();
+        progressDialog.hide();
     }
     private void createGameApi() {
         Gson gson = new GsonBuilder().create();
@@ -71,6 +83,11 @@ public class MainActivity extends AppCompatActivity {
         listObjects.setVisibility(View.VISIBLE);
         returnObjectsBtn.setVisibility(View.VISIBLE );
         gameApi.allObjects().enqueue(objectsCallBack);
+        progressDialog.setTitle("Loading...");
+        progressDialog.setMessage("Waiting for the server");
+        progressDialog.setCancelable(false);
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+        progressDialog.show();
 
     }
 
@@ -92,6 +109,11 @@ public class MainActivity extends AppCompatActivity {
         listObjects.setVisibility(View.VISIBLE);
         returnObjectsBtn.setVisibility(View.VISIBLE );
         gameApi.allstats().enqueue(statsCallBack);
+        progressDialog.setTitle("Loading...");
+        progressDialog.setMessage("Waiting for the server");
+        progressDialog.setCancelable(false);
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+        progressDialog.show();
 
     }
 
@@ -104,6 +126,11 @@ public class MainActivity extends AppCompatActivity {
         listObjects.setVisibility(View.VISIBLE);
         returnObjectsBtn.setVisibility(View.VISIBLE );
         gameApi.mystats(1).enqueue(myStatsCallBack);
+        progressDialog.setTitle("Loading...");
+        progressDialog.setMessage("Waiting for the server");
+        progressDialog.setCancelable(false);
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+        progressDialog.show();
 
     }
 
@@ -114,9 +141,22 @@ public class MainActivity extends AppCompatActivity {
             if (response.isSuccessful()) {
                 List<GameObject> data = new ArrayList<>();
                 data.addAll(response.body());
-                listObjects.setAdapter(new AdapterRecycler(data));
+                listObjects.setAdapter(adapter);
+                adapter.addElements(data);
+                progressDialog.hide();
             } else {
                 Log.d("QuestionsCallback", "Code: " + response.code() + " Message: " + response.message());
+                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(MainActivity.this);
+
+                alertDialogBuilder
+                        .setTitle("Error")
+                        .setMessage(response.message())
+                        .setCancelable(false)
+                        .setPositiveButton("OK", (dialog, which) -> {
+                        });
+
+                AlertDialog alertDialog = alertDialogBuilder.create();
+                alertDialog.show();
             }
         }
 
@@ -135,8 +175,21 @@ public class MainActivity extends AppCompatActivity {
                 data.addAll(response.body());
                 Collections.sort(data,(d1,d2)->d1.getUsername().compareTo(d2.getUsername()));
                 listObjects.setAdapter(new AdapterRecyclerStats(data));
+                progressDialog.hide();
             } else {
                 Log.d("QuestionsCallback", "Code: " + response.code() + " Message: " + response.message());
+                //Show the alert dialog
+                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(MainActivity.this);
+
+                alertDialogBuilder
+                        .setTitle("Error")
+                        .setMessage(response.message())
+                        .setCancelable(false)
+                        .setPositiveButton("OK", (dialog, which) -> {
+                        });
+
+                AlertDialog alertDialog = alertDialogBuilder.create();
+                alertDialog.show();
             }
         }
 
@@ -154,8 +207,20 @@ public class MainActivity extends AppCompatActivity {
                 List<UserStats> data = new ArrayList<>();
                 data.add(response.body());
                 listObjects.setAdapter(new AdapterRecyclerUserStats(data));
+                progressDialog.hide();
             } else {
                 Log.d("QuestionsCallback", "Code: " + response.code() + " Message: " + response.message());
+                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(MainActivity.this);
+
+                alertDialogBuilder
+                        .setTitle("Error")
+                        .setMessage(response.message())
+                        .setCancelable(false)
+                        .setPositiveButton("OK", (dialog, which) -> {
+                        });
+
+                AlertDialog alertDialog = alertDialogBuilder.create();
+                alertDialog.show();
             }
         }
 
