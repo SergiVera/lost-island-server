@@ -16,6 +16,9 @@ public class BoostLife extends GameObject {
     public Player modifyAttributesBuy(Player player) {
         int maxHealth = player.getMaxHealth();
         maxHealth += this.objectPoints;
+        if(maxHealth >= 10){
+            maxHealth = 10;
+        }
         player.setMaxHealth(maxHealth);
         return player;
     }
@@ -24,6 +27,9 @@ public class BoostLife extends GameObject {
     public Player modifyAttributesSell(Player player) {
         int maxHealth = player.getMaxHealth();
         maxHealth -= this.objectPoints;
+        if(maxHealth <= 0){
+            maxHealth = 0;
+        }
         player.setMaxHealth(maxHealth);
         return player;
     }
