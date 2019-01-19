@@ -228,7 +228,7 @@ public class Users {
             @ApiResponse(code = 201, message = "Successful"),
             @ApiResponse(code = 404, message = "User doesn't exist")
     })
-    @Path("/{idUser}/updatekilledenemies/{currentHealth}")
+    @Path("/{idUser}/updatecurrenthealth/{currentHealth}")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response updateUserCurrentHealth(@PathParam("idUser") int idUser,@PathParam("currentHealth") int currentHealth){
         try {
