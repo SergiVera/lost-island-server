@@ -26,8 +26,9 @@ $(document).ready(function(){
             console.log("Log in succesfully");
             console.log(data);
             console.log(url);
-            var url1 = "http://147.83.7.155:8080/html/index2.html?username=";
-            var url = url1.concat(username);
+            window.localStorage.setItem("user_id",data.user_id);
+            window.localStorage.setItem("username",username);
+            var url = "http://147.83.7.155:8080/html/index2.html";
             window.open(url, "_self");
         },
         error: function(error){

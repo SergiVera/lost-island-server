@@ -21,32 +21,24 @@
 				<div class="menu col-xs-12 col-md-6">
 					<a href="scoreboard2.html">ScoreBoard</a>
 					<div class="dropdown">
-						<a href="#">
-				            USER_NAME 
-				            <!--<script type ="text/javascript">
-								function getRelativePath(){
-									var loc = window.location;
-									console.log(loc);
-									var pathName = loc.href.substring(loc.href.lastIndexOf('=') + 1,loc.href.length);
-									console.log(pathName);
-									return pathName;
-								}
-								document.getElementById("name").innerHTML = getRelativePath();
-							</script> -->
+						<a href="#" id="name">
+				            <script type ="text/javascript">								
+								document.getElementById("name").innerHTML = window.localStorage.getItem("username");
+							</script>
 							<span class="caret"></span>					
 				        </a>
 						<div class="dropdown-menu">
 							<div class="row">
-								<a href="#">Profile</a>
+								<a href="../html/perfil.html">Profile</a>
 							</div>
 							<div class="row">
-								<a href="#">Change Password</a>
+								<a href="../html/changepas.html">Change Password</a>
 							</div>
 							<div class="row">
-								<a href="../index.html">Log Out</a>
+								<a href="#">Log Out</a>
 							</div>
 							<div class="row">
-								<a href="../index.html">Delet</a>
+								<a href="#">Delet</a>
 							</div>					            	
 		        		</div>
 					</div>
@@ -63,48 +55,47 @@
 				<div class="row">
 					<div class="col-md-12">
 						<h1 class="titulo">SHOP</h1>
-						<h2 class="dinero">Dinero: 0.00€</h2>
+						<h2 class="dinero">Money: 0.00€</h2>
 					</div>
 				</div>
 
 				<div class="row">
 					<div class="precio col-sm-4">
 						<div class="plan verde">
-							<p class="nombre">NOMBRE</p>
+							<p class="nombre" id="nombre"></p>
 							<img src="#">
-							<p class="precio">$99</p>
+							<p class="precio" id="precio"></p>
 							<ul class="caracteristicas">
-								<li>Type: Boost Damage</li>
-								<li>Points: 1</li>
-								<li>Detail: increments damage</li>
+								<li id="type"></li>
+								<li id="points"></li>
 							</ul>
-							<a href="#" class="btn">BUY</a>
+							<a href="#" class="btn" id="buy">BUY</a>
 						</div>
 					</div>
 
 					<div class="precio col-sm-4">
 						<div class="plan active">
-							<p class="nombre">NOMBRE</p>
+							<p class="nombre" id="nombre"></p>
 							<img src="#">
-							<p class="precio">$99</p>
+							<p class="precio" id="precio"></p>
 							<ul class="caracteristicas">
-								<li>Type: Boost Damage</li>
-								<li>Points: 1</li>
+								<li id="type"></li>
+								<li id="points"></li>
 							</ul>
-							<a href="#" class="btn">BUY</a>
+							<a href="#" class="btn" id="buy">BUY</a>
 						</div>
 					</div>
 
 					<div class="precio col-sm-4">
 						<div class="plan naranja">
-							<p class="nombre">NOMBRE</p>
+							<p class="nombre" id="nombre"></p>
 							<img src="#">
-							<p class="precio">$99</p>
+							<p class="precio" id="precio"></p>
 							<ul class="caracteristicas">
-								<li>Type: Boost Damage</li>
-								<li>Points: 1</li>
+								<li id="type"></li>
+								<li id="points"></li>
 							</ul>
-							<a href="#" class="btn">BUY</a>
+							<a href="#" class="btn" id="buy">BUY</a>
 						</div>
 					</div>
 				</div>
@@ -115,40 +106,40 @@
 				<div class="row">
 					<div class="precio col-sm-4">
 						<div class="plan verde">
-							<p class="nombre">Básico</p>
+							<p class="nombre" id="nombre"></p>
 							<img src="#">
+							<p class="precio" id="precio"></p>
 							<ul class="caracteristicas">
-								<li>1  Cuenta </li>
-								<li>10 GB de espacio</li>
-								<li>Dominio Personal</li>
+								<li id="type"></li>
+								<li id="points"></li>
 							</ul>
-							<a href="#" class="btn">Contratar Ahora</a>
+							<a href="#" class="btn" id="buy">BUY</a>
 						</div>
 					</div>
 
 					<div class="precio col-sm-4">
 						<div class="plan active">
-							<p class="nombre">Standard</p>
+							<p class="nombre" id="nombre"></p>
 							<img src="#">
+							<p class="precio" id="precio"></p>
 							<ul class="caracteristicas">
-								<li>5  Cuenta </li>
-								<li>50 GB de espacio</li>
-								<li>Dominio Personal</li>
+								<li id="type"></li>
+								<li id="points"></li>
 							</ul>
-							<a href="#" class="btn">Contratar Ahora</a>
+							<a href="#" class="btn" id="buy">BUY</a>
 						</div>
 					</div>
 
 					<div class="precio col-sm-4">
 						<div class="plan naranja">
-							<p class="nombre">Premium</p>
-							<p class="precio">$99</p>
+							<p class="nombre" id="nombre"></p>
+							<img src="#">
+							<p class="precio" id="precio"></p>
 							<ul class="caracteristicas">
-								<li>Cuentas Ilimitadas</li>
-								<li>500 GB de espacio</li>
-								<li>Dominios Ilimitados</li>
+								<li id="type"></li>
+								<li id="points"></li>
 							</ul>
-							<a href="#" class="btn">Contratar Ahora</a>
+							<a href="#" class="btn" id="buy">BUY</a>
 						</div>
 					</div>
 				</div>

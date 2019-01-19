@@ -21,32 +21,24 @@
 				<div class="menu col-xs-12 col-md-6">
 					<a href="scoreboard2.html">ScoreBoard</a>
 					<div class="dropdown">
-						<a href="#">
-				            USER_NAME 
-				            <!--<script type ="text/javascript">
-								function getRelativePath(){
-									var loc = window.location;
-									console.log(loc);
-									var pathName = loc.href.substring(loc.href.lastIndexOf('=') + 1,loc.href.length);
-									console.log(pathName);
-									return pathName;
-								}
-								document.getElementById("name").innerHTML = getRelativePath();
-							</script> -->
+						<a href="#" id=name>
+				            <script type ="text/javascript">								
+								document.getElementById("name").innerHTML = window.localStorage.getItem("username");
+							</script>
 							<span class="caret"></span>					
 				        </a>
 						<div class="dropdown-menu">
 							<div class="row">
-								<a href="#">Profile</a>
+								<a href="../html/perfil.html">Profile</a>
 							</div>
 							<div class="row">
-								<a href="#">Change Password</a>
+								<a href="../html/changepas.html">Change Password</a>
 							</div>
 							<div class="row">
-								<a href="../index.html">Log Out</a>
+								<a href="#">Log Out</a>
 							</div>
 							<div class="row">
-								<a href="../index.html">Delet</a>
+								<a href="#">Delet</a>
 							</div>					            	
 		        		</div>
 					</div>
