@@ -22,13 +22,31 @@ header {
       header .contenedor_logo_menu .logo a img {
         vertical-align: top; 
         cursor: pointer;}
-    header .contenedor_logo_menu .menu {
+    header .contenedor_logo_menu .menu {      
       text-align: right;
       line-height: 50px; }
       header .contenedor_logo_menu .menu a {
+        text-decoration: none;         
+        display: inline-block;
         color: #000;
-        margin-left: 60px;
+        padding: 0 30px;
         font-size: 18px; }
+      header .contenedor_logo_menu .menu .dropdown{
+        text-align: center;
+        position: relative;
+        display: inline-block;
+      }
+      header .contenedor_logo_menu .menu .dropdown .dropdown-menu{
+        display: none;
+        position: absolute;
+        background-color: #f9f9f9;
+        min-width: 160px;
+        box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+        z-index: 1
+      }
+      header .contenedor_logo_menu .menu .dropdown:hover .dropdown-menu{
+        display: block;
+      }
   header .texto {
     color: #fff;
     text-align: center;
@@ -106,6 +124,80 @@ header {
 .main .tabla {
   padding: 70px 0;
 }
+.main .precios {
+  padding: 70px 0; }
+  .main .precios .titulo {
+    text-align: center;
+    font-family: "Roboto Mono", monospace;
+    font-weight: 700;
+    font-size: 45px;
+    color: #000;
+    margin-bottom: 70px; }
+  .main .precios .dinero{
+    font-family: "Roboto Mono", monospace;
+    font-weight: 500;
+    font-size: 25px;
+    color: #000;
+    margin-bottom: 70px; }
+  .main .precios .plan {
+    background: #fff;
+    text-align: center;
+    font-family: "Roboto Mono", monospace;
+    padding: 50px 0;
+    -webkit-box-shadow: 0px 0px 15px 0px rgba(0, 0, 0, 0.35);
+    box-shadow: 0px 0px 15px 0px rgba(0, 0, 0, 0.35); }
+    .main .precios .plan .nombre {
+      font-size: 32px;
+      line-height: 32px;
+      font-weight: 300;
+      margin-bottom: 30px; }
+    .main .precios .plan .precio {
+      font-weight: 300;
+      font-size: 25px;
+      margin-top: 30px;
+      margin-bottom: 30px;}
+    .main .precios .plan .caracteristicas {
+      list-style: none;
+      padding: 0 20px;
+      margin-bottom: 50px; }
+      .main .precios .plan .caracteristicas li {
+        font-size: 18px;
+        padding: 15px 0;
+        border-bottom: 1px solid #dedede; }
+    .main .precios .plan .btn {
+      width: 70%;
+      font-size: 16px;
+      padding: 15px 0;
+      text-align: center;
+      display: inline-block;
+      border-radius: 100px; }
+    .main .precios .plan.verde .nombre,
+    .main .precios .plan.verde .precio {
+      color: #00AD27FF; }
+    .main .precios .plan.verde .btn {
+      color: #00AD27FF;
+      border: 2px solid #00AD27FF; }
+      .main .precios .plan.verde .btn:hover {
+        background: #00AD27FF;
+        color: #fff; }
+    .main .precios .plan.active {
+      background: #00BFFFFF;
+      color: #fff; }
+      .main .precios .plan.active .btn {
+        color: #fff;
+        border: 2px solid #fff; }
+        .main .precios .plan.active .btn:hover {
+          background: #fff;
+          color: #00BFFFFF; }
+    .main .precios .plan.naranja .nombre,
+    .main .precios .plan.naranja .precio {
+      color: #EE8210; }
+    .main .precios .plan.naranja .btn {
+      color: #EE8210;
+      border: 2px solid #EE8210; }
+      .main .precios .plan.naranja .btn:hover {
+        background: #EE8210;
+        color: #fff; }
 /*Estilo footer*/
 footer .direccion {
   background: #3c4045;
@@ -137,8 +229,10 @@ footer .social {
       text-decoration: none; }
     footer .social a.youtube {
       background: #cd201f; }
+    footer .social a.github1 {
+      background: #F40; }
     footer .social a.github {
-      background: #000; }
+      background: #00F; }
 /*Estilos para adaptar a pantañas pequeñas*/
 @media screen and (max-width: 992px) {
   header .contenedor_logo_menu .logo {

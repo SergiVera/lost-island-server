@@ -5,7 +5,7 @@
 	<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
 	<title>Shop</title>
 	<link rel="stylesheet" href="../css/bootstrap.min.css">
-	<link rel="stylesheet" href="./css/font-awesome.min.css">
+	<link rel="stylesheet" href="../css/font-awesome.min.css">
 	<link href="https://fonts.googleapis.com/css?family=Roboto+Mono:300,400,500i,700" rel="stylesheet">
 	<link rel="stylesheet" href="../css/estilos.css">
 </head>
@@ -16,47 +16,146 @@
 		<div class="container">
 			<div class="row contenedor_logo_menu">
 				<div class="logo col-xs-12 col-md-6">
-					<a href="../index.html"><img src="../resources/logo.png" alt=""></a>					
+					<a href="../html/index2.html"><img src="../resources/logo.png" alt=""></a>					
 				</div>
-				<div class="menu col-xs-12 col-md-6">					
-					<a href="scoreboard2.html">ScoreBoard</a>					
-					<a href="#">USER_NAME</a>
-					<a href="shop.html">Shop</a>
+				<div class="menu col-xs-12 col-md-6">
+					<a href="scoreboard2.html">ScoreBoard</a>
+					<div class="dropdown">
+						<a href="#">
+				            USER_NAME 
+				            <!--<script type ="text/javascript">
+								function getRelativePath(){
+									var loc = window.location;
+									console.log(loc);
+									var pathName = loc.href.substring(loc.href.lastIndexOf('=') + 1,loc.href.length);
+									console.log(pathName);
+									return pathName;
+								}
+								document.getElementById("name").innerHTML = getRelativePath();
+							</script> -->
+							<span class="caret"></span>					
+				        </a>
+						<div class="dropdown-menu">
+							<div class="row">
+								<a href="#">Profile</a>
+							</div>
+							<div class="row">
+								<a href="#">Change Password</a>
+							</div>
+							<div class="row">
+								<a href="../index.html">Log Out</a>
+							</div>
+							<div class="row">
+								<a href="../index.html">Delet</a>
+							</div>					            	
+		        		</div>
+					</div>
+			        					        
+				    <a href="shop.html">Shop</a>									
 				</div>
 			</div>
 		</div>		
 	</header>
 
 	<section class="main">
-		<section class="tabla">
+		<section class="precios">
 			<div class="container">
 				<div class="row">
 					<div class="col-md-12">
-						<table>
-							<tr>
-								<th>TYPE</th>
-								<th>NAME</th>
-								<th>OBJECT POINTS</th>
-								<th>COST</th>
-							</tr>
-							<tr>
-								<td>data</td>
-								<td>data</td>
-								<td>data</td>
-								<td>data</td>
-							</tr>
-							<tr>
-								<td>data</td>
-								<td>data</td>
-								<td>data</td>
-								<td>data</td>
-							</tr>
-						</table>					
+						<h1 class="titulo">SHOP</h1>
+						<h2 class="dinero">Dinero: 0.00€</h2>
+					</div>
+				</div>
+
+				<div class="row">
+					<div class="precio col-sm-4">
+						<div class="plan verde">
+							<p class="nombre">NOMBRE</p>
+							<img src="#">
+							<p class="precio">$99</p>
+							<ul class="caracteristicas">
+								<li>Type: Boost Damage</li>
+								<li>Points: 1</li>
+								<li>Detail: increments damage</li>
+							</ul>
+							<a href="#" class="btn">BUY</a>
+						</div>
+					</div>
+
+					<div class="precio col-sm-4">
+						<div class="plan active">
+							<p class="nombre">NOMBRE</p>
+							<img src="#">
+							<p class="precio">$99</p>
+							<ul class="caracteristicas">
+								<li>Type: Boost Damage</li>
+								<li>Points: 1</li>
+							</ul>
+							<a href="#" class="btn">BUY</a>
+						</div>
+					</div>
+
+					<div class="precio col-sm-4">
+						<div class="plan naranja">
+							<p class="nombre">NOMBRE</p>
+							<img src="#">
+							<p class="precio">$99</p>
+							<ul class="caracteristicas">
+								<li>Type: Boost Damage</li>
+								<li>Points: 1</li>
+							</ul>
+							<a href="#" class="btn">BUY</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+		<section class="precios">
+			<div class="container">
+				<div class="row">
+					<div class="precio col-sm-4">
+						<div class="plan verde">
+							<p class="nombre">Básico</p>
+							<img src="#">
+							<ul class="caracteristicas">
+								<li>1  Cuenta </li>
+								<li>10 GB de espacio</li>
+								<li>Dominio Personal</li>
+							</ul>
+							<a href="#" class="btn">Contratar Ahora</a>
+						</div>
+					</div>
+
+					<div class="precio col-sm-4">
+						<div class="plan active">
+							<p class="nombre">Standard</p>
+							<img src="#">
+							<ul class="caracteristicas">
+								<li>5  Cuenta </li>
+								<li>50 GB de espacio</li>
+								<li>Dominio Personal</li>
+							</ul>
+							<a href="#" class="btn">Contratar Ahora</a>
+						</div>
+					</div>
+
+					<div class="precio col-sm-4">
+						<div class="plan naranja">
+							<p class="nombre">Premium</p>
+							<p class="precio">$99</p>
+							<ul class="caracteristicas">
+								<li>Cuentas Ilimitadas</li>
+								<li>500 GB de espacio</li>
+								<li>Dominios Ilimitados</li>
+							</ul>
+							<a href="#" class="btn">Contratar Ahora</a>
+						</div>
 					</div>
 				</div>
 			</div>
 		</section>
 	</section>
+	
 
 	<footer>
 		<div class="direccion">
@@ -64,7 +163,7 @@
 				<div class="row">
 					<div class="col-md-8">
 						<h4 class="titulo">Contacto</h4>
-						<p class="correo">lostiland@gmail.com</p>
+						<p class="correo">lostisland@gmail.com</p>
 						<p class="git">LINK github</p>
 					</div>
 					<div class="col-md-4 logo" >
@@ -77,8 +176,9 @@
 		<div class="social">
 			<div class="container">
 				<div class="col-md-12">
-					<a href="#" class="youtube"><i class="fa fa-youtube"></i></a>
-					<a href="#" class="github"><i class="fa fa-github"></i></a>
+					<a href="https://github.com/SergiVera/lost-island-server" class="github1"><i class="fa fa-github"></i></a>
+					<a href="https://www.youtube.com/" class="youtube"><i class="fa fa-youtube"></i></a>
+					<a href="https://github.com/SergiVera/lost-island-client" class="github"><i class="fa fa-github"></i></a>
 				</div>				
 			</div>
 		</div>	
