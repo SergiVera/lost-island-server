@@ -9,17 +9,9 @@ function myfunction(){
     success: function(objects){
       console.log(objects);
       console.log("Length: " +objects.length);
-      document.getElementById("");
-      for(let i=0; i<objects.length; i++)
+      for(let i=0; i<3; i++)
       {
-        $("tbody").append(`
-          <tr>
-            <td>${scoreboard[i].username}</td>
-            <td>${scoreboard[i].points}</td>
-            <td>${scoreboard[i].enemiesKilled}</td>
-            <td>${scoreboard[i].level}</td>
-          </tr>
-        `);
+        document.getElementById('nombre[i]').value = objects[i].name;
       }
     }
   });
