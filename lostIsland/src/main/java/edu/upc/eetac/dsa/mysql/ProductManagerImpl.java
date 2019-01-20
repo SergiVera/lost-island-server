@@ -84,9 +84,9 @@ public class ProductManagerImpl implements ProductManager {
             if(exists == false) {
                 session.save(user);
                 int idUser = getIdUser(username, password);
-                Player player = new Player(6, 6, 1, 1, 0, 0, 1, idUser);
+                Player player = new Player(6, 6, 1, 1, 100, 0, 1, idUser);
                 session.save(player);
-                for(int i=1; i<4; i++) {
+                for(int i=1; i<3; i++) {
                     Monkey monkey = new Monkey();
                     monkey.setType("Monkey");
                     monkey.setLife(2);

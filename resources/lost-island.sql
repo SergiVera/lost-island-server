@@ -64,7 +64,6 @@ INSERT INTO GameObject(type, name, objectPoints, cost) VALUES ('BoostLife','coco
 INSERT INTO GameObject(type, name, objectPoints, cost) VALUES ('Food','banana',1, 10);
 INSERT INTO GameObject(type, name, objectPoints, cost) VALUES ('Antenna','Reflector',0, 0);
 INSERT INTO GameObject(type, name, objectPoints, cost) VALUES ('Antenna','Dipole',0, 0);
-INSERT INTO GameObject(type, name, objectPoints, cost) VALUES ('Antenna','Directors',0, 0);
 INSERT INTO GameObject(type, name, objectPoints, cost) VALUES ('Antenna','Clamp',0, 0);
 INSERT INTO GameObject(type, name, objectPoints, cost) VALUES ('Antenna','Support',0, 0);
 INSERT INTO Enemy (type, life, map, positionX, positionY, player_id) VALUES ('Monkey',2,1,3,9, 1);
@@ -79,13 +78,11 @@ INSERT INTO Players_Gameobjects (player_id, gameObject_idGameObject) VALUES (1,1
 INSERT INTO Players_Gameobjects (player_id, gameObject_idGameObject) VALUES (1,4);
 INSERT INTO Players_Gameobjects (player_id, gameObject_idGameObject) VALUES (1,(SELECT ID FROM GameObject WHERE name="Reflector"));
 INSERT INTO Players_Gameobjects (player_id, gameObject_idGameObject) VALUES (1,(SELECT ID FROM GameObject WHERE name="Dipole"));
-INSERT INTO Players_Gameobjects (player_id, gameObject_idGameObject) VALUES (1,(SELECT ID FROM GameObject WHERE name="Directors"));
 INSERT INTO Players_Gameobjects (player_id, gameObject_idGameObject) VALUES (1,(SELECT ID FROM GameObject WHERE name="Clamp"));
 INSERT INTO Players_Gameobjects (player_id, gameObject_idGameObject) VALUES (1,(SELECT ID FROM GameObject WHERE name="Support"));
 INSERT INTO Players_Gameobjects (player_id, gameObject_idGameObject) VALUES (2,2);
 INSERT INTO Players_Gameobjects (player_id, gameObject_idGameObject) VALUES (2,5);
 INSERT INTO Players_Gameobjects (player_id, gameObject_idGameObject) VALUES (2,(SELECT ID FROM GameObject WHERE name="Reflector"));
 INSERT INTO Players_Gameobjects (player_id, gameObject_idGameObject) VALUES (2,(SELECT ID FROM GameObject WHERE name="Dipole"));
-INSERT INTO Players_Gameobjects (player_id, gameObject_idGameObject) VALUES (2,(SELECT ID FROM GameObject WHERE name="Directors"));
 INSERT INTO Players_Gameobjects (player_id, gameObject_idGameObject) VALUES (2,(SELECT ID FROM GameObject WHERE name="Clamp"));
 INSERT INTO Players_Gameobjects (player_id, gameObject_idGameObject) VALUES (2,(SELECT ID FROM GameObject WHERE name="Support"));

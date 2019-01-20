@@ -67,7 +67,7 @@ public class Authentication {
         String password = user.getPassword();
         try {
             this.productManager.signUp(username, password);
-            return Response.status(201).build();
+            return Response.status(201).entity(user).build();
         } catch (UserAlreadyExistsException e) {
             e.printStackTrace();
             return Response.status(402).build();
@@ -89,7 +89,7 @@ public class Authentication {
 
         try {
             this.productManager.modifyCredentials(username, oldpassword, newpassword);
-            return Response.status(201).build();
+            return Response.status(201).entity(credentials).build();
         } catch (UserNotFoundException e) {
             e.printStackTrace();
             return Response.status(404).build();
@@ -110,7 +110,7 @@ public class Authentication {
 
         try {
             this.productManager.deleteAccount(username, password);
-            return Response.status(201).build();
+            return Response.status(201).entity(user).build();
         } catch (UserNotFoundException e) {
             e.printStackTrace();
             return Response.status(404).build();
@@ -128,7 +128,7 @@ public class Authentication {
     public Response logOut(int idUser) {
         try {
             this.productManager.logOut(idUser);
-            return Response.status(201).build();
+            return Response.status(201).entity(idUser).build();
         } catch (UserNotFoundException e) {
             e.printStackTrace();
             return Response.status(404).build();
