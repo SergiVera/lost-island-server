@@ -4,13 +4,18 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
 	<title>Shop</title>
+	<link rel="stylesheet" href="../css/estilos.css">
 	<link rel="stylesheet" href="../css/bootstrap.min.css">
 	<link rel="stylesheet" href="../css/font-awesome.min.css">
 	<link href="https://fonts.googleapis.com/css?family=Roboto+Mono:300,400,500i,700" rel="stylesheet">
-	<link rel="stylesheet" href="../css/estilos.css">
+	
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script type="text/javascript" src="../js/shop.js"></script>
+    <script type="text/javascript" src="../js/index2.js"></script>
+    
 </head>
 
-<body>
+<body onload="myfunction()">
 
 	<header>
 		<div class="container">
@@ -29,17 +34,17 @@
 				        </a>
 						<div class="dropdown-menu">
 							<div class="row">
-								<a href="../html/perfil.html">Profile</a>
+								<a href="perfil.html">Profile</a>
 							</div>
 							<div class="row">
-								<a href="../html/changepas.html">Change Password</a>
+								<a href="changepas.html">ChangePass</a>
 							</div>
 							<div class="row">
-								<a href="#">Log Out</a>
+								<a id="logout_btn">LogOut</a>
 							</div>
 							<div class="row">
-								<a href="#">Delet</a>
-							</div>					            	
+								<a href="delete.html">Delete</a>
+							</div>						            	
 		        		</div>
 					</div>
 			        					        
@@ -55,7 +60,7 @@
 				<div class="row">
 					<div class="col-md-12">
 						<h1 class="titulo">SHOP</h1>
-						<h2 class="dinero">Money: 0.00€</h2>
+						<h2 class="dinero"></h2>
 					</div>
 				</div>
 
@@ -63,39 +68,39 @@
 					<div class="precio col-sm-4">
 						<div class="plan verde">
 							<p class="nombre" id="nombre"></p>
-							<img src="#">
+							<img src="../resources/banana.png">
 							<p class="precio" id="precio"></p>
 							<ul class="caracteristicas">
-								<li id="type"></li>
-								<li id="points"></li>
+								<li class="type"></li>
+								<li class="points"></li>
 							</ul>
-							<a href="#" class="btn" id="buy">BUY</a>
+							<a src="shop.html" type="button" class="btn" id="buy_btn6" onclick="comprar(6)" value="Click">BUY</a>
 						</div>
 					</div>
 
 					<div class="precio col-sm-4">
 						<div class="plan active">
 							<p class="nombre" id="nombre"></p>
-							<img src="#">
+							<img src="../resources/sword.png">
 							<p class="precio" id="precio"></p>
 							<ul class="caracteristicas">
-								<li id="type"></li>
-								<li id="points"></li>
+								<li class="type"></li>
+								<li class="points"></li>
 							</ul>
-							<a href="#" class="btn" id="buy">BUY</a>
+							<a  class="btn" id="buy_btn1" onclick="comprar(1)">BUY</a>
 						</div>
 					</div>
 
 					<div class="precio col-sm-4">
 						<div class="plan naranja">
 							<p class="nombre" id="nombre"></p>
-							<img src="#">
+							<img src="../resources/hammer.jpg">
 							<p class="precio" id="precio"></p>
 							<ul class="caracteristicas">
-								<li id="type"></li>
-								<li id="points"></li>
+								<li class="type"></li>
+								<li class="points"></li>
 							</ul>
-							<a href="#" class="btn" id="buy">BUY</a>
+							<a  class="btn" id="buy_btn2" onclick="comprar(2)">BUY</a>
 						</div>
 					</div>
 				</div>
@@ -107,39 +112,39 @@
 					<div class="precio col-sm-4">
 						<div class="plan verde">
 							<p class="nombre" id="nombre"></p>
-							<img src="#">
+							<img src="../resources/bomb.png">
 							<p class="precio" id="precio"></p>
 							<ul class="caracteristicas">
-								<li id="type"></li>
-								<li id="points"></li>
+								<li class="type"></li>
+								<li class="points"></li>
 							</ul>
-							<a href="#" class="btn" id="buy">BUY</a>
+							<a  class="btn" id="buy_btn3" onclick="comprar(3)">BUY</a>
 						</div>
 					</div>
 
 					<div class="precio col-sm-4">
 						<div class="plan active">
 							<p class="nombre" id="nombre"></p>
-							<img src="#">
+							<img src="../resources/poison.png">
 							<p class="precio" id="precio"></p>
 							<ul class="caracteristicas">
-								<li id="type"></li>
-								<li id="points"></li>
+								<li class="type"></li>
+								<li class="points"></li>
 							</ul>
-							<a href="#" class="btn" id="buy">BUY</a>
+							<a  class="btn" id="buy_btn4" onclick="comprar(4)">BUY</a>
 						</div>
 					</div>
 
 					<div class="precio col-sm-4">
 						<div class="plan naranja">
 							<p class="nombre" id="nombre"></p>
-							<img src="#">
+							<img src="../resources/coco.png">
 							<p class="precio" id="precio"></p>
 							<ul class="caracteristicas">
-								<li id="type"></li>
-								<li id="points"></li>
+								<li class="type"></li>
+								<li class="points"></li>
 							</ul>
-							<a href="#" class="btn" id="buy">BUY</a>
+							<a  class="btn" id="buy_btn5" onclick="comprar(5)">BUY</a>
 						</div>
 					</div>
 				</div>

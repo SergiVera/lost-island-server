@@ -8,8 +8,9 @@ $(document).ready(function(){
       var username = $(".username").val();
       console.log(username);
       var password_old = $(".password_old").val();
-      console.log(password);
+      console.log(password_old);
       var password_new = $(".password_new").val();
+      console.log(password_new);
       console.log("Estoy en login script");
       //Create the object that we want to pass, which is user
       var user = {
@@ -25,9 +26,9 @@ $(document).ready(function(){
         data: JSON.stringify(user),
         dataType: 'json',
         success: function(data) {
-            console.log("Log in succesfully");
+            console.log("Change succesfully");
             console.log(data);
-            var url = "http://147.83.7.155:8080/";
+            var url = "http://147.83.7.155:8080/html/index2.html";
             window.open(url, "_self");
         },
         error: function(error){

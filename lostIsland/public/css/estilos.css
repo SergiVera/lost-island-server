@@ -145,17 +145,22 @@ header {
     font-family: "Roboto Mono", monospace;
     padding: 50px 0;
     -webkit-box-shadow: 0px 0px 15px 0px rgba(0, 0, 0, 0.35);
-    box-shadow: 0px 0px 15px 0px rgba(0, 0, 0, 0.35); }
+    box-shadow: 0px 0px 15px 0px rgba(0, 0, 0, 0.35);}
     .main .precios .plan .nombre {
       font-size: 32px;
       line-height: 32px;
       font-weight: 300;
-      margin-bottom: 30px; }
+      margin-bottom: 30px; 
+      text-transform: capitalize;}
     .main .precios .plan .precio {
       font-weight: 300;
       font-size: 25px;
       margin-top: 30px;
       margin-bottom: 30px;}
+    .main .precios .plan img {
+      display: block;
+      width: 50%;
+      margin: auto;}
     .main .precios .plan .caracteristicas {
       list-style: none;
       padding: 0 20px;
