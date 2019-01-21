@@ -16,6 +16,11 @@ $(document).ready(function(){
       success: function(data) {
           console.log("Log in succesfully");
           window.open("http://147.83.7.155:8080","_self");
+      },
+      error: function(error){
+        if(error.status==404){
+          alert("User doesn't exist. Your username or password may be wrong");
+        }
       }
     });
   });

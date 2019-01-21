@@ -8,9 +8,15 @@
 	<link rel="stylesheet" href="../css/font-awesome.min.css">
 	<link href="https://fonts.googleapis.com/css?family=Roboto+Mono:300,400,500i,700" rel="stylesheet">
 	<link rel="stylesheet" href="../css/estilos.css">
+	<script type="text/javascript" src="../js/jquery.js"></script>
+	<script type="text/javascript" src="../js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../js/index2.js"></script>
+    <script type="text/javascript" src="../js/perfil.js"></script>
+    
+
 </head>
 
-<body>
+<body onload="myfunction()">
 
 	<header>
 		<div class="container">
@@ -29,16 +35,16 @@
 				        </a>
 						<div class="dropdown-menu">
 							<div class="row">
-								<a href="../html/perfil.html">Profile</a>
+								<a href="perfil.html">Profile</a>
 							</div>
 							<div class="row">
-								<a href="../html/changepas.html">ChangePassword</a>
+								<a href="changepas.html">ChangePass</a>
 							</div>
 							<div class="row">
-								<a href="#">Log Out</a>
+								<a id="logout_btn">LogOut</a>
 							</div>
 							<div class="row">
-								<a href="#">Delet</a>
+								<a href="delete.html">Delete</a>
 							</div>					            	
 		        		</div>
 					</div>
@@ -54,65 +60,156 @@
 			<div class="container">
 				<div class="row">
 					<div class="col-md-12">
-						<h1 class="titulo">STATS USER_NAME</h1>
-						<p class="parrafo">POINTS</p>
-						<p class="parrafo">KILLED</p>
-						<p class="parrafo">LEVELS</p>
+						<h1 id="stats">
+							<script type ="text/javascript">								
+								document.getElementById("stats").innerHTML ="<h1> Stats " + window.localStorage.getItem("username") + "</h1>";
+							</script>
+						</h1>
+						<p class="points parrafo"></p>
+						<p class="killed parrafo"></p>
+						<p class="level parrafo"></p>
 					</div>
 				</div>
 			</div>
 			
-		</section>
 		<section class="precios">
 			<div class="container">
 				<div class="row">
 					<div class="col-md-12">
-						<h2 class="dinero">Dinero: 0.00€</h2>
+						<h2 class="dinero"></h2>
 					</div>
 				</div>
 
 				<div class="row">
 					<div class="precio col-sm-4">
 						<div class="plan verde">
-							<p class="nombre">Básico</p>
-							<img src="#">
+							<p class="nombre" id="nombre"></p>
+							<img class="imagen">
+							<p class="precio" id="precio"></p>
 							<ul class="caracteristicas">
-								<li>1  Cuenta </li>
-								<li>10 GB de espacio</li>
-								<li>Dominio Personal</li>
+								<li class="type"></li>
+								<li class="points"></li>
 							</ul>
-							<a href="#" class="btn">Contratar Ahora</a>
+							<a class="vender"></a>
 						</div>
 					</div>
 
 					<div class="precio col-sm-4">
 						<div class="plan active">
-							<p class="nombre">Standard</p>
-							<img src="#">
+							<p class="nombre" id="nombre"></p>
+							<img class="imagen">
+							<p class="precio" id="precio"></p>
 							<ul class="caracteristicas">
-								<li>5  Cuenta </li>
-								<li>50 GB de espacio</li>
-								<li>Dominio Personal</li>
+								<li class="type"></li>
+								<li class="points"></li>
 							</ul>
-							<a href="#" class="btn">Contratar Ahora</a>
+							<a class="vender"></a>
 						</div>
 					</div>
 
 					<div class="precio col-sm-4">
 						<div class="plan naranja">
-							<p class="nombre">Premium</p>
-							<img src="#">
+							<p class="nombre" id="nombre"></p>
+							<img class="imagen">
+							<p class="precio" id="precio"></p>
 							<ul class="caracteristicas">
-								<li>Cuentas Ilimitadas</li>
-								<li>500 GB de espacio</li>
-								<li>Dominios Ilimitados</li>
+								<li class="type"></li>
+								<li class="points"></li>
 							</ul>
-							<a href="#" class="btn">Contratar Ahora</a>
+							<a class="vender"></a>
 						</div>
 					</div>
 				</div>
 			</div>
-		</section>		
+		</section>
+		<section class="precios">
+			<div class="container">
+				<div class="row">
+					<div class="precio col-sm-4">
+						<div class="plan verde">
+							<p class="nombre" id="nombre"></p>
+							<img class="imagen">
+							<p class="precio" id="precio"></p>
+							<ul class="caracteristicas">
+								<li class="type"></li>
+								<li class="points"></li>
+							</ul>
+							<a class="vender"></a>
+						</div>
+					</div>
+
+					<div class="precio col-sm-4">
+						<div class="plan active">
+							<p class="nombre" id="nombre"></p>
+							<img class="imagen">
+							<p class="precio" id="precio"></p>
+							<ul class="caracteristicas">
+								<li class="type"></li>
+								<li class="points"></li>
+							</ul>
+							<a class="vender"></a>
+						</div>
+					</div>
+
+					<div class="precio col-sm-4">
+						<div class="plan naranja">
+							<p class="nombre" id="nombre"></p>
+							<img class="imagen">
+							<p class="precio" id="precio"></p>
+							<ul class="caracteristicas">
+								<li class="type"></li>
+								<li class="points"></li>
+							</ul>
+							<a class="vender"></a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+		<section class="precios">
+			<div class="container">
+				<div class="row">
+					<div class="precio col-sm-4">
+						<div class="plan verde">
+							<p class="nombre" id="nombre"></p>
+							<img class="imagen">
+							<p class="precio" id="precio"></p>
+							<ul class="caracteristicas">
+								<li class="type"></li>
+								<li class="points"></li>
+							</ul>
+							<a class="vender"></a>
+						</div>
+					</div>
+
+					<div class="precio col-sm-4">
+						<div class="plan active">
+							<p class="nombre" id="nombre"></p>
+							<img class="imagen">
+							<p class="precio" id="precio"></p>
+							<ul class="caracteristicas">
+								<li class="type"></li>
+								<li class="points"></li>
+							</ul>
+							<a class="vender"></a>
+						</div>
+					</div>
+
+					<div class="precio col-sm-4">
+						<div class="plan naranja">
+							<p class="nombre" id="nombre"></p>
+							<img class="imagen">
+							<p class="precio" id="precio"></p>
+							<ul class="caracteristicas">
+								<li class="type"></li>
+								<li class="points"></li>
+							</ul>
+							<a class="vender"></a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>			
 	</section>
 	
 
